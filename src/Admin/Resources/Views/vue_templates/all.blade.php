@@ -1,0 +1,5 @@
+@include('larapress::vue_templates.directories')
+@include('larapress::vue_templates.files')
+@include('larapress::vue_templates.uploader')
+@include('larapress::vue_templates.mediaManager')
+@include('larapress::vue_templates.featureImage')
