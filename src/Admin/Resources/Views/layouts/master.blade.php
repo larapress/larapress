@@ -8,7 +8,11 @@
 
     @yield('meta')
 
-    {!!HTML::style('larapress/css/larapress.css')!!}
+    @if(env('APP_ENV') == 'local')
+        {!!HTML::style('css/vendor/larapress/admin/admin.css')!!}
+    @else
+        {!!HTML::style('larapress/css/larapress.css')!!}
+    @endif
 </head>
 
 <body>
@@ -49,7 +53,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.21/vue.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.7.0/vue-resource.min.js"></script>
 
-<script src="/js/main.js"></script>
+@if(env('APP_ENV') == 'local')
+    <script src="/js/vendor/larapress/admin/main.js"></script>
+@else
+    <script src="/js/main.js"></script>
+@endif
 
 @yield('scripts')
 </body>

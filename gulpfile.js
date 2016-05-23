@@ -20,11 +20,21 @@ elixir(function(mix){
     elixir.config.assetsPath = 'src/'; //trailing slash required.
     elixir.config.js.folder = '';
     elixir.config.js.outputFolder = '';
+    elixir.config.css.folder ='';
+    elixir.config.css.sass.folder = '';
 
     //console.log(elixir.config);
 
     /**
-     * Admin section of package
+     * Admin Styles
+     */
+    mix.sass([
+        'Admin/Resources/Assets/sass/app.scss'
+    ], 'src/Admin/Resources/Public/css/admin.css');
+
+
+    /**
+     * Admin js section of package
      */
     mix.scripts([
         'Admin/Resources/Assets/js/lib/ajquery-2.2.3.min.js',
@@ -32,4 +42,11 @@ elixir(function(mix){
         'Admin/Resources/Assets/js/vue_components',
         'Admin/Resources/Assets/js/main.js'
     ], 'src/Admin/Resources/Public/js/main.js')
+
+
+    /**
+     * Copy to the public path to make app workable when developing
+     */
+    mix.copy('src/Admin/Resources/Public/js/main.js', '../../../public/js/vendor/larapress/admin/main.js');
+    mix.copy('src/Admin/Resources/Public/css/admin.css', '../../../public/css/vendor/larapress/admin/admin.css');
 });
