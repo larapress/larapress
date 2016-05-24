@@ -1,5 +1,7 @@
 var elixir = require('laravel-elixir');
 
+require('laravel-elixir-vueify');
+
 /*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
@@ -36,17 +38,14 @@ elixir(function(mix){
     /**
      * Admin js section of package
      */
-    mix.scripts([
-        'Admin/Resources/Assets/js/lib/ajquery-2.2.3.min.js',
-        'Admin/Resources/Assets/js/lib/bootstrap.min.js',
-        'Admin/Resources/Assets/js/vue_components',
-        'Admin/Resources/Assets/js/main.js'
-    ], 'src/Admin/Resources/Public/js/main.js')
+    mix.browserify([
+        'Admin/Resources/Assets/js/larapress_vues.js'
+    ], 'src/Admin/Resources/Public/js/larapress_vues.js')
 
 
     /**
      * Copy to the public path to make app workable when developing
      */
-    mix.copy('src/Admin/Resources/Public/js/main.js', '../../../public/js/vendor/larapress/admin/main.js');
-    mix.copy('src/Admin/Resources/Public/css/admin.css', '../../../public/css/vendor/larapress/admin/admin.css');
+    mix.copy('src/Admin/Resources/Public/js/larapress_vues.js', '../../public/js/vendor/larapress/admin/larapress_vues.js');
+    mix.copy('src/Admin/Resources/Public/css/admin.css', '../../public/css/vendor/larapress/admin/admin.css');
 });

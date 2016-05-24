@@ -4,7 +4,7 @@
     <link rel="icon" type="image/x-icon" href="{!!\URL::to('images/favicon.png')!!}"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf_token" content="{!! csrf_token() !!}"/>
+    <meta name="csrf_token" id="csrf_token" content="{!! csrf_token() !!}"/>
 
     @yield('meta')
 
@@ -47,14 +47,11 @@
     </div>
 </div>
 
-@include('larapress::vue_templates.all')
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.21/vue.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.7.0/vue-resource.min.js"></script>
 
 @if(env('APP_ENV') == 'local')
-    <script src="/js/vendor/larapress/admin/main.js"></script>
+    <script src="/js/vendor/larapress/admin/larapress_vues.js"></script>
 @else
     <script src="/js/main.js"></script>
 @endif

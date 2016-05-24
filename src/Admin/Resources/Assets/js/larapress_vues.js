@@ -1,26 +1,32 @@
-Vue.component('directories-component', directoriesComponent);
-Vue.component('files-component', filesComponent);
-Vue.component('upload-component', uploadComponent);
-Vue.component('media-manager', mediaManager);
-Vue.component('feature-image', featureImage);
+var Vue = require('vue');
+Vue.use( require('vue-resource'));
 
-Vue.http.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf_token"]').attr('content');
+Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#csrf_token').getAttribute('content');
+
+import MediaManager from './vue_components/mediaManager.vue';
+import FeatureImage from './vue_components/featureImage.vue';
 
 new Vue({
     el: 'body',
+
+    components: {
+        MediaManager: MediaManager,
+        FeatureImage: FeatureImage
+    },
+
     events: {
         /**
          * if an event occurs anywhere requesting the media manager
          * @param context - hook name to identify request element/template
          */
-        mediaManagerRequested: function(context){
+        mediaManagerRequested: function (context) {
             this.$broadcast('mediaManagerRequested', context);
         },
         /**
          * if the media manager has had the submit btn pressed
          * @param result - object with the files,context.
          */
-        mediaSubmitted: function(result){
+        mediaSubmitted: function (result) {
             this.$broadcast('mediaSubmitted', result);
         }
     },
@@ -28,10 +34,9 @@ new Vue({
         /**
          * if an el directly requests for media manager, show it
          */
-        requestMediaManager:function(){
+        requestMediaManager: function () {
             this.$broadcast('mediaManagerRequested');
         }
     }
 });
-
 

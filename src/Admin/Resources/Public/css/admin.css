@@ -4376,12 +4376,6 @@ a.thumbnail.active {
   .alert-danger .alert-link {
     color: #843534; }
 
-@-webkit-keyframes progress-bar-stripes {
-  from {
-    background-position: 40px 0; }
-  to {
-    background-position: 0 0; } }
-
 @keyframes progress-bar-stripes {
   from {
     background-position: 40px 0; }
@@ -4415,7 +4409,6 @@ a.thumbnail.active {
 
 .progress.active .progress-bar,
 .progress-bar.active {
-  -webkit-animation: progress-bar-stripes 2s linear infinite;
   animation: progress-bar-stripes 2s linear infinite; }
 
 .progress-bar-success {
@@ -5029,12 +5022,9 @@ button.close, button.mailbox-attachment-close {
   -webkit-overflow-scrolling: touch;
   outline: 0; }
   .modal.fade .modal-dialog {
-    -webkit-transform: translate(0, -25%);
     transform: translate(0, -25%);
-    transition: -webkit-transform 0.3s ease-out;
     transition: transform 0.3s ease-out; }
   .modal.in .modal-dialog {
-    -webkit-transform: translate(0, 0);
     transform: translate(0, 0); }
 
 .modal-open .modal {
@@ -5377,22 +5367,16 @@ button.close, button.mailbox-attachment-close {
       line-height: 1; }
     @media all and (transform-3d), (-webkit-transform-3d) {
       .carousel-inner > .item {
-        transition: -webkit-transform 0.6s ease-in-out;
         transition: transform 0.6s ease-in-out;
-        -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
-        -webkit-perspective: 1000px;
         perspective: 1000px; }
         .carousel-inner > .item.next, .carousel-inner > .item.active.right {
-          -webkit-transform: translate3d(100%, 0, 0);
           transform: translate3d(100%, 0, 0);
           left: 0; }
         .carousel-inner > .item.prev, .carousel-inner > .item.active.left {
-          -webkit-transform: translate3d(-100%, 0, 0);
           transform: translate3d(-100%, 0, 0);
           left: 0; }
         .carousel-inner > .item.next.left, .carousel-inner > .item.prev.right, .carousel-inner > .item.active {
-          -webkit-transform: translate3d(0, 0, 0);
           transform: translate3d(0, 0, 0);
           left: 0; } }
   .carousel-inner > .active,
@@ -10127,12 +10111,6 @@ a.thumbnail.active {
   .alert-danger .alert-link {
     color: #843534; }
 
-@-webkit-keyframes progress-bar-stripes {
-  from {
-    background-position: 40px 0; }
-  to {
-    background-position: 0 0; } }
-
 @keyframes progress-bar-stripes {
   from {
     background-position: 40px 0; }
@@ -10166,7 +10144,6 @@ a.thumbnail.active {
 
 .progress.active .progress-bar,
 .progress-bar.active {
-  -webkit-animation: progress-bar-stripes 2s linear infinite;
   animation: progress-bar-stripes 2s linear infinite; }
 
 .progress-bar-success {
@@ -10780,12 +10757,9 @@ button.close, button.mailbox-attachment-close {
   -webkit-overflow-scrolling: touch;
   outline: 0; }
   .modal.fade .modal-dialog {
-    -webkit-transform: translate(0, -25%);
     transform: translate(0, -25%);
-    transition: -webkit-transform 0.3s ease-out;
     transition: transform 0.3s ease-out; }
   .modal.in .modal-dialog {
-    -webkit-transform: translate(0, 0);
     transform: translate(0, 0); }
 
 .modal-open .modal {
@@ -11128,22 +11102,16 @@ button.close, button.mailbox-attachment-close {
       line-height: 1; }
     @media all and (transform-3d), (-webkit-transform-3d) {
       .carousel-inner > .item {
-        transition: -webkit-transform 0.6s ease-in-out;
         transition: transform 0.6s ease-in-out;
-        -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
-        -webkit-perspective: 1000px;
         perspective: 1000px; }
         .carousel-inner > .item.next, .carousel-inner > .item.active.right {
-          -webkit-transform: translate3d(100%, 0, 0);
           transform: translate3d(100%, 0, 0);
           left: 0; }
         .carousel-inner > .item.prev, .carousel-inner > .item.active.left {
-          -webkit-transform: translate3d(-100%, 0, 0);
           transform: translate3d(-100%, 0, 0);
           left: 0; }
         .carousel-inner > .item.next.left, .carousel-inner > .item.prev.right, .carousel-inner > .item.active {
-          -webkit-transform: translate3d(0, 0, 0);
           transform: translate3d(0, 0, 0);
           left: 0; } }
   .carousel-inner > .active,
@@ -11548,7 +11516,6 @@ body {
 .content-wrapper,
 .right-side,
 .main-footer {
-  transition: -webkit-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
   transition: transform 0.3s ease-in-out, margin 0.3s ease-in-out;
   margin-left: 230px;
   z-index: 820; }
@@ -11570,7 +11537,6 @@ body {
     .sidebar-open .content-wrapper, .sidebar-open
     .right-side, .sidebar-open
     .main-footer {
-      -webkit-transform: translate(230px, 0);
       transform: translate(230px, 0); } }
 
 .content-wrapper,
@@ -11845,22 +11811,18 @@ a:focus {
   min-height: 100%;
   width: 230px;
   z-index: 810;
-  transition: -webkit-transform 0.3s ease-in-out, width 0.3s ease-in-out;
   transition: transform 0.3s ease-in-out, width 0.3s ease-in-out; }
   @media (max-width: 767px) {
     .main-sidebar,
     .left-side {
-      -webkit-transform: translate(-230px, 0);
       transform: translate(-230px, 0); } }
   @media (min-width: 768px) {
     .sidebar-collapse .main-sidebar, .sidebar-collapse
     .left-side {
-      -webkit-transform: translate(-230px, 0);
       transform: translate(-230px, 0); } }
   @media (max-width: 767px) {
     .sidebar-open .main-sidebar, .sidebar-open
     .left-side {
-      -webkit-transform: translate(0, 0);
       transform: translate(0, 0); } }
 
 .sidebar {
@@ -11930,7 +11892,6 @@ a:focus {
     margin-right: 10px;
     margin-top: 3px; }
   .sidebar-menu li.active > a > .fa-angle-left {
-    -webkit-transform: rotate(-90deg);
     transform: rotate(-90deg); }
   .sidebar-menu li.active > .treeview-menu {
     display: block; }
@@ -11966,7 +11927,6 @@ a:focus {
     margin-left: 50px !important;
     z-index: 840; }
   .sidebar-mini.sidebar-collapse .main-sidebar {
-    -webkit-transform: translate(0, 0);
     transform: translate(0, 0);
     width: 50px !important;
     z-index: 850; }
@@ -12418,7 +12378,6 @@ a:focus {
 /* Add fade animation to dropdown menus by appending
  the class .animated-dropdown-menu to the .dropdown-menu ul (or ol)*/
 .open:not(.dropup) > .animated-dropdown-menu {
-  -webkit-backface-visibility: visible !important;
   backface-visibility: visible !important; }
 
 /*
@@ -13610,11 +13569,9 @@ table.text-center, table.text-center td, table.text-center th {
   padding: 0; }
 
 .direct-chat.chat-pane-open .direct-chat-contacts {
-  -webkit-transform: translate(0, 0);
   transform: translate(0, 0); }
 
 .direct-chat-messages {
-  -webkit-transform: translate(0, 0);
   transform: translate(0, 0);
   padding: 10px;
   height: 250px;
@@ -13634,7 +13591,6 @@ table.text-center, table.text-center td, table.text-center th {
 
 .direct-chat-messages,
 .direct-chat-contacts {
-  transition: -webkit-transform 0.5s ease-in-out;
   transition: transform 0.5s ease-in-out; }
 
 .direct-chat-text {
@@ -13690,11 +13646,9 @@ table.text-center, table.text-center td, table.text-center th {
   color: #999; }
 
 .direct-chat-contacts-open .direct-chat-contacts {
-  -webkit-transform: translate(0, 0);
   transform: translate(0, 0); }
 
 .direct-chat-contacts {
-  -webkit-transform: translate(101%, 0);
   transform: translate(101%, 0);
   position: absolute;
   top: 0;
@@ -14144,10 +14098,8 @@ table.text-center, table.text-center td, table.text-center th {
     margin-right: 5px;
     line-height: 30px; }
     .fc-color-picker > li .fa {
-      transition: -webkit-transform linear 0.3s;
       transition: transform linear 0.3s; }
       .fc-color-picker > li .fa:hover {
-        -webkit-transform: rotate(30deg);
         transform: rotate(30deg); }
 
 #add-new-event {
@@ -14543,7 +14495,6 @@ table.text-center, table.text-center td, table.text-center th {
   .main-footer {
     margin-left: 0 !important;
     min-height: 0 !important;
-    -webkit-transform: translate(0, 0);
     transform: translate(0, 0); }
   .fixed .content-wrapper,
   .fixed .right-side {
