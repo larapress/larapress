@@ -1,37 +1,60 @@
-<nav class="navbar navbar-stacked" id="sidebar-wrapper" role="navigation">
-    <ul class="nav sidebar-nav">
-        <li>
-            <a href="{!!route('larapress.dashboard')!!}">Dashboard</a>
-        </li>
-        <li>
-            <a v-on:click="requestMediaManager" href="#">Media Manager</a>
-        </li>
+<aside class="main-sidebar">
+    <!-- Inner sidebar -->
+    <div class="sidebar">
+        <!-- user panel (Optional) -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+            </div>
+            <div class="pull-left info">
+                <p>User Name</p>
 
-        @foreach($menu as $item)
+                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+            </div>
+        </div><!-- /.user-panel -->
 
-        @if(count($item['sub_menu']) == 0)
 
-        <li>
-            <a href="{!!$item['route']!!}">{!!$item['display']!!}</a>
-        </li>
+        <!-- Sidebar Menu -->
+        <ul class="sidebar-menu">
+            <li class="header">HEADER</li>
+            <!-- Optionally, you can add icons to the links -->
+            <li>
+                <a href="{!!route('larapress.dashboard')!!}">Dashboard</a>
+            </li>
 
-        @else
+            <li>
+                <a v-on:click="requestMediaManager" href="#">Media Manager</a>
+            </li>
 
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{!!$item['display']!!} <span
-                    class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-                <li class="dropdown-header">Dropdown heading</li>
-                @foreach($item['sub_menu'] as $subItem)
-                <li><a href="{!!route($subItem['route'])!!}">{!!$subItem['display']!!}</a></li>
-                @endforeach
-            </ul>
-        </li>
+            @foreach($menu as $item)
 
-        @endif
+                @if(count($item['sub_menu']) == 0)
 
-        @endforeach
+                    <li>
+                        <a href="{!!$item['route']!!}">{!!$item['display']!!}</a>
+                    </li>
 
-    </ul>
-</nav>
-<!-- /#sidebar-wrapper -->
+                @else
+
+                    <li class="treeview">
+                        <a href="#">
+                            <span>{!!$item['display']!!}</span>
+                            <i class="fa fa-angle-right pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            @foreach($item['sub_menu'] as $subItem)
+                                <li><a href="{!!route($subItem['route'])!!}">{!!$subItem['display']!!}</a></li>
+                            @endforeach
+                        </ul>
+                    </li>
+
+                @endif
+
+            @endforeach
+
+        </ul><!-- /.sidebar-menu -->
+
+    </div><!-- /.sidebar -->
+</aside><!-- /.main-sidebar -->
+
+

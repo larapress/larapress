@@ -9,25 +9,22 @@
     @yield('meta')
 
     @if(env('APP_ENV') == 'local')
-        {!!HTML::style('css/vendor/larapress/admin/admin.css')!!}
+        {!!HTML::style('css/admin.css')!!}
+
     @else
         {!!HTML::style('larapress/css/larapress.css')!!}
     @endif
 </head>
 
-<body>
+<body class="skin-blue fixed">
 
-<div class="container">
-    <div class="row">
-        @include('larapress::common.header')
-    </div>
+<div class="wrapper">
+    @include('larapress::common.header')
 
-    <div class="row">
-        <div class="col-xs-2">
-            @include('larapress::common.sidebar')
-        </div>
-        <div class="col-xs-10">
+    @include('larapress::common.sidebar')
 
+    <div class="content-wrapper">
+        <div class="col-xs-12">
             @if(\Session::has('success'))
                 <div class="alert alert-success">
                     <p>
@@ -41,18 +38,17 @@
             <media-manager></media-manager>
         </div>
     </div>
+</div>
 
-    <div class="row">
-        @include('larapress::common.footer')
-    </div>
+<div class="row">
+    @include('larapress::common.footer')
 </div>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.7.0/vue-resource.min.js"></script>
 
 @if(env('APP_ENV') == 'local')
-    <script src="/js/vendor/larapress/admin/larapress_libs.js"></script>
-    <script src="/js/vendor/larapress/admin/larapress_vues.js"></script>
+    <script src="/js/larapress_libs.js"></script>
+    <script src="/js/larapress_vues.js"></script>
 @else
     <script src="/js/main.js"></script>
 @endif

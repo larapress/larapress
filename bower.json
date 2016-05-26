@@ -18,6 +18,7 @@
   ],
   "dependencies": {
     "bootstrap-sass": "^3.3.6",
-    "admin-lte.scss": "^3.1.2"
+    "admin-lte.scss": "^3.1.2",
+    "components-font-awesome": "^4.6.3"
   }
 }
