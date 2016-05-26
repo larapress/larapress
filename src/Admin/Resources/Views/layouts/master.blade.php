@@ -51,6 +51,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.7.0/vue-resource.min.js"></script>
 
 @if(env('APP_ENV') == 'local')
+    <script src="/js/vendor/larapress/admin/larapress_libs.js"></script>
     <script src="/js/vendor/larapress/admin/larapress_vues.js"></script>
 @else
     <script src="/js/main.js"></script>

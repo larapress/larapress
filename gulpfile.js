@@ -27,6 +27,7 @@ elixir(function(mix){
 
     //console.log(elixir.config);
 
+
     /**
      * Admin Styles
      */
@@ -34,6 +35,11 @@ elixir(function(mix){
         'Admin/Resources/Assets/sass/app.scss'
     ], 'src/Admin/Resources/Public/css/admin.css');
 
+
+    mix.scripts([
+        'Admin/Resources/Assets/js/lib/ajquery-2.2.3.min.js',
+        'Admin/Resources/Assets/js/lib/bootstrap.min.js'
+    ], 'src/Admin/Resources/Public/js/larapress_libs.js')
 
     /**
      * Admin js section of package
@@ -46,6 +52,7 @@ elixir(function(mix){
     /**
      * Copy to the public path to make app workable when developing
      */
+    mix.copy('src/Admin/Resources/Public/js/larapress_libs.js', '../../public/js/vendor/larapress/admin/larapress_libs.js');
     mix.copy('src/Admin/Resources/Public/js/larapress_vues.js', '../../public/js/vendor/larapress/admin/larapress_vues.js');
     mix.copy('src/Admin/Resources/Public/css/admin.css', '../../public/css/vendor/larapress/admin/admin.css');
 });
