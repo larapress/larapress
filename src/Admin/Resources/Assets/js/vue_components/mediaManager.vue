@@ -1,30 +1,47 @@
 <template>
-    <div v-show="display" class="col-xs-6 col-xs-offset-3" style="margin-top: 10rem">
-        <h1>Media Manager</h1>
+    <div id="mediaManager" class="modal" tabindex="-1" role="dialog" v-bind:style="{display: display}">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                     <button type="button" class="close" v-on:click="closeMediaManager()" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
 
-        <h2 v-on:click="closeMediaManager()" class="pull-right">&times;</h2>
-        <a href="#" v-on:click="setUpload()" v-show="showing_files">Upload</a>
-        <a href="#" v-else v-on:click="setToShowFiles()">Show Files</a>
+                    <h4 class="modal-title">Media Manager</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-3">
+                                <directories-component></directories-component>
+                            </div>
 
-        <div class="col-xs-4">
-            <h5>Directories</h5>
-            <directories-component></directories-component>
+                            <div class="col-xs-9">
+                                <files-component></files-component>
+                            </div>
+
+                            <div class="col-xs-9">
+                                <upload-component></upload-component>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <button v-on:click="setUpload()" v-show="showing_files" class="btn btn-primary pull-left">Upload</button>
+                    <button v-else v-on:click="setToShowFiles()" class="btn btn-default pull-left">Show Files</button>
+
+
+
+                    <button type="button" class="btn btn-default" v-on:click="closeMediaManager()">Close</button>
+                    <button type="button" class="btn btn-primary" v-on:click="mediaSubmit()">Confirm</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
         </div>
-
-        <div class="col-xs-4">
-            <files-component></files-component>
-        </div>
-
-        <div class="col-xs-4">
-            <upload-component></upload-component>
-        </div>
-
-        <div class="col-xs-12">
-            <a href="#" class="btn btn-primary" v-on:click="mediaSubmit()">
-                Confirm
-            </a>
-        </div>
+        <!-- /.modal-dialog -->
     </div>
+    <!-- /.modal -->
 </template>
 
 <script>
@@ -45,7 +62,7 @@
                 selected_file: '',                  // the file that has been selected
                 working_context: '',                // this will be to identify which el/template called media manager to send back result
                 showing_files: true,                // default to show files not upload
-                display: false                      // default to hide the media manager
+                display: 'none'                      // default to hide the media manager
             }
         },
         //change the directory/refresh on load
@@ -62,7 +79,7 @@
              * @param context - Identifier of the calling el/template
              */
             mediaManagerRequested: function (context) {
-                this.display = true;
+                this.display = 'block';
                 this.working_context = context;
             },
             /**
@@ -92,7 +109,7 @@
              * if the close btn has been pressed
              */
             closeMediaManager: function () {
-                this.display = false;
+                this.display = 'none';
             },
             /**
              * when the user submits the media manager

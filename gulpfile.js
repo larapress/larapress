@@ -33,27 +33,27 @@ elixir(function(mix){
      */
     mix.sass([
         'src/Admin/Resources/Assets/sass/app.scss'
-    ], 'src/Admin/Resources/Public/css/admin.css');
+    ], 'src/Admin/Resources/Public/css/admin.css')
+        .copy('src/Admin/Resources/Public/css/admin.css', '../../public/css/admin.css');;
 
 
+    /**
+     * Javascript libraries
+     */
     mix.scripts([
         'src/Admin/Resources/Assets/js/lib/ajquery-2.2.3.min.js',
         'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.min.js',
         'bower_components/admin-lte.scss/javascripts/app.js'
     ], 'src/Admin/Resources/Public/js/larapress_libs.js')
+        .copy('src/Admin/Resources/Public/js/larapress_libs.js', '../../public/js/larapress_libs.js')
+
 
     /**
-     * Admin js section of package
+     * Admin vue.js section of package
      */
     mix.browserify([
         'src/Admin/Resources/Assets/js/larapress_vues.js'
     ], 'src/Admin/Resources/Public/js/larapress_vues.js')
+        .copy('src/Admin/Resources/Public/js/larapress_vues.js', '../../public/js/larapress_vues.js');
 
-
-    /**
-     * Copy to the public path to make app workable when developing
-     */
-    mix.copy('src/Admin/Resources/Public/js/larapress_libs.js', '../../public/js/larapress_libs.js');
-    mix.copy('src/Admin/Resources/Public/js/larapress_vues.js', '../../public/js/larapress_vues.js');
-    mix.copy('src/Admin/Resources/Public/css/admin.css', '../../public/css/admin.css');
 });

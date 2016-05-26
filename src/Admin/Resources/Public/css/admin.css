@@ -12403,4 +12403,7 @@ table.text-center, table.text-center td, table.text-center th {
   overflow: visible;
   clip: auto; }
 
+.modal-lg {
+  width: 80%; }
+
 /*# sourceMappingURL=admin.css.map */
