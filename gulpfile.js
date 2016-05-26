@@ -13,30 +13,20 @@ require('laravel-elixir-vueify');
  |
  */
 
+/**
+ * Change the defaults to make it work in package scope
+ * @type {string}
+ */
+elixir.config.assetsPath = ''; //trailing slash required.
+elixir.config.js.folder = '';
+elixir.config.js.outputFolder = '';
+elixir.config.css.folder ='';
+elixir.config.css.sass.folder = '';
 
-elixir(function(mix){
-    /**
-     * Change the defaults to make it work in package scope
-     * @type {string}
-     */
-    elixir.config.assetsPath = ''; //trailing slash required.
-    elixir.config.js.folder = '';
-    elixir.config.js.outputFolder = '';
-    elixir.config.css.folder ='';
-    elixir.config.css.sass.folder = '';
-
-    //console.log(elixir.config);
+//console.log(elixir.config);
 
 
-    /**
-     * Admin Styles
-     */
-    mix.sass([
-        'src/Admin/Resources/Assets/sass/app.scss'
-    ], 'src/Admin/Resources/Public/css/admin.css')
-        .copy('src/Admin/Resources/Public/css/admin.css', '../../public/css/admin.css');;
-
-
+var libs = elixir(function(mix){
     /**
      * Javascript libraries
      */
@@ -46,6 +36,18 @@ elixir(function(mix){
         'bower_components/admin-lte.scss/javascripts/app.js'
     ], 'src/Admin/Resources/Public/js/larapress_libs.js')
         .copy('src/Admin/Resources/Public/js/larapress_libs.js', '../../public/js/larapress_libs.js')
+
+
+});
+
+var admin = elixir(function(mix){
+    /**
+     * Admin Styles
+     */
+    mix.sass([
+        'src/Admin/Resources/Assets/sass/app.scss'
+    ], 'src/Admin/Resources/Public/css/admin.css')
+        .copy('src/Admin/Resources/Public/css/admin.css', '../../public/css/admin.css');;
 
 
     /**

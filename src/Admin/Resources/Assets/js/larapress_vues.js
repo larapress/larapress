@@ -5,13 +5,15 @@ Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#csrf_token').
 
 import MediaManager from './vue_components/mediaManager.vue';
 import FeatureImage from './vue_components/featureImage.vue';
+import ImageAttachments from './vue_components/imageAttachments.vue';
 
 new Vue({
     el: 'body',
 
     components: {
         MediaManager: MediaManager,
-        FeatureImage: FeatureImage
+        FeatureImage: FeatureImage,
+        ImageAttachments: ImageAttachments
     },
 
     events: {

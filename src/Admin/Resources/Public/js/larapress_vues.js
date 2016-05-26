@@ -11966,6 +11966,10 @@ var _featureImage = require('./vue_components/featureImage.vue');
 
 var _featureImage2 = _interopRequireDefault(_featureImage);
 
+var _imageAttachments = require('./vue_components/imageAttachments.vue');
+
+var _imageAttachments2 = _interopRequireDefault(_imageAttachments);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Vue = require('vue');
@@ -11978,7 +11982,8 @@ new Vue({
 
     components: {
         MediaManager: _mediaManager2.default,
-        FeatureImage: _featureImage2.default
+        FeatureImage: _featureImage2.default,
+        ImageAttachments: _imageAttachments2.default
     },
 
     events: {
@@ -12007,7 +12012,7 @@ new Vue({
     }
 });
 
-},{"./vue_components/featureImage.vue":30,"./vue_components/mediaManager.vue":32,"vue":27,"vue-resource":16}],29:[function(require,module,exports){
+},{"./vue_components/featureImage.vue":30,"./vue_components/imageAttachments.vue":33,"./vue_components/mediaManager.vue":34,"vue":27,"vue-resource":16}],29:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -12075,7 +12080,7 @@ module.exports = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <a href=\"#\" class=\"btn btn-primary pull-right\" v-on:click=\"chooseImage()\">Select Feature image</a>\n    <input type=\"hidden\" value=\"{{ image_url }}\" name=\"feature_image\">\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <button class=\"btn btn-primary pull-right\" v-on:click=\"chooseImage()\">Select Feature image</button>\n    <input type=\"hidden\" value=\"{{ image_url }}\" name=\"feature_image\">\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12146,6 +12151,76 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"vue":27,"vue-hot-reload-api":2}],32:[function(require,module,exports){
+'use strict';
+
+module.exports = {
+
+    data: function data() {
+        return {
+            image_url: 'None Selected',
+            context: 'attachment' // this is a name that gets passed back once file has been selected from broadcast
+        };
+    },
+    events: {
+        /**
+         * if a file was selected then update file name
+         * @param result - object containing context,value
+         */
+        mediaSubmitted: function mediaSubmitted(result) {
+            if (result.context == this.context) this.image_url = result.value;
+        }
+    },
+    methods: {
+        /**
+         * If btn pressed to select the feature image
+         */
+        chooseImage: function chooseImage() {
+            this.$dispatch('mediaManagerRequested', this.context);
+        }
+    }
+
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"box box-default\">\n        <div class=\"box-header with-border\">\n            <h3 class=\"box-title\">Image: {{image_url}}</h3>\n\n            <div class=\"box-tools pull-right\">\n                <button class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i></button>\n            </div>\n            <!-- /.box-tools -->\n        </div>\n        <!-- /.box-header -->\n        <div class=\"box-body\">\n            <input type=\"text\" value=\"{{ image_url }}\" name=\"feature_image\">\n            <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"chooseImage()\">Select Image</button>\n        </div>\n        <!-- /.box-body -->\n    </div>\n    <!-- /.box -->\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/home/vagrant/Code/sjlaravel/packages/larapress/src/Admin/Resources/Assets/js/vue_components/imageAttachment.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":27,"vue-hot-reload-api":2}],33:[function(require,module,exports){
+'use strict';
+
+var _imageAttachment = require('./imageAttachment.vue');
+
+var _imageAttachment2 = _interopRequireDefault(_imageAttachment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = {
+    components: {
+        ImageAttachment: _imageAttachment2.default
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-xs-12\">\n\n        <h3 class=\"box-title\">Image Attachments</h3>\n\n        <div class=\"row\">\n            <div class=\"col-xs-12\">\n                <image-attachment></image-attachment>\n            </div>\n        </div>\n\n        <button class=\"btn btn-primary\">Add Another Attachment</button>\n\n    </div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/home/vagrant/Code/sjlaravel/packages/larapress/src/Admin/Resources/Assets/js/vue_components/imageAttachments.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"./imageAttachment.vue":32,"vue":27,"vue-hot-reload-api":2}],34:[function(require,module,exports){
 'use strict';
 
 var _directory = require('./directory.vue');
@@ -12249,7 +12324,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./directory.vue":29,"./filesComponent.vue":31,"./uploadComponent.vue":33,"vue":27,"vue-hot-reload-api":2}],33:[function(require,module,exports){
+},{"./directory.vue":29,"./filesComponent.vue":31,"./uploadComponent.vue":35,"vue":27,"vue-hot-reload-api":2}],35:[function(require,module,exports){
 "use strict";
 
 module.exports = {

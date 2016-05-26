@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a href="#" class="btn btn-primary pull-right" v-on:click="chooseImage()">Select Feature image</a>
+        <button class="btn btn-primary pull-right" v-on:click="chooseImage()">Select Feature image</button>
         <input type="hidden" value="{{ image_url }}" name="feature_image"/>
     </div>
 </template>

@@ -36,6 +36,8 @@
                 {!!old('body', isset($post->body) ? $post->body : null)!!}
             </textarea>
         </div>
+
+        <image-attachments></image-attachments>
     </div>
 
     <div class="col-xs-4">
@@ -48,11 +50,11 @@
             </select>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" style="width:100%;float: left;">
             <feature-image></feature-image>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" style="width:100%;float: left;">
             <input type="submit" value="Save" class="btn btn-primary pull-right">
         </div>
     </div>
