@@ -1,0 +1,27 @@
+$fileColor:$blue;
+
+.fileThumb{
+  width:100%;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  background-position: center;
+  background-size: cover;
+  border: 5px solid #fff;
+  .title{
+    width:100%;
+    display: block;
+    background: $fileColor;
+    color:#fff;
+    padding: 0.3rem 0.6rem 0.3rem 0.6rem;
+    bottom: 1px;
+    flex:1;
+    flex-grow: inherit;
+  }
+}
+
+.fileThumb.active{
+  border-color: $fileColor;
+}

@@ -12129,16 +12129,24 @@ module.exports = {
         },
         /**
          * When a file is selected, send the filename to whatever needs it
-         * @param filename
+         * @param selected_file - obj
          */
-        selectedFile: function selectedFile(file) {
-            this.selected_file = file;
-            this.$dispatch('fileSelected', file);
+        selectedFile: function selectedFile(selected_file) {
+            //remove selected from all icons
+            this.files.forEach(function (file) {
+                file.active = false;
+            });
+
+            //toggle the active status
+            selected_file.active = selected_file.active != true;
+
+            this.selected_file = selected_file.path;
+            this.$dispatch('fileSelected', selected_file.path);
         }
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div v-show=\"display\">\n    <h5 v-show=\"files.length < 1\">Directory is empty</h5>\n    <ul>\n        <li v-for=\"file in files\">\n            <a href=\"#\" v-on:click=\"selectedFile(file.path)\">{{ file.name }}</a>\n        </li>\n    </ul>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div v-show=\"display\">\n    <h5 v-show=\"files.length < 1\">Directory is empty</h5>\n    <div class=\"row\">\n        <div v-for=\"file in files\" class=\"col-xs-3\">\n            <a href=\"#\" v-on:click=\"selectedFile(file)\" class=\"fileThumb\" v-bind:class=\"{active : file.active}\" style=\"background: url('{{ file.path }}')\">\n                <div class=\"title\">\n                    <p>{{ file.name }}</p>\n                </div>\n            </a>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12181,7 +12189,7 @@ module.exports = {
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"box box-default\">\n        <div class=\"box-header with-border\">\n            <h3 class=\"box-title\">Image: {{image_url}}</h3>\n\n            <div class=\"box-tools pull-right\">\n                <button class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i></button>\n            </div>\n            <!-- /.box-tools -->\n        </div>\n        <!-- /.box-header -->\n        <div class=\"box-body\">\n            <input type=\"text\" value=\"{{ image_url }}\" name=\"feature_image\">\n            <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"chooseImage()\">Select Image</button>\n        </div>\n        <!-- /.box-body -->\n    </div>\n    <!-- /.box -->\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"box box-default\">\n        <div class=\"box-header with-border\">\n            <div class=\"col-xs-2\">\n                <img src=\"{{image_url}}\" class=\"img-responsive\">\n            </div>\n            <div class=\"col-xs-8\">\n                <h3 class=\"box-title\">Image: {{image_url}}</h3>\n            </div>\n\n            <div class=\"col-xs-2\">\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i></button>\n                </div>\n            </div>\n            <!-- /.box-tools -->\n        </div>\n        <!-- /.box-header -->\n        <div class=\"box-body\">\n            <input type=\"text\" value=\"{{ image_url }}\" name=\"feature_image\">\n            <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"chooseImage()\">Select Image</button>\n        </div>\n        <!-- /.box-body -->\n    </div>\n    <!-- /.box -->\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12205,10 +12213,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 module.exports = {
     components: {
         ImageAttachment: _imageAttachment2.default
+    },
+    data: function data() {
+        return {
+            attachments: [{
+                id: 1
+            }, { id: 2 }]
+        };
+    },
+    methods: {
+        createAttachment: function createAttachment() {
+            this.attachments.push({
+                id: 9
+            });
+        }
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-xs-12\">\n\n        <h3 class=\"box-title\">Image Attachments</h3>\n\n        <div class=\"row\">\n            <div class=\"col-xs-12\">\n                <image-attachment></image-attachment>\n            </div>\n        </div>\n\n        <button class=\"btn btn-primary\">Add Another Attachment</button>\n\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-xs-12\">\n\n        <h3 class=\"box-title\">Image Attachments</h3>\n\n        <div class=\"row\">\n            <div class=\"col-xs-12\">\n                <image-attachment v-for=\"attachment in attachments\"></image-attachment>\n            </div>\n        </div>\n\n        <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"createAttachment()\">Add Another Attachment\n        </button>\n\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

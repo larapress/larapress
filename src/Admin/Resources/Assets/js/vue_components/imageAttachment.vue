@@ -2,10 +2,17 @@
     <div>
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title">Image: {{image_url}}</h3>
+                <div class="col-xs-2">
+                    <img src="{{image_url}}" class="img-responsive"/>
+                </div>
+                <div class="col-xs-8">
+                    <h3 class="box-title">Image: {{image_url}}</h3>
+                </div>
 
-                <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                <div class="col-xs-2">
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
                 </div>
                 <!-- /.box-tools -->
             </div>

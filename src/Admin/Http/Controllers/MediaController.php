@@ -43,6 +43,7 @@ class MediaController extends Controller
             $result->directory = $dir;
             $result->path = '/'. $dir . '/' . basename($file);
             $result->fullPath = \URL::to($dir) . '/' . basename($file);
+            $result->active = false;
             $files[] = $result;
         }
 
