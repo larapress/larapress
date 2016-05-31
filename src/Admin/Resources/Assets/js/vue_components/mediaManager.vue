@@ -73,6 +73,7 @@
             changeOfDirectory: function (directory) {
                 this.working_directory = directory;
                 this.$broadcast('changeOfDirectory', directory);
+                console.log('Working Directory: ' + this.working_directory);
             },
             /**
              * When a el/template requests the media manager

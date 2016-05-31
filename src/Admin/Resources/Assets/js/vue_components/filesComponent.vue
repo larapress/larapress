@@ -1,12 +1,12 @@
 <template>
-    <div v-show="display">
+    <div v-show="display" class="filePanel">
         <h5 v-show="files.length < 1">Directory is empty</h5>
         <div class="row">
-            <div v-for="file in files" class="col-xs-3">
+            <div v-for="file in files" class="col-xs-2">
                 <a href="#" v-on:click="selectedFile(file)"
                    class="fileThumb"
                    v-bind:class="{active : file.active}"
-                   style="background: url('{{ file.path }}')">
+                   v-bind:style="{background : file.backgroundImage}">
                     <div class="title">
                         <p>{{ file.name }}</p>
                     </div>
@@ -67,5 +67,4 @@
             }
         }
     }
-
 </script>

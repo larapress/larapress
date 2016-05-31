@@ -2,10 +2,10 @@
         <div class="sidebar" style="background: #000">
             <ul class="sidebar-menu">
                 <li v-for="directory in directories">
-                    <a v-on:click="changeDirectory(directory.path)" href="#">{{ directory.name }}</a>
-                    <ul class="treeview">
+                    <a v-on:click="changeDirectory(directory)" href="#">{{ directory.name }}</a>
+                    <ul v-show="directory.show_sub_directories">
                         <li v-for="sub_directory in directory.sub_directories">
-                            <a v-on:click="changeDirectory(sub_directory.path)" href="#">{{ sub_directory.name }}</a>
+                            <a v-on:click="changeDirectory(sub_directory)" href="#">{{ sub_directory.name }}</a>
                         </li>
                     </ul>
                 </li>
@@ -35,7 +35,8 @@
                 });
             },
             changeDirectory: function (directory) {
-                this.$dispatch('changeOfDirectory', directory);
+                directory.show_sub_directories = true;
+                this.$dispatch('changeOfDirectory', directory.path);
             }
         }
     }

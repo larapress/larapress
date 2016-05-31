@@ -43,7 +43,9 @@ class MediaController extends Controller
             $result->directory = $dir;
             $result->path = '/'. $dir . '/' . basename($file);
             $result->fullPath = \URL::to($dir) . '/' . basename($file);
+            $result->backgroundImage = "url('$result->path')";
             $result->active = false;
+
             $files[] = $result;
         }
 
@@ -75,6 +77,8 @@ class MediaController extends Controller
         $folder->path = $dir;
 
         $folder->sub_directories = [];
+
+        $folder->show_sub_directories = false;
 
         $directories = Storage::directories($dir);
 

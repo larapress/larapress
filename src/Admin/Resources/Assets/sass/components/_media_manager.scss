@@ -1,27 +1,44 @@
-$fileColor:$blue;
+$fileColor: $blue;
 
-.fileThumb{
-  width:100%;
-  height: 150px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: flex-end;
-  background-position: center;
-  background-size: cover;
-  border: 5px solid #fff;
-  .title{
-    width:100%;
-    display: block;
-    background: $fileColor;
-    color:#fff;
-    padding: 0.3rem 0.6rem 0.3rem 0.6rem;
-    bottom: 1px;
-    flex:1;
-    flex-grow: inherit;
+//this is the panel that shows the fileThumbs
+.filePanel {
+  width: 100%;
+  height: 300px;
+  float: left;
+  position: relative;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  border: 1px solid grey;
+
+  //these are the file thumbs
+  .fileThumb {
+    width: 100%;
+    height: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+    background-position: center;
+    background-size: 100%;
+    border: 5px solid #fff;
+    .title {
+      width: 100%;
+      display: none;
+      background: $fileColor;
+      color: #fff;
+      padding: 0.3rem 0.6rem 0.3rem 0.6rem;
+      bottom: 1px;
+      flex: 1;
+      flex-grow: inherit;
+    }
+  }
+  .fileThumb:hover {
+    .fileThumb.title{
+      display: block;
+    }
+  }
+  .fileThumb.active {
+    border-color: $fileColor;
   }
 }
 
-.fileThumb.active{
-  border-color: $fileColor;
-}

@@ -1,4 +1,5 @@
 var elixir = require('laravel-elixir');
+var argv = require('yargs').argv;
 
 require('laravel-elixir-vueify');
 
@@ -20,42 +21,45 @@ require('laravel-elixir-vueify');
 elixir.config.assetsPath = ''; //trailing slash required.
 elixir.config.js.folder = '';
 elixir.config.js.outputFolder = '';
-elixir.config.css.folder ='';
+elixir.config.css.folder = '';
 elixir.config.css.sass.folder = '';
 
 //console.log(elixir.config);
 
 
-var libs = elixir(function(mix){
-    /**
-     * Javascript libraries
-     */
-    mix.scripts([
-        'src/Admin/Resources/Assets/js/lib/ajquery-2.2.3.min.js',
-        'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.min.js',
-        'bower_components/admin-lte.scss/javascripts/app.js'
-    ], 'src/Admin/Resources/Public/js/larapress_libs.js')
-        .copy('src/Admin/Resources/Public/js/larapress_libs.js', '../../public/js/larapress_libs.js')
+elixir(function (mix) {
 
 
-});
+    if (argv.build) {
+        /**
+         * Javascript libraries
+         */
+        mix.scripts([
+            'src/Admin/Resources/Assets/js/lib/ajquery-2.2.3.min.js',
+            'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.min.js',
+            'bower_components/admin-lte.scss/javascripts/app.js'
+        ], 'src/Admin/Resources/Public/js/larapress_libs.js')
+            .copy('src/Admin/Resources/Public/js/larapress_libs.js', '../../public/js/larapress_libs.js')
+    }
 
-var admin = elixir(function(mix){
-    /**
-     * Admin Styles
-     */
-    mix.sass([
-        'src/Admin/Resources/Assets/sass/app.scss'
-    ], 'src/Admin/Resources/Public/css/admin.css')
-        .copy('src/Admin/Resources/Public/css/admin.css', '../../public/css/admin.css');;
 
+    if(argv.sass || argv.dev) {
+        /**
+         * Admin Styles
+         */
+        mix.sass([
+            'src/Admin/Resources/Assets/sass/app.scss'
+        ], 'src/Admin/Resources/Public/css/admin.css')
+            .copy('src/Admin/Resources/Public/css/admin.css', '../../public/css/admin.css');
+    }
 
-    /**
-     * Admin vue.js section of package
-     */
-    mix.browserify([
-        'src/Admin/Resources/Assets/js/larapress_vues.js'
-    ], 'src/Admin/Resources/Public/js/larapress_vues.js')
-        .copy('src/Admin/Resources/Public/js/larapress_vues.js', '../../public/js/larapress_vues.js');
-
+    if(argv.vue || argv.dev) {
+        /**
+         * Admin vue.js section of package
+         */
+        mix.browserify([
+            'src/Admin/Resources/Assets/js/larapress_vues.js'
+        ], 'src/Admin/Resources/Public/js/larapress_vues.js')
+            .copy('src/Admin/Resources/Public/js/larapress_vues.js', '../../public/js/larapress_vues.js');
+    }
 });

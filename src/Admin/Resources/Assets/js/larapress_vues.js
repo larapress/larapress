@@ -1,5 +1,5 @@
 var Vue = require('vue');
-Vue.use( require('vue-resource'));
+Vue.use(require('vue-resource'));
 
 Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#csrf_token').getAttribute('content');
 
@@ -15,7 +15,9 @@ new Vue({
         FeatureImage: FeatureImage,
         ImageAttachments: ImageAttachments
     },
-
+    ready: function () {
+        console.log(Vue.http.headers.common['X-CSRF-TOKEN']);
+    },
     events: {
         /**
          * if an event occurs anywhere requesting the media manager

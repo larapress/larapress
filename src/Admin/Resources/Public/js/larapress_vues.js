@@ -11985,7 +11985,9 @@ new Vue({
         FeatureImage: _featureImage2.default,
         ImageAttachments: _imageAttachments2.default
     },
-
+    ready: function ready() {
+        console.log(Vue.http.headers.common['X-CSRF-TOKEN']);
+    },
     events: {
         /**
          * if an event occurs anywhere requesting the media manager
@@ -12033,12 +12035,13 @@ module.exports = {
             });
         },
         changeDirectory: function changeDirectory(directory) {
-            this.$dispatch('changeOfDirectory', directory);
+            directory.show_sub_directories = true;
+            this.$dispatch('changeOfDirectory', directory.path);
         }
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"sidebar\" style=\"background: #000\">\n    <ul class=\"sidebar-menu\">\n        <li v-for=\"directory in directories\">\n            <a v-on:click=\"changeDirectory(directory.path)\" href=\"#\">{{ directory.name }}</a>\n            <ul class=\"treeview\">\n                <li v-for=\"sub_directory in directory.sub_directories\">\n                    <a v-on:click=\"changeDirectory(sub_directory.path)\" href=\"#\">{{ sub_directory.name }}</a>\n                </li>\n            </ul>\n        </li>\n    </ul>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"sidebar\" style=\"background: #000\">\n    <ul class=\"sidebar-menu\">\n        <li v-for=\"directory in directories\">\n            <a v-on:click=\"changeDirectory(directory)\" href=\"#\">{{ directory.name }}</a>\n            <ul v-show=\"directory.show_sub_directories\">\n                <li v-for=\"sub_directory in directory.sub_directories\">\n                    <a v-on:click=\"changeDirectory(sub_directory)\" href=\"#\">{{ sub_directory.name }}</a>\n                </li>\n            </ul>\n        </li>\n    </ul>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12146,7 +12149,7 @@ module.exports = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div v-show=\"display\">\n    <h5 v-show=\"files.length < 1\">Directory is empty</h5>\n    <div class=\"row\">\n        <div v-for=\"file in files\" class=\"col-xs-3\">\n            <a href=\"#\" v-on:click=\"selectedFile(file)\" class=\"fileThumb\" v-bind:class=\"{active : file.active}\" style=\"background: url('{{ file.path }}')\">\n                <div class=\"title\">\n                    <p>{{ file.name }}</p>\n                </div>\n            </a>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div v-show=\"display\" class=\"filePanel\">\n    <h5 v-show=\"files.length < 1\">Directory is empty</h5>\n    <div class=\"row\">\n        <div v-for=\"file in files\" class=\"col-xs-2\">\n            <a href=\"#\" v-on:click=\"selectedFile(file)\" class=\"fileThumb\" v-bind:class=\"{active : file.active}\" v-bind:style=\"{background : file.backgroundImage}\">\n                <div class=\"title\">\n                    <p>{{ file.name }}</p>\n                </div>\n            </a>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12283,6 +12286,7 @@ module.exports = {
         changeOfDirectory: function changeOfDirectory(directory) {
             this.working_directory = directory;
             this.$broadcast('changeOfDirectory', directory);
+            console.log('Working Directory: ' + this.working_directory);
         },
         /**
          * When a el/template requests the media manager
