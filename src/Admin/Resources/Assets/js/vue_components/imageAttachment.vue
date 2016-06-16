@@ -19,8 +19,28 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <input type="text" v-bind:value="imageUrl" v-bind:name="imageName""/>
-                <button type="button" class="btn btn-primary" v-on:click="chooseImage()">Select Image</button>
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label v-bind:for="imageAltName" class="col-sm-3 control-label">Alt Tag</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" v-bind:value="imageAlt" v-bind:name="imageAltName" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label v-bind:for="imageAltCaption" class="col-sm-3 control-label">Display Caption</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" v-bind:value="imageCaption" v-bind:name="imageCaptionName"
+                                   class="form-control"/>
+                        </div>
+                    </div>
+
+                    <input type="hidden" v-bind:value="imageUrl" v-bind:name="imageName"/>
+                    <button type="button" class="btn btn-primary pull-right" v-on:click="chooseImage()">Select Image
+                    </button>
+                </div>
             </div>
             <!-- /.box-body -->
         </div>
@@ -35,9 +55,18 @@
         data: function () {
             return {
                 attachmentSuffix: this.generateUniqueSuffix(),
-                imageName: this.attachmentPrefix,
-                imageUrl: 'None Selected',
-                context: 'attachment' // this is a name that gets passed back once file has been selected from broadcast
+                attachmentName: '',
+
+                imageName: '',
+                imageUrl: '',
+
+                imageAlt: '',
+                imageAltName: '',
+
+                imageCaption: '',
+                imageCaptionName: '',
+
+                context: '' // this is a name that gets passed back once file has been selected from broadcast
             }
         },
         events: {
@@ -74,10 +103,14 @@
              * Updates the attributes of the template form
              */
             updateAllFieldAttributes: function () {
-                this.imageName = this.attachmentPrefix + this.attachmentSuffix;
-                this.context = 'attachment_' + this.imageName;
+                this.attachmentName = this.attachmentPrefix + this.attachmentSuffix;
+                this.imageName = this.attachmentName + '_image';
+                this.imageAltName = this.attachmentName + '_alt';
+                this.imageCaptionName = this.attachmentName + '_caption';
+                this.context = 'attachment_' + this.attachmentName;
             }
         },
+
         ready: function () {
             this.updateAllFieldAttributes();
         }

@@ -12172,9 +12172,18 @@ module.exports = {
     data: function data() {
         return {
             attachmentSuffix: this.generateUniqueSuffix(),
-            imageName: this.attachmentPrefix,
-            imageUrl: 'None Selected',
-            context: 'attachment' // this is a name that gets passed back once file has been selected from broadcast
+            attachmentName: '',
+
+            imageName: '',
+            imageUrl: '',
+
+            imageAlt: '',
+            imageAltName: '',
+
+            imageCaption: '',
+            imageCaptionName: '',
+
+            context: '' // this is a name that gets passed back once file has been selected from broadcast
         };
     },
     events: {
@@ -12211,8 +12220,11 @@ module.exports = {
          * Updates the attributes of the template form
          */
         updateAllFieldAttributes: function updateAllFieldAttributes() {
-            this.imageName = this.attachmentPrefix + this.attachmentSuffix;
-            this.context = 'attachment_' + this.imageName;
+            this.attachmentName = this.attachmentPrefix + this.attachmentSuffix;
+            this.imageName = this.attachmentName + '_image';
+            this.imageAltName = this.attachmentName + '_alt';
+            this.imageCaptionName = this.attachmentName + '_caption';
+            this.context = 'attachment_' + this.attachmentName;
         }
     },
     ready: function ready() {
@@ -12221,7 +12233,7 @@ module.exports = {
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"box box-default\">\n        <div class=\"box-header with-border\">\n            <div class=\"col-xs-2\">\n                <img v-bind:src=\"imageUrl\" class=\"img-responsive\">\n            </div>\n            <div class=\"col-xs-8\">\n                <h3 class=\"box-title\">Image: {{imageUrl}}</h3>\n            </div>\n\n            <div class=\"col-xs-2\">\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i></button>\n                </div>\n            </div>\n            <!-- /.box-tools -->\n        </div>\n        <!-- /.box-header -->\n        <div class=\"box-body\">\n            <input type=\"text\" v-bind:value=\"imageUrl\" v-bind:name=\"imageName\" \"=\"\">\n            <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"chooseImage()\">Select Image</button>\n        </div>\n        <!-- /.box-body -->\n    </div>\n    <!-- /.box -->\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"box box-default\">\n        <div class=\"box-header with-border\">\n            <div class=\"col-xs-2\">\n                <img v-bind:src=\"imageUrl\" class=\"img-responsive\">\n            </div>\n            <div class=\"col-xs-8\">\n                <h3 class=\"box-title\">Image: {{imageUrl}}</h3>\n            </div>\n\n            <div class=\"col-xs-2\">\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i></button>\n                </div>\n            </div>\n            <!-- /.box-tools -->\n        </div>\n        <!-- /.box-header -->\n        <div class=\"box-body\">\n            <div class=\"form-horizontal\">\n                <div class=\"form-group\">\n                    <label v-bind:for=\"imageAltName\" class=\"col-sm-3 control-label\">Alt Tag</label>\n\n                    <div class=\"col-sm-9\">\n                        <input type=\"text\" v-bind:value=\"imageAlt\" v-bind:name=\"imageAltName\" class=\"form-control\">\n                    </div>\n                </div>\n\n                <div class=\"form-group\">\n                    <label v-bind:for=\"imageAltCaption\" class=\"col-sm-3 control-label\">Display Caption</label>\n\n                    <div class=\"col-sm-9\">\n                        <input type=\"text\" v-bind:value=\"imageCaption\" v-bind:name=\"imageCaptionName\" class=\"form-control\">\n                    </div>\n                </div>\n\n                <input type=\"hidden\" v-bind:value=\"imageUrl\" v-bind:name=\"imageName\">\n                <button type=\"button\" class=\"btn btn-primary pull-right\" v-on:click=\"chooseImage()\">Select Image\n                </button>\n            </div>\n        </div>\n        <!-- /.box-body -->\n    </div>\n    <!-- /.box -->\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
