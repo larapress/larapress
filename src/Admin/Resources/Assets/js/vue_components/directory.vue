@@ -1,10 +1,10 @@
 <template>
         <div class="sidebar" style="background: #000">
-            <ul class="sidebar-menu">
-                <li v-for="directory in directories">
+            <ul class="nav sidebar-menu">
+                <li v-for="directory in directories" class="treeview" v-bind:class="{ active : directory.active }">
                     <a v-on:click="changeDirectory(directory)" href="#">{{ directory.name }}</a>
-                    <ul v-show="directory.show_sub_directories">
-                        <li v-for="sub_directory in directory.sub_directories">
+                    <ul v-show="directory.show_sub_directories" class="nav treeview-menu">
+                        <li v-for="sub_directory in directory.sub_directories" v-bind:class="{ active : sub_directory.active }">
                             <a v-on:click="changeDirectory(sub_directory)" href="#">{{ sub_directory.name }}</a>
                         </li>
                     </ul>
@@ -18,9 +18,7 @@
     module.exports = {
         data: function () {
             return {
-                directories: [
-                    {name: 'test'}
-                ]
+                directories: []
             }
         },
         ready: function () {
@@ -34,9 +32,12 @@
                     console.log(error);
                 });
             },
-            changeDirectory: function (directory) {
-                directory.show_sub_directories = true;
-                this.$dispatch('changeOfDirectory', directory.path);
+            changeDirectory: function (selected_directory) {
+                selected_directory.show_sub_directories = true;
+
+                selected_directory.active = true;
+
+                this.$dispatch('changeOfDirectory', selected_directory.path);
             }
         }
     }

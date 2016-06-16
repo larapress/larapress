@@ -6,7 +6,7 @@
                 <a href="#" v-on:click="selectedFile(file)"
                    class="fileThumb"
                    v-bind:class="{active : file.active}"
-                   v-bind:style="{background : file.backgroundImage}">
+                   v-bind:style="{backgroundImage : file.backgroundImage}">
                     <div class="title">
                         <p>{{ file.name }}</p>
                     </div>

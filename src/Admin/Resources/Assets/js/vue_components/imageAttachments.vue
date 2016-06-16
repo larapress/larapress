@@ -2,11 +2,11 @@
     <div class="row">
         <div class="col-xs-12">
 
-            <h3 class="box-title">Image Attachments</h3>
+            <h3 class="box-title">{{listTitle}}</h3>
 
             <div class="row">
                 <div class="col-xs-12">
-                    <image-attachment v-for="attachment in attachments"></image-attachment>
+                    <image-attachment v-for="attachment in attachments" v-bind:attachment-prefix="attachmentsPrefix"></image-attachment>
                 </div>
             </div>
 
@@ -24,6 +24,7 @@
         components: {
             ImageAttachment: ImageAttachment
         },
+        props: ['listTitle', 'attachmentsPrefix'],
         data: function () {
             return {
                 attachments: [{

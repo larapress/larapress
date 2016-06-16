@@ -80,6 +80,8 @@ class MediaController extends Controller
 
         $folder->show_sub_directories = false;
 
+        $folder->active = false;
+
         $directories = Storage::directories($dir);
 
         foreach ($directories as $dir) {

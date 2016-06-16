@@ -12020,7 +12020,7 @@ new Vue({
 module.exports = {
     data: function data() {
         return {
-            directories: [{ name: 'test' }]
+            directories: []
         };
     },
     ready: function ready() {
@@ -12034,14 +12034,17 @@ module.exports = {
                 console.log(error);
             });
         },
-        changeDirectory: function changeDirectory(directory) {
-            directory.show_sub_directories = true;
-            this.$dispatch('changeOfDirectory', directory.path);
+        changeDirectory: function changeDirectory(selected_directory) {
+            selected_directory.show_sub_directories = true;
+
+            selected_directory.active = true;
+
+            this.$dispatch('changeOfDirectory', selected_directory.path);
         }
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"sidebar\" style=\"background: #000\">\n    <ul class=\"sidebar-menu\">\n        <li v-for=\"directory in directories\">\n            <a v-on:click=\"changeDirectory(directory)\" href=\"#\">{{ directory.name }}</a>\n            <ul v-show=\"directory.show_sub_directories\">\n                <li v-for=\"sub_directory in directory.sub_directories\">\n                    <a v-on:click=\"changeDirectory(sub_directory)\" href=\"#\">{{ sub_directory.name }}</a>\n                </li>\n            </ul>\n        </li>\n    </ul>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"sidebar\" style=\"background: #000\">\n    <ul class=\"nav sidebar-menu\">\n        <li v-for=\"directory in directories\" class=\"treeview\" v-bind:class=\"{ active : directory.active }\">\n            <a v-on:click=\"changeDirectory(directory)\" href=\"#\">{{ directory.name }}</a>\n            <ul v-show=\"directory.show_sub_directories\" class=\"nav treeview-menu\">\n                <li v-for=\"sub_directory in directory.sub_directories\" v-bind:class=\"{ active : sub_directory.active }\">\n                    <a v-on:click=\"changeDirectory(sub_directory)\" href=\"#\">{{ sub_directory.name }}</a>\n                </li>\n            </ul>\n        </li>\n    </ul>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12149,7 +12152,7 @@ module.exports = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div v-show=\"display\" class=\"filePanel\">\n    <h5 v-show=\"files.length < 1\">Directory is empty</h5>\n    <div class=\"row\">\n        <div v-for=\"file in files\" class=\"col-xs-2\">\n            <a href=\"#\" v-on:click=\"selectedFile(file)\" class=\"fileThumb\" v-bind:class=\"{active : file.active}\" v-bind:style=\"{background : file.backgroundImage}\">\n                <div class=\"title\">\n                    <p>{{ file.name }}</p>\n                </div>\n            </a>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div v-show=\"display\" class=\"filePanel\">\n    <h5 v-show=\"files.length < 1\">Directory is empty</h5>\n    <div class=\"row\">\n        <div v-for=\"file in files\" class=\"col-xs-2\">\n            <a href=\"#\" v-on:click=\"selectedFile(file)\" class=\"fileThumb\" v-bind:class=\"{active : file.active}\" v-bind:style=\"{backgroundImage : file.backgroundImage}\">\n                <div class=\"title\">\n                    <p>{{ file.name }}</p>\n                </div>\n            </a>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12165,10 +12168,12 @@ if (module.hot) {(function () {  module.hot.accept()
 'use strict';
 
 module.exports = {
-
+    props: ['attachmentPrefix'],
     data: function data() {
         return {
-            image_url: 'None Selected',
+            attachmentSuffix: this.generateUniqueSuffix(),
+            imageName: this.attachmentPrefix,
+            imageUrl: 'None Selected',
             context: 'attachment' // this is a name that gets passed back once file has been selected from broadcast
         };
     },
@@ -12178,7 +12183,7 @@ module.exports = {
          * @param result - object containing context,value
          */
         mediaSubmitted: function mediaSubmitted(result) {
-            if (result.context == this.context) this.image_url = result.value;
+            if (result.context == this.context) this.imageUrl = result.value;
         }
     },
     methods: {
@@ -12187,12 +12192,36 @@ module.exports = {
          */
         chooseImage: function chooseImage() {
             this.$dispatch('mediaManagerRequested', this.context);
+        },
+
+        /**
+         * Generate a suffix to make attachment unique by timestamp
+         */
+        generateUniqueSuffix: function generateUniqueSuffix() {
+            if (!Date.now) {
+                Date.now = function () {
+                    return new Date().getTime();
+                };
+            }
+
+            return '_' + Math.floor(Date.now());
+        },
+
+        /**
+         * Updates the attributes of the template form
+         */
+        updateAllFieldAttributes: function updateAllFieldAttributes() {
+            this.imageName = this.attachmentPrefix + this.attachmentSuffix;
+            this.context = 'attachment_' + this.imageName;
         }
+    },
+    ready: function ready() {
+        this.updateAllFieldAttributes();
     }
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"box box-default\">\n        <div class=\"box-header with-border\">\n            <div class=\"col-xs-2\">\n                <img src=\"{{image_url}}\" class=\"img-responsive\">\n            </div>\n            <div class=\"col-xs-8\">\n                <h3 class=\"box-title\">Image: {{image_url}}</h3>\n            </div>\n\n            <div class=\"col-xs-2\">\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i></button>\n                </div>\n            </div>\n            <!-- /.box-tools -->\n        </div>\n        <!-- /.box-header -->\n        <div class=\"box-body\">\n            <input type=\"text\" value=\"{{ image_url }}\" name=\"feature_image\">\n            <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"chooseImage()\">Select Image</button>\n        </div>\n        <!-- /.box-body -->\n    </div>\n    <!-- /.box -->\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"box box-default\">\n        <div class=\"box-header with-border\">\n            <div class=\"col-xs-2\">\n                <img v-bind:src=\"imageUrl\" class=\"img-responsive\">\n            </div>\n            <div class=\"col-xs-8\">\n                <h3 class=\"box-title\">Image: {{imageUrl}}</h3>\n            </div>\n\n            <div class=\"col-xs-2\">\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i></button>\n                </div>\n            </div>\n            <!-- /.box-tools -->\n        </div>\n        <!-- /.box-header -->\n        <div class=\"box-body\">\n            <input type=\"text\" v-bind:value=\"imageUrl\" v-bind:name=\"imageName\" \"=\"\">\n            <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"chooseImage()\">Select Image</button>\n        </div>\n        <!-- /.box-body -->\n    </div>\n    <!-- /.box -->\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12217,6 +12246,7 @@ module.exports = {
     components: {
         ImageAttachment: _imageAttachment2.default
     },
+    props: ['listTitle', 'attachmentsPrefix'],
     data: function data() {
         return {
             attachments: [{
@@ -12233,7 +12263,7 @@ module.exports = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-xs-12\">\n\n        <h3 class=\"box-title\">Image Attachments</h3>\n\n        <div class=\"row\">\n            <div class=\"col-xs-12\">\n                <image-attachment v-for=\"attachment in attachments\"></image-attachment>\n            </div>\n        </div>\n\n        <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"createAttachment()\">Add Another Attachment\n        </button>\n\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-xs-12\">\n\n        <h3 class=\"box-title\">{{listTitle}}</h3>\n\n        <div class=\"row\">\n            <div class=\"col-xs-12\">\n                <image-attachment v-for=\"attachment in attachments\" v-bind:attachment-prefix=\"attachmentsPrefix\"></image-attachment>\n            </div>\n        </div>\n\n        <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"createAttachment()\">Add Another Attachment\n        </button>\n\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

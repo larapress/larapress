@@ -3,22 +3,23 @@
         <div class="box box-default">
             <div class="box-header with-border">
                 <div class="col-xs-2">
-                    <img src="{{image_url}}" class="img-responsive"/>
+                    <img v-bind:src="imageUrl" class="img-responsive"/>
                 </div>
                 <div class="col-xs-8">
-                    <h3 class="box-title">Image: {{image_url}}</h3>
+                    <h3 class="box-title">Image: {{imageUrl}}</h3>
                 </div>
 
                 <div class="col-xs-2">
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i></button>
                     </div>
                 </div>
                 <!-- /.box-tools -->
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <input type="text" value="{{ image_url }}" name="feature_image"/>
+                <input type="text" v-bind:value="imageUrl" v-bind:name="imageName""/>
                 <button type="button" class="btn btn-primary" v-on:click="chooseImage()">Select Image</button>
             </div>
             <!-- /.box-body -->
@@ -30,10 +31,12 @@
 <script>
 
     module.exports = {
-
+        props: ['attachmentPrefix'],
         data: function () {
             return {
-                image_url: 'None Selected',
+                attachmentSuffix: this.generateUniqueSuffix(),
+                imageName: this.attachmentPrefix,
+                imageUrl: 'None Selected',
                 context: 'attachment' // this is a name that gets passed back once file has been selected from broadcast
             }
         },
@@ -43,7 +46,7 @@
              * @param result - object containing context,value
              */
             mediaSubmitted: function (result) {
-                if (result.context == this.context) this.image_url = result.value;
+                if (result.context == this.context) this.imageUrl = result.value;
             }
         },
         methods: {
@@ -52,8 +55,33 @@
              */
             chooseImage: function () {
                 this.$dispatch('mediaManagerRequested', this.context);
+            },
+
+            /**
+             * Generate a suffix to make attachment unique by timestamp
+             */
+            generateUniqueSuffix: function () {
+                if (!Date.now) {
+                    Date.now = function () {
+                        return new Date().getTime();
+                    }
+                }
+
+                return '_' + Math.floor(Date.now());
+            },
+
+            /**
+             * Updates the attributes of the template form
+             */
+            updateAllFieldAttributes: function () {
+                this.imageName = this.attachmentPrefix + this.attachmentSuffix;
+                this.context = 'attachment_' + this.imageName;
             }
+        },
+        ready: function () {
+            this.updateAllFieldAttributes();
         }
+
 
     }
 </script>

@@ -37,7 +37,7 @@
             </textarea>
         </div>
 
-        <image-attachments></image-attachments>
+        <image-attachments list-title="Post Gallery Images" attachments-prefix="post-image"></image-attachments>
     </div>
 
     <div class="col-xs-4">

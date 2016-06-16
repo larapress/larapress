@@ -14,12 +14,13 @@ $fileColor: $blue;
   .fileThumb {
     width: 100%;
     height: 70px;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     justify-content: flex-end;
     background-position: center;
-    background-size: 100%;
+    background-size: cover;
     border: 5px solid #fff;
     .title {
       width: 100%;
@@ -33,7 +34,7 @@ $fileColor: $blue;
     }
   }
   .fileThumb:hover {
-    .fileThumb.title{
+    .title{
       display: block;
     }
   }
