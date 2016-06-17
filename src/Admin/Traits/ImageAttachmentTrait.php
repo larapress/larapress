@@ -36,7 +36,7 @@ trait ImageAttachmentTrait
                 $field = $context . '_' . $attachmentID . '_';
                 Attachment::create([
                     'context' => $context,
-                    'url' => $request->get($field . 'image'),
+                    'url' => $request->get($field . 'url'),
                     'alt' => $request->get($field . 'alt'),
                     'caption' => $request->get($field . 'caption'),
                     'status' => 'active'

@@ -6,7 +6,13 @@
 
             <div class="row">
                 <div class="col-xs-12">
-                    <image-attachment v-for="attachment in attachments" v-bind:attachment-prefix="attachmentsPrefix"></image-attachment>
+                    <image-attachment v-for="attachment in attachments"
+                                      v-bind:attachment-prefix="attachmentsPrefix"
+                                      v-bind:attachment-id="attachment.id"
+                                      v-bind:attachment-alt="attachment.alt"
+                                      v-bind:attachment-url="attachment.url"
+                                      v-bind:attachment-caption="attachment.caption">
+                    </image-attachment>
                 </div>
             </div>
 
@@ -24,12 +30,10 @@
         components: {
             ImageAttachment: ImageAttachment
         },
-        props: ['listTitle', 'attachmentsPrefix'],
+        props: ['listTitle', 'attachmentsPrefix', 'attachmentModel', 'attachmentModelId'],
         data: function () {
             return {
-                attachments: [{
-                    id: 1
-                }, {id: 2}]
+                attachments: []
             }
         },
         methods: {
@@ -38,6 +42,20 @@
                     id: 9
                 })
             }
+        },
+        ready: function () {
+            var data = {
+                model: this.attachmentModel,
+                model_id: this.attachmentModelId,
+                context: this.attachmentsPrefix
+            }
+
+            this.$http.post('/larapress/attachments/getByModel', data)
+                    .then(function (response) {
+                        console.log(response);
+                    });
+            console.log(this.attachmentModel);
+            console.log(this.attachmentModelId);
         }
     }
 </script>

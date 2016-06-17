@@ -8,4 +8,5 @@
     \Route::get('/larapress/media/directories', ['as' => 'larapress.media.directories', 'uses' => '\Larapress\Admin\Http\Controllers\MediaController@directories']);
     \Route::post('/larapress/media/files', ['as' => 'larapress.media.files', 'uses' => '\Larapress\Admin\Http\Controllers\MediaController@files']);
     \Route::post('/larapress/media/upload', ['as' => 'larapress.media.upload', 'uses' => '\Larapress\Admin\Http\Controllers\MediaController@upload']);
+    \Route::post('/larapress/attachments/getByModel', ['as' => 'larapress.attachment.getByModel', 'uses' => '\Larapress\Admin\Http\Controllers\AttachmentController@getByModel']);
 });

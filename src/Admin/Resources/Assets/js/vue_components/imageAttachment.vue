@@ -24,15 +24,15 @@
                         <label v-bind:for="imageAltName" class="col-sm-3 control-label">Alt Tag</label>
 
                         <div class="col-sm-9">
-                            <input type="text" v-bind:value="imageAlt" v-bind:name="imageAltName" class="form-control"/>
+                            <input type="text" v-bind:value="attachmentAlt" v-bind:name="imageAltName" class="form-control"/>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label v-bind:for="imageAltCaption" class="col-sm-3 control-label">Display Caption</label>
+                        <label v-bind:for="imageCaptionName" class="col-sm-3 control-label">Display Caption</label>
 
                         <div class="col-sm-9">
-                            <input type="text" v-bind:value="imageCaption" v-bind:name="imageCaptionName"
+                            <input type="text" v-bind:value="attachmentCaption" v-bind:name="imageCaptionName"
                                    class="form-control"/>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
 <script>
 
     module.exports = {
-        props: ['attachmentPrefix'],
+        props: ['attachmentPrefix', 'attachmentId', 'attachmentAlt', 'attachmentCaption', 'attachmentUrl'],
         data: function () {
             return {
                 attachmentSuffix: this.generateUniqueSuffix(),
@@ -60,10 +60,8 @@
                 imageName: '',
                 imageUrl: '',
 
-                imageAlt: '',
                 imageAltName: '',
 
-                imageCaption: '',
                 imageCaptionName: '',
 
                 context: '' // this is a name that gets passed back once file has been selected from broadcast
@@ -104,15 +102,17 @@
              */
             updateAllFieldAttributes: function () {
                 this.attachmentName = this.attachmentPrefix + this.attachmentSuffix;
-                this.imageName = this.attachmentName + '_image';
+                this.imageName = this.attachmentName + '_url';
                 this.imageAltName = this.attachmentName + '_alt';
                 this.imageCaptionName = this.attachmentName + '_caption';
                 this.context = 'attachment_' + this.attachmentName;
+                this.imageUrl = this.attachmentUrl;
             }
         },
 
         ready: function () {
             this.updateAllFieldAttributes();
+            console.log('id ' + this.attachmentId);
         }
 
 

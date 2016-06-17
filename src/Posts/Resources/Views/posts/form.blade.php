@@ -37,7 +37,12 @@
             </textarea>
         </div>
 
-        <image-attachments list-title="Post Gallery Images" attachments-prefix="post-image"></image-attachments>
+        <image-attachments
+                list-title="Post Gallery Images"
+                attachments-prefix="post-image"
+                attachment-model="\Larapress\Posts\Models\Post"
+                attachment-model-id="{!!isset($post->id) ? $post->id : null!!}">
+        </image-attachments>
     </div>
 
     <div class="col-xs-4">
