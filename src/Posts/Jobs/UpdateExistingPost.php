@@ -34,6 +34,8 @@ class UpdateExistingPost extends Job implements ShouldQueue
     {
        $post = Post::findOrFail($this->id);
 
+        $post->SaveImageAttachments($request);
+
         $post->update([
             'title' => $request->get('title'),
             'description' => $request->get('description'),
