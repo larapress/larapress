@@ -60,6 +60,6 @@ elixir(function (mix) {
         mix.browserify([
             'src/Admin/Resources/Assets/js/larapress_vues.js'
         ], 'src/Admin/Resources/Public/js/larapress_vues.js')
-            .copy('src/Admin/Resources/Public/js/larapress_vues.js', '../../public/js/larapress_vues.js');
+            .copy('src/Admin/Resources/Public/js/larapress_vues.js', '../../public/larapress/js/larapress_vues.js');
     }
 });

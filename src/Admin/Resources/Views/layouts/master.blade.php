@@ -9,7 +9,7 @@
     @yield('meta')
 
     @if(env('APP_ENV') == 'local')
-        {!!HTML::style('css/admin.css')!!}
+        {!!HTML::style('larapress/css/admin.css')!!}
 
     @else
         {!!HTML::style('larapress/css/larapress.css')!!}

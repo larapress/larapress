@@ -12081,7 +12081,7 @@ var __vueify_style__ = require("vueify-insert-css").insert("/* line 4, stdin */\
 'use strict';
 
 module.exports = {
-    props: ['btnText', 'featureName', 'featureTitle'],
+    props: ['btnText', 'featureName', 'featureTitle', 'featureValue'],
 
     data: function data() {
         return {
@@ -12105,11 +12105,18 @@ module.exports = {
          */
         chooseImage: function chooseImage() {
             this.$dispatch('mediaManagerRequested', this.context);
+        },
+        removeImage: function removeImage() {
+            this.$set('imageUrl', '');
         }
+
+    },
+    ready: function ready() {
+        this.$set('imageUrl', this.featureImage);
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"featureImage\">\n    <div class=\"box box-default\">\n        <div class=\"box-header with-border\">\n            <div class=\"col-xs-10\">\n                <h3 class=\"box-title\">{{featureTitle}}</h3>\n            </div>\n\n            <div class=\"col-xs-2\">\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i></button>\n                </div>\n            </div>\n            <!-- /.box-tools -->\n        </div>\n        <!-- /.box-header -->\n\n\n        <div class=\"box-body\">\n            <img v-show=\"imageUrl\" v-bind:src=\"imageUrl\">\n            <button type=\"button\" class=\"btn btn-primary pull-right\" v-on:click=\"chooseImage()\">\n                {{ btnText }}\n            </button>\n            <input type=\"hidden\" value=\"{{ imageUrl }}\" v-bind:name=\"featureName\">\n        </div>\n        <!-- /.box-body -->\n    </div>\n    <!-- /.box -->\n\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"featureImage\">\n    <div class=\"box box-default\">\n        <div class=\"box-header with-border\">\n            <div class=\"col-xs-10\">\n                <h3 class=\"box-title\">{{featureTitle}}</h3>\n            </div>\n\n            <div class=\"col-xs-2\">\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i></button>\n                </div>\n            </div>\n            <!-- /.box-tools -->\n        </div>\n        <!-- /.box-header -->\n\n\n        <div class=\"box-body\">\n            <img v-show=\"imageUrl\" v-bind:src=\"imageUrl\">\n\n            <button type=\"button\" class=\"btn btn-primary pull-right\" v-on:click=\"chooseImage()\">\n                {{ btnText }}\n            </button>\n            <button type=\"button\" class=\"btn pull-right\" v-on:click=\"removeImage()\">\n                Remove Image\n            </button>\n            <input type=\"hidden\" value=\"{{ imageUrl }}\" v-bind:name=\"featureName\">\n        </div>\n        <!-- /.box-body -->\n    </div>\n    <!-- /.box -->\n\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

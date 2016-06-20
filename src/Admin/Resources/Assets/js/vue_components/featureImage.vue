@@ -31,8 +31,12 @@
 
             <div class="box-body">
                 <img v-show="imageUrl" v-bind:src="imageUrl"/>
+
                 <button type="button" class="btn btn-primary pull-right" v-on:click="chooseImage()">
                     {{ btnText }}
+                </button>
+                <button type="button" class="btn pull-right" v-on:click="removeImage()">
+                    Remove Image
                 </button>
                 <input type="hidden" value="{{ imageUrl }}" v-bind:name="featureName"/>
             </div>
@@ -45,7 +49,7 @@
 
 <script>
     module.exports = {
-        props: ['btnText', 'featureName', 'featureTitle'],
+        props: ['btnText', 'featureName', 'featureTitle', 'featureValue'],
 
         data: function () {
             return {
@@ -69,7 +73,14 @@
              */
             chooseImage: function () {
                 this.$dispatch('mediaManagerRequested', this.context);
+            },
+            removeImage: function(){
+                this.$set('imageUrl', '');
             }
+
+        },
+        ready: function(){
+            this.$set('imageUrl', this.featureImage);
         }
     }
 
