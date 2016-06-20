@@ -4,20 +4,17 @@
         <!-- user panel (Optional) -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="/larapress/images/user.jpg" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
                 <p>User Name</p>
-
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
-        </div><!-- /.user-panel -->
+        </div>
+        <!-- /.user-panel -->
 
 
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
-            <li class="header">HEADER</li>
-            <!-- Optionally, you can add icons to the links -->
             <li>
                 <a href="{!!route('larapress.dashboard')!!}">Dashboard</a>
             </li>
@@ -52,9 +49,11 @@
 
             @endforeach
 
-        </ul><!-- /.sidebar-menu -->
+        </ul>
+        <!-- /.sidebar-menu -->
 
-    </div><!-- /.sidebar -->
+    </div>
+    <!-- /.sidebar -->
 </aside><!-- /.main-sidebar -->
 
 

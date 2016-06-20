@@ -20,7 +20,12 @@ class LarapressAdminServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . '/../Resources/Assets' => resource_path('larapress'),
+        ], 'assets');
+
+        $this->publishes([
+            __DIR__ . '/../Resources/Public' => public_path('larapress'),
         ], 'public');
+
 
         $this->publishes([
             __DIR__ . '/../Config' => config_path('larapress'),
