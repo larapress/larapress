@@ -37,6 +37,7 @@
                         </div>
                     </div>
 
+                    <input type="hidden" v-bind:value="attachmentId" v-bind:name="imageIdName"/>
                     <input type="hidden" v-bind:value="imageUrl" v-bind:name="imageName"/>
                     <button type="button" class="btn btn-primary pull-right" v-on:click="chooseImage()">Select Image
                     </button>
@@ -57,12 +58,12 @@
                 attachmentSuffix: this.generateUniqueSuffix(),
                 attachmentName: '',
 
-                imageName: '',
                 imageUrl: '',
 
+                imageName: '', //name tag attribute names for the fields
                 imageAltName: '',
-
                 imageCaptionName: '',
+                imageIdName: '',
 
                 context: '' // this is a name that gets passed back once file has been selected from broadcast
             }
@@ -105,6 +106,7 @@
                 this.imageName = this.attachmentName + '_url';
                 this.imageAltName = this.attachmentName + '_alt';
                 this.imageCaptionName = this.attachmentName + '_caption';
+                this.imageIdName = this.attachmentName + '_id';
                 this.context = 'attachment_' + this.attachmentName;
                 this.imageUrl = this.attachmentUrl;
             }
@@ -112,7 +114,6 @@
 
         ready: function () {
             this.updateAllFieldAttributes();
-            console.log('id ' + this.attachmentId);
         }
 
 

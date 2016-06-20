@@ -10,4 +10,29 @@ class Attachment extends Model
     protected $guarded = ['id'];
 
     protected $table = 'LP_attachments';
+
+    /**
+     * Returns an array of objects in a format suitable for vue to populate attachments
+     */
+    static public function getByModel($model, $model_id, $context)
+    {
+        $attachments = Attachment::where('model_id', $model_id)
+            ->where('context', $context)
+            ->where('model', $model)
+            ->get();
+
+        $result = [];
+
+        foreach ($attachments as $attachment) {
+            $details = new \stdClass();
+            $details->id = $attachment->id;
+            $details->url = $attachment->url;
+            $details->alt = $attachment->alt;
+            $details->caption = $attachment->caption;
+
+            $result[] = $details;
+        }
+
+        return $result;
+    }
 }

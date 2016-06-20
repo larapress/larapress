@@ -12403,6 +12403,10 @@ table.text-center, table.text-center td, table.text-center th {
   overflow: visible;
   clip: auto; }
 
+.content-wrapper {
+  float: left;
+  width: 80%; }
+
 .modal-lg {
   width: 80%; }
 

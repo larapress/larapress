@@ -11956,6 +11956,26 @@ setTimeout(function () {
 module.exports = Vue;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"_process":1}],28:[function(require,module,exports){
+var inserted = exports.cache = {}
+
+exports.insert = function (css) {
+  if (inserted[css]) return
+  inserted[css] = true
+
+  var elem = document.createElement('style')
+  elem.setAttribute('type', 'text/css')
+
+  if ('textContent' in elem) {
+    elem.textContent = css
+  } else {
+    elem.styleSheet.cssText = css
+  }
+
+  document.getElementsByTagName('head')[0].appendChild(elem)
+  return elem
+}
+
+},{}],29:[function(require,module,exports){
 'use strict';
 
 var _mediaManager = require('./vue_components/mediaManager.vue');
@@ -12014,7 +12034,7 @@ new Vue({
     }
 });
 
-},{"./vue_components/featureImage.vue":30,"./vue_components/imageAttachments.vue":33,"./vue_components/mediaManager.vue":34,"vue":27,"vue-resource":16}],29:[function(require,module,exports){
+},{"./vue_components/featureImage.vue":31,"./vue_components/imageAttachments.vue":34,"./vue_components/mediaManager.vue":35,"vue":27,"vue-resource":16}],30:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -12056,15 +12076,18 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":27,"vue-hot-reload-api":2}],30:[function(require,module,exports){
+},{"vue":27,"vue-hot-reload-api":2}],31:[function(require,module,exports){
+var __vueify_style__ = require("vueify-insert-css").insert("/* line 4, stdin */\n.featureImage img {\n  width: 100%;\n  float: left;\n  margin-bottom: 1rem; }\n")
 'use strict';
 
 module.exports = {
+    props: ['btnText', 'featureName', 'featureTitle'],
 
     data: function data() {
         return {
-            image_url: 'None Selected',
-            context: 'featureImage' // this is a name that gets passed back once file has been selected from broadcast
+            btnText: 'Select Feature Image',
+            imageUrl: false,
+            context: this.featureName // this is a name that gets passed back once file has been selected from broadcast
         };
     },
     events: {
@@ -12073,7 +12096,7 @@ module.exports = {
          * @param result - object containing context,value
          */
         mediaSubmitted: function mediaSubmitted(result) {
-            if (result.context == 'featureImage') this.image_url = result.value;
+            if (result.context == this.context) this.imageUrl = result.value;
         }
     },
     methods: {
@@ -12086,19 +12109,23 @@ module.exports = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <button class=\"btn btn-primary pull-right\" v-on:click=\"chooseImage()\">Select Feature image</button>\n    <input type=\"hidden\" value=\"{{ image_url }}\" name=\"feature_image\">\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"featureImage\">\n    <div class=\"box box-default\">\n        <div class=\"box-header with-border\">\n            <div class=\"col-xs-10\">\n                <h3 class=\"box-title\">{{featureTitle}}</h3>\n            </div>\n\n            <div class=\"col-xs-2\">\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i></button>\n                </div>\n            </div>\n            <!-- /.box-tools -->\n        </div>\n        <!-- /.box-header -->\n\n\n        <div class=\"box-body\">\n            <img v-show=\"imageUrl\" v-bind:src=\"imageUrl\">\n            <button type=\"button\" class=\"btn btn-primary pull-right\" v-on:click=\"chooseImage()\">\n                {{ btnText }}\n            </button>\n            <input type=\"hidden\" value=\"{{ imageUrl }}\" v-bind:name=\"featureName\">\n        </div>\n        <!-- /.box-body -->\n    </div>\n    <!-- /.box -->\n\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   var id = "/home/vagrant/Code/sjlaravel/packages/larapress/src/Admin/Resources/Assets/js/vue_components/featureImage.vue"
+  module.hot.dispose(function () {
+    require("vueify-insert-css").cache["/* line 4, stdin */\n.featureImage img {\n  width: 100%;\n  float: left;\n  margin-bottom: 1rem; }\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":27,"vue-hot-reload-api":2}],31:[function(require,module,exports){
+},{"vue":27,"vue-hot-reload-api":2,"vueify-insert-css":28}],32:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -12164,7 +12191,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":27,"vue-hot-reload-api":2}],32:[function(require,module,exports){
+},{"vue":27,"vue-hot-reload-api":2}],33:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -12174,12 +12201,12 @@ module.exports = {
             attachmentSuffix: this.generateUniqueSuffix(),
             attachmentName: '',
 
-            imageName: '',
             imageUrl: '',
 
+            imageName: '', //name tag attribute names for the fields
             imageAltName: '',
-
             imageCaptionName: '',
+            imageIdName: '',
 
             context: '' // this is a name that gets passed back once file has been selected from broadcast
         };
@@ -12222,6 +12249,7 @@ module.exports = {
             this.imageName = this.attachmentName + '_url';
             this.imageAltName = this.attachmentName + '_alt';
             this.imageCaptionName = this.attachmentName + '_caption';
+            this.imageIdName = this.attachmentName + '_id';
             this.context = 'attachment_' + this.attachmentName;
             this.imageUrl = this.attachmentUrl;
         }
@@ -12229,12 +12257,11 @@ module.exports = {
 
     ready: function ready() {
         this.updateAllFieldAttributes();
-        console.log('id ' + this.attachmentId);
     }
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"box box-default\">\n        <div class=\"box-header with-border\">\n            <div class=\"col-xs-2\">\n                <img v-bind:src=\"imageUrl\" class=\"img-responsive\">\n            </div>\n            <div class=\"col-xs-8\">\n                <h3 class=\"box-title\">Image: {{imageUrl}}</h3>\n            </div>\n\n            <div class=\"col-xs-2\">\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i></button>\n                </div>\n            </div>\n            <!-- /.box-tools -->\n        </div>\n        <!-- /.box-header -->\n        <div class=\"box-body\">\n            <div class=\"form-horizontal\">\n                <div class=\"form-group\">\n                    <label v-bind:for=\"imageAltName\" class=\"col-sm-3 control-label\">Alt Tag</label>\n\n                    <div class=\"col-sm-9\">\n                        <input type=\"text\" v-bind:value=\"attachmentAlt\" v-bind:name=\"imageAltName\" class=\"form-control\">\n                    </div>\n                </div>\n\n                <div class=\"form-group\">\n                    <label v-bind:for=\"imageCaptionName\" class=\"col-sm-3 control-label\">Display Caption</label>\n\n                    <div class=\"col-sm-9\">\n                        <input type=\"text\" v-bind:value=\"attachmentCaption\" v-bind:name=\"imageCaptionName\" class=\"form-control\">\n                    </div>\n                </div>\n\n                <input type=\"hidden\" v-bind:value=\"imageUrl\" v-bind:name=\"imageName\">\n                <button type=\"button\" class=\"btn btn-primary pull-right\" v-on:click=\"chooseImage()\">Select Image\n                </button>\n            </div>\n        </div>\n        <!-- /.box-body -->\n    </div>\n    <!-- /.box -->\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"box box-default\">\n        <div class=\"box-header with-border\">\n            <div class=\"col-xs-2\">\n                <img v-bind:src=\"imageUrl\" class=\"img-responsive\">\n            </div>\n            <div class=\"col-xs-8\">\n                <h3 class=\"box-title\">Image: {{imageUrl}}</h3>\n            </div>\n\n            <div class=\"col-xs-2\">\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i></button>\n                </div>\n            </div>\n            <!-- /.box-tools -->\n        </div>\n        <!-- /.box-header -->\n        <div class=\"box-body\">\n            <div class=\"form-horizontal\">\n                <div class=\"form-group\">\n                    <label v-bind:for=\"imageAltName\" class=\"col-sm-3 control-label\">Alt Tag</label>\n\n                    <div class=\"col-sm-9\">\n                        <input type=\"text\" v-bind:value=\"attachmentAlt\" v-bind:name=\"imageAltName\" class=\"form-control\">\n                    </div>\n                </div>\n\n                <div class=\"form-group\">\n                    <label v-bind:for=\"imageCaptionName\" class=\"col-sm-3 control-label\">Display Caption</label>\n\n                    <div class=\"col-sm-9\">\n                        <input type=\"text\" v-bind:value=\"attachmentCaption\" v-bind:name=\"imageCaptionName\" class=\"form-control\">\n                    </div>\n                </div>\n\n                <input type=\"hidden\" v-bind:value=\"attachmentId\" v-bind:name=\"imageIdName\">\n                <input type=\"hidden\" v-bind:value=\"imageUrl\" v-bind:name=\"imageName\">\n                <button type=\"button\" class=\"btn btn-primary pull-right\" v-on:click=\"chooseImage()\">Select Image\n                </button>\n            </div>\n        </div>\n        <!-- /.box-body -->\n    </div>\n    <!-- /.box -->\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12246,7 +12273,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":27,"vue-hot-reload-api":2}],33:[function(require,module,exports){
+},{"vue":27,"vue-hot-reload-api":2}],34:[function(require,module,exports){
 'use strict';
 
 var _imageAttachment = require('./imageAttachment.vue');
@@ -12266,24 +12293,31 @@ module.exports = {
         };
     },
     methods: {
+        /**
+         * Creates a new attachment dynamically
+         */
         createAttachment: function createAttachment() {
             this.attachments.push({
-                id: 9
+                id: null
+            });
+        },
+        /**
+         * Gets the attachment data from server
+         */
+        retrieveData: function retrieveData() {
+            var data = {
+                model: this.attachmentModel,
+                model_id: this.attachmentModelId,
+                context: this.attachmentsPrefix
+            };
+
+            this.$http.post('/larapress/attachments/getByModel', data).success(function (response) {
+                this.$set('attachments', response);
             });
         }
     },
     ready: function ready() {
-        var data = {
-            model: this.attachmentModel,
-            model_id: this.attachmentModelId,
-            context: this.attachmentsPrefix
-        };
-
-        this.$http.post('/larapress/attachments/getByModel', data).then(function (response) {
-            console.log(response);
-        });
-        console.log(this.attachmentModel);
-        console.log(this.attachmentModelId);
+        this.retrieveData();
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
@@ -12299,7 +12333,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./imageAttachment.vue":32,"vue":27,"vue-hot-reload-api":2}],34:[function(require,module,exports){
+},{"./imageAttachment.vue":33,"vue":27,"vue-hot-reload-api":2}],35:[function(require,module,exports){
 'use strict';
 
 var _directory = require('./directory.vue');
@@ -12404,7 +12438,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./directory.vue":29,"./filesComponent.vue":31,"./uploadComponent.vue":35,"vue":27,"vue-hot-reload-api":2}],35:[function(require,module,exports){
+},{"./directory.vue":30,"./filesComponent.vue":32,"./uploadComponent.vue":36,"vue":27,"vue-hot-reload-api":2}],36:[function(require,module,exports){
 "use strict";
 
 module.exports = {
@@ -12456,6 +12490,6 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":27,"vue-hot-reload-api":2}]},{},[28]);
+},{"vue":27,"vue-hot-reload-api":2}]},{},[29]);
 
 //# sourceMappingURL=larapress_vues.js.map

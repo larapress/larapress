@@ -34,13 +34,30 @@ trait ImageAttachmentTrait
         foreach ($this->attachmentNames as $context) {
             foreach ($this->inputIndex[$context]['identifiers'] as $attachmentID) {
                 $field = $context . '_' . $attachmentID . '_';
-                Attachment::create([
-                    'context' => $context,
-                    'url' => $request->get($field . 'url'),
-                    'alt' => $request->get($field . 'alt'),
-                    'caption' => $request->get($field . 'caption'),
-                    'status' => 'active'
-                ]);
+
+                if($request->get($field . 'id') == null){
+                    Attachment::create([
+                        'context' => $context,
+                        'url' => $request->get($field . 'url'),
+                        'alt' => $request->get($field . 'alt'),
+                        'caption' => $request->get($field . 'caption'),
+                        'status' => 'active',
+                        'model' => '\Larapress\Posts\Models\Post',
+                        'model_id' => $this->id
+                    ]);
+                }else{
+                    $attachment = Attachment::find($request->get($field . 'id'));
+
+                    $attachment->update([
+                        'context' => $context,
+                        'url' => $request->get($field . 'url'),
+                        'alt' => $request->get($field . 'alt'),
+                        'caption' => $request->get($field . 'caption'),
+                        'status' => 'active'
+                    ], [
+                        'id' => $request->get($field . 'id')
+                    ]);
+                }
             }
         }
     }

@@ -11,13 +11,13 @@
         </div>
 
         @if(!isset($post))
-        <div class="form-group">
-            <label for="slug">Slug</label>
-            <input type="text" id="slug"
-                   name="slug"
-                   value="{!!old('slug', isset($post->slug) ? $post->slug : null)!!}"
-                   class="form-control"/>
-        </div>
+            <div class="form-group">
+                <label for="slug">Slug</label>
+                <input type="text" id="slug"
+                       name="slug"
+                       value="{!!old('slug', isset($post->slug) ? $post->slug : null)!!}"
+                       class="form-control"/>
+            </div>
         @endif
 
         <div class="form-group">
@@ -27,7 +27,7 @@
                    value="{!!old('description', isset($post->description) ? $post->description : null)!!}"
                    class="form-control"/>
         </div>
-        
+
         <div class="form-group">
             <label for="body">Content</label>
             <textarea id="body"
@@ -56,7 +56,10 @@
         </div>
 
         <div class="form-group" style="width:100%;float: left;">
-            <feature-image></feature-image>
+            <feature-image btn-text="Select Post Cover"
+                           feature-name="cover_image"
+                           feature-title="Cover Image">
+            </feature-image>
         </div>
 
         <div class="form-group" style="width:100%;float: left;">

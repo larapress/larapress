@@ -9,10 +9,13 @@ use Larapress\Admin\Models\Attachment;
 
 class AttachmentController extends Controller
 {
+    /**
+     * Return the json to populate the attachment list for a context
+     */
     public function getByModel(Request $request)
     {
-        $attachments = Attachment::where('model_id', $request->get('model_id'))->get();
+        $attachments = Attachment::getByModel($request->get('model'), $request->get('model_id'), $request->get('context'));
 
-        dd($attachments);
+        return response()->json($attachments);
     }
 }

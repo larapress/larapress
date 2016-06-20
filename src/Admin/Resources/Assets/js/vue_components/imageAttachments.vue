@@ -37,25 +37,32 @@
             }
         },
         methods: {
+            /**
+             * Creates a new attachment dynamically
+             */
             createAttachment: function () {
                 this.attachments.push({
-                    id: 9
+                    id: null
                 })
+            },
+            /**
+             * Gets the attachment data from server
+             */
+            retrieveData: function () {
+                var data = {
+                    model: this.attachmentModel,
+                    model_id: this.attachmentModelId,
+                    context: this.attachmentsPrefix
+                }
+
+                this.$http.post('/larapress/attachments/getByModel', data)
+                        .success(function (response) {
+                            this.$set('attachments', response);
+                        });
             }
         },
         ready: function () {
-            var data = {
-                model: this.attachmentModel,
-                model_id: this.attachmentModelId,
-                context: this.attachmentsPrefix
-            }
-
-            this.$http.post('/larapress/attachments/getByModel', data)
-                    .then(function (response) {
-                        console.log(response);
-                    });
-            console.log(this.attachmentModel);
-            console.log(this.attachmentModelId);
+            this.retrieveData();
         }
     }
 </script>
