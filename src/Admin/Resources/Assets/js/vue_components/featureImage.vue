@@ -80,7 +80,7 @@
 
         },
         ready: function(){
-            this.$set('imageUrl', this.featureImage);
+            this.$set('imageUrl', this.featureValue);
         }
     }
 
