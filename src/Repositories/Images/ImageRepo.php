@@ -91,7 +91,11 @@ class ImageRepo
 
         if (!file_exists($originalFile)) throw new \Exception('Original file not found, ' . $originalFile);
 
-        $image = Image::make($originalFile);
+        try{
+            $image = Image::make($originalFile);
+        }catch(\Exception $e){
+            dd($e);
+        }
 
         if (isset($size['height'])) {
             $image->resize($this->sizes[$size]["width"], $this->sizes[$size]["height"])->save($destinationFile, 100);
@@ -147,7 +151,7 @@ class ImageRepo
      */
     protected function setImageSizes()
     {
-        return config('sizes');
+        return config('larapress.images.sizes');
     }
 
     /**
@@ -156,7 +160,7 @@ class ImageRepo
      */
     protected function setPublicUrl()
     {
-        $publicUrl = \URL::to('/') . config('paths.cache');
+        $publicUrl = \URL::to('/') . config('larapress.images.paths.cache');
 
         return $publicUrl;
     }
@@ -167,7 +171,7 @@ class ImageRepo
      */
     protected function setCachePath()
     {
-        $cachePath = public_path() . config('paths.cache');
+        $cachePath = public_path() . config('larapress.images.paths.cache');
 
         if (!file_exists($cachePath)) mkdir($cachePath, 0777, true);
 
@@ -180,7 +184,7 @@ class ImageRepo
      */
     protected function setOriginalsPath()
     {
-        $originalsPath = base_path() . config('paths.original');
+        $originalsPath = public_path() . config('larapress.images.paths.original');
 
         if (!file_exists($originalsPath)) mkdir($originalsPath, 0777, true);
 

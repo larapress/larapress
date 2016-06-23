@@ -31,7 +31,7 @@ trait ImageAttachmentTrait
         }
 
         //go through index and save them to database
-        foreach ($this->attachmentNames as $context) {
+        foreach ($this->attachmentNames as $context) {dd(get_parent_class());
             foreach ($this->inputIndex[$context]['identifiers'] as $attachmentID) {
                 $field = $context . '_' . $attachmentID . '_';
 
@@ -42,7 +42,7 @@ trait ImageAttachmentTrait
                         'alt' => $request->get($field . 'alt'),
                         'caption' => $request->get($field . 'caption'),
                         'status' => 'active',
-                        'model' => '\Larapress\Posts\Models\Post',
+                        'model' => get_class(),
                         'model_id' => $this->id
                     ]);
                 }else{
