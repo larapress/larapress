@@ -30,6 +30,7 @@ trait ImageAttachmentTrait
             $this->addToInputIndex($key);
         }
 
+
         //go through index and save them to database
         foreach ($this->attachmentNames as $context) {dd(get_parent_class());
             foreach ($this->inputIndex[$context]['identifiers'] as $attachmentID) {
