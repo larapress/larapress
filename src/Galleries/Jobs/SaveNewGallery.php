@@ -1,15 +1,15 @@
 <?php
 
-namespace Larapress\Pages\Jobs;
+namespace Larapress\Galleries\Jobs;
 
-use Larapress\Pages\Models\Page;
+use Larapress\Galleries\Models\Gallery;
 use App\Jobs\Job;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Symfony\Component\HttpFoundation\Request;
 
-class SaveNewPage extends Job implements ShouldQueue
+class SaveNewGalleries extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
@@ -30,15 +30,11 @@ class SaveNewPage extends Job implements ShouldQueue
      */
     public function handle(Request $request)
     {
-        $page = Page::create([
+        $gallery = Gallery::create([
             'title' => $request->get('title'),
-            'description' => $request->get('description'),
             'slug' => str_slug($request->get('slug')),
-            'body' => $request->get('body'),
         ]);
 
-        \Session::flash('success', 'Your page has been saved.');
-
-        event(new \Larapress\Pages\Events\PageWasSaved($page));
+        \Session::flash('success', 'Your gallery has been saved.');
     }
 }

@@ -33,34 +33,50 @@ trait ImageAttachmentTrait
 
         //go through index and save them to database
         foreach ($this->attachmentNames as $context) {
-            foreach ($this->inputIndex[$context]['identifiers'] as $attachmentID) {
-                $field = $context . '_' . $attachmentID . '_';
+            if (isset($this->inputIndex[$context])) {
+                foreach ($this->inputIndex[$context]['identifiers'] as $attachmentID) {
+                    $field = $context . '_' . $attachmentID . '_';
 
-                if($request->get($field . 'id') == null){
-                    Attachment::create([
-                        'context' => $context,
-                        'url' => $request->get($field . 'url'),
-                        'alt' => $request->get($field . 'alt'),
-                        'caption' => $request->get($field . 'caption'),
-                        'status' => 'active',
-                        'model' => get_class(),
-                        'model_id' => $this->id
-                    ]);
-                }else{
-                    $attachment = Attachment::find($request->get($field . 'id'));
+                    if ($request->get($field . 'id') == null) {
+                        Attachment::create([
+                            'context' => $context,
+                            'url' => $request->get($field . 'url'),
+                            'alt' => $request->get($field . 'alt'),
+                            'caption' => $request->get($field . 'caption'),
+                            'status' => 'active',
+                            'model' => get_class(),
+                            'model_id' => $this->id
+                        ]);
+                    } else {
+                        $attachment = Attachment::find($request->get($field . 'id'));
 
-                    $attachment->update([
-                        'context' => $context,
-                        'url' => $request->get($field . 'url'),
-                        'alt' => $request->get($field . 'alt'),
-                        'caption' => $request->get($field . 'caption'),
-                        'status' => 'active'
-                    ], [
-                        'id' => $request->get($field . 'id')
-                    ]);
+                        $attachment->update([
+                            'context' => $context,
+                            'url' => $request->get($field . 'url'),
+                            'alt' => $request->get($field . 'alt'),
+                            'caption' => $request->get($field . 'caption'),
+                            'status' => 'active'
+                        ], [
+                            'id' => $request->get($field . 'id')
+                        ]);
+                    }
                 }
             }
         }
+    }
+
+
+    /**
+     * Returns collection of all image attachments
+     * @return mixed
+     */
+    public function getAllImageAttachments()
+    {
+        $model = get_class();
+
+        return Attachment::where('model_id', $this->id)
+            ->where('model', $model)
+            ->get();
     }
 
 
