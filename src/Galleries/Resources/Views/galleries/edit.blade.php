@@ -9,9 +9,9 @@
 
 <div class="row">
     <div class="col-xs-12">
-        {!! Form::model($gallery, ['route' => ['larapress.gallery.update', $gallery->id], 'files' => true, 'method' => 'put'])
+        {!! Form::model($gallery, ['route' => ['larapress.galleries.update', $gallery->id], 'files' => true, 'method' => 'put'])
         !!}
-        @include('larapress::gallery.form')
+        @include('larapress::galleries.form')
         {!!Form::close()!!}
     </div>
 </div>

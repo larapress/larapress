@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Symfony\Component\HttpFoundation\Request;
 
-class SaveNewGalleries extends Job implements ShouldQueue
+class SaveNewGallery extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
@@ -34,6 +34,8 @@ class SaveNewGalleries extends Job implements ShouldQueue
             'title' => $request->get('title'),
             'slug' => str_slug($request->get('slug')),
         ]);
+
+        $gallery->SaveImageAttachments($request);
 
         \Session::flash('success', 'Your gallery has been saved.');
     }

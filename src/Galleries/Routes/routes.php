@@ -1,7 +1,7 @@
 <?php
 
 \Route::group(['middleware' => ['web', 'larapress']], function(){
-    \Route::resource('/larapress/gallery', '\Larapress\Gallery\Http\Controllers\PortfolioController');
-    \Route::post('larapress/gallery/search', ['as' => 'larapress.gallery.search', 'uses' => '\Larapress\Gallery\Http\Controllers\PortfolioController@search']);
+    \Route::resource('/larapress/galleries', '\Larapress\Galleries\Http\Controllers\GalleriesController');
+    \Route::post('larapress/galleries/search', ['as' => 'larapress.galleries.search', 'uses' => '\Larapress\Galleries\Http\Controllers\GalleriesController@search']);
 });
 

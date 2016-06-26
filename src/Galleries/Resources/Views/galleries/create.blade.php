@@ -9,8 +9,8 @@
 
 <div class="row">
     <div class="col-xs-12">
-        {!! Form::open(['route' => 'larapress.gallery.store', 'files' => true]) !!}
-        @include('larapress::gallery.form')
+        {!! Form::open(['route' => 'larapress.galleries.store', 'files' => true]) !!}
+        @include('larapress::galleries.form')
         {!!Form::close()!!}
     </div>
 </div>

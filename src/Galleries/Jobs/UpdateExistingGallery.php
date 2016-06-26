@@ -38,6 +38,9 @@ class UpdateExistingGallery extends Job implements ShouldQueue
             'title' => $request->get('title'),
         ]);
 
+        $gallery->SaveImageAttachments($request);
+
+
         \Session::flash('success', 'Your gallery has been saved successfully');
     }
 }

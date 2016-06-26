@@ -31,13 +31,13 @@
 </div>
 
 
-@foreach($pages as $page)
-@include('larapress::pages.panel')
+@foreach($galleries as $gallery)
+@include('larapress::galleries.panel')
 @endforeach
 
 <div class="row">
     <div class="col-xs-12">
-        {!!$pages->render()!!}
+        {!!$galleries->render()!!}
     </div>
 </div>
 
