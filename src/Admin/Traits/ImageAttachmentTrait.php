@@ -70,9 +70,16 @@ trait ImageAttachmentTrait
      * Returns collection of all image attachments
      * @return mixed
      */
-    public function getAllImageAttachments()
+    public function getAllImageAttachments($context = null)
     {
         $model = get_class();
+
+        if($context){
+            return Attachment::where('model_id', $this->id)
+                ->where('context', $context)
+                ->where('model', $model)
+                ->get();
+        }
 
         return Attachment::where('model_id', $this->id)
             ->where('model', $model)

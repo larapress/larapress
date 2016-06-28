@@ -12110,10 +12110,12 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"vue":4,"vue-hot-reload-api":2}],10:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("/* line 3, stdin */\n.attachment .list {\n  width: 100%;\n  float: left; }\n  /* line 6, stdin */\n  .attachment .list .image {\n    float: left;\n    padding-right: 1rem;\n    width: 20%; }\n  /* line 11, stdin */\n  .attachment .list .form {\n    float: right;\n    padding-left: 1rem;\n    width: 80%; }\n\n/* line 18, stdin */\n.attachment .grid {\n  float: left;\n  width: 19%;\n  margin: 0.5%; }\n  /* line 22, stdin */\n  .attachment .grid .image {\n    float: left;\n    width: 100%; }\n  /* line 26, stdin */\n  .attachment .grid .form {\n    display: none; }\n")
 'use strict';
 
 module.exports = {
-    props: ['attachmentPrefix', 'attachmentId', 'attachmentAlt', 'attachmentCaption', 'attachmentUrl'],
+    props: ['attachmentPrefix', 'attachmentId', 'attachmentAlt', 'attachmentCaption', 'attachmentUrl', 'attachmentLayout'],
     data: function data() {
         return {
             attachmentSuffix: this.generateUniqueSuffix(),
@@ -12179,18 +12181,22 @@ module.exports = {
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"box box-default\">\n        <div class=\"box-header with-border\">\n            <div class=\"col-xs-2\">\n                <img v-bind:src=\"imageUrl\" class=\"img-responsive\">\n            </div>\n            <div class=\"col-xs-8\">\n                <h3 class=\"box-title\">Image: {{imageUrl}}</h3>\n            </div>\n\n            <div class=\"col-xs-2\">\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i></button>\n                </div>\n            </div>\n            <!-- /.box-tools -->\n        </div>\n        <!-- /.box-header -->\n        <div class=\"box-body\">\n            <div class=\"form-horizontal\">\n                <div class=\"form-group\">\n                    <label v-bind:for=\"imageAltName\" class=\"col-sm-3 control-label\">Alt Tag</label>\n\n                    <div class=\"col-sm-9\">\n                        <input type=\"text\" v-bind:value=\"attachmentAlt\" v-bind:name=\"imageAltName\" class=\"form-control\">\n                    </div>\n                </div>\n\n                <div class=\"form-group\">\n                    <label v-bind:for=\"imageCaptionName\" class=\"col-sm-3 control-label\">Display Caption</label>\n\n                    <div class=\"col-sm-9\">\n                        <input type=\"text\" v-bind:value=\"attachmentCaption\" v-bind:name=\"imageCaptionName\" class=\"form-control\">\n                    </div>\n                </div>\n\n                <input type=\"hidden\" v-bind:value=\"attachmentId\" v-bind:name=\"imageIdName\">\n                <input type=\"hidden\" v-bind:value=\"imageUrl\" v-bind:name=\"imageName\">\n                <button type=\"button\" class=\"btn btn-primary pull-right\" v-on:click=\"chooseImage()\">Select Image\n                </button>\n            </div>\n        </div>\n        <!-- /.box-body -->\n    </div>\n    <!-- /.box -->\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"attachment\">\n    <div class=\"box box-default\" v-bind:class=\"attachmentLayout\">\n        <div class=\"box-body\">\n            <div class=\"image\">\n                <img v-bind:src=\"imageUrl\" class=\"img-responsive\" title=\"{{imageUrl}}\">\n            </div>\n\n            <div class=\"form\">\n                <div class=\"form-horizontal\">\n                    <div class=\"form-group\">\n                        <label v-bind:for=\"imageAltName\" class=\"col-sm-3 control-label\">Alt Tag</label>\n\n                        <div class=\"col-sm-9\">\n                            <input type=\"text\" v-bind:value=\"attachmentAlt\" v-bind:name=\"imageAltName\" class=\"form-control\">\n                        </div>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label v-bind:for=\"imageCaptionName\" class=\"col-sm-3 control-label\">Display Caption</label>\n\n                        <div class=\"col-sm-9\">\n                            <input type=\"text\" v-bind:value=\"attachmentCaption\" v-bind:name=\"imageCaptionName\" class=\"form-control\">\n                        </div>\n                    </div>\n\n                    <input type=\"hidden\" v-bind:value=\"attachmentId\" v-bind:name=\"imageIdName\">\n                    <input type=\"hidden\" v-bind:value=\"imageUrl\" v-bind:name=\"imageName\">\n                    <button type=\"button\" class=\"btn btn-primary pull-right\" v-on:click=\"chooseImage()\">Select Image\n                    </button>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["/* line 3, stdin */\n.attachment .list {\n  width: 100%;\n  float: left; }\n  /* line 6, stdin */\n  .attachment .list .image {\n    float: left;\n    padding-right: 1rem;\n    width: 20%; }\n  /* line 11, stdin */\n  .attachment .list .form {\n    float: right;\n    padding-left: 1rem;\n    width: 80%; }\n\n/* line 18, stdin */\n.attachment .grid {\n  float: left;\n  width: 19%;\n  margin: 0.5%; }\n  /* line 22, stdin */\n  .attachment .grid .image {\n    float: left;\n    width: 100%; }\n  /* line 26, stdin */\n  .attachment .grid .form {\n    display: none; }\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
   if (!module.hot.data) {
     hotAPI.createRecord("_v-66b17dac", module.exports)
   } else {
     hotAPI.update("_v-66b17dac", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":4,"vue-hot-reload-api":2}],11:[function(require,module,exports){
+},{"vue":4,"vue-hot-reload-api":2,"vueify/lib/insert-css":5}],11:[function(require,module,exports){
 'use strict';
 
 var _imageAttachment = require('./imageAttachment.vue');
@@ -12203,7 +12209,16 @@ module.exports = {
     components: {
         ImageAttachment: _imageAttachment2.default
     },
-    props: ['listTitle', 'attachmentsPrefix', 'attachmentModel', 'attachmentModelId'],
+    props: {
+        listTitle: {
+            type: String
+        },
+        attachmentsPrefix: { type: String },
+        attachmentModel: { type: String },
+        attachmentModelId: { type: Number },
+        attachmentButton: { type: String, default: 'New one' },
+        attachmentLayout: { type: String }
+    },
     data: function data() {
         return {
             attachments: []
@@ -12231,6 +12246,10 @@ module.exports = {
             this.$http.post('/larapress/attachments/getByModel', data).success(function (response) {
                 this.$set('attachments', response);
             });
+        },
+        changeLayout: function changeLayout(layout) {
+            console.log(layout);
+            this.attachmentLayout = layout;
         }
     },
     ready: function ready() {
@@ -12238,7 +12257,7 @@ module.exports = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-xs-12\">\n\n        <h3 class=\"box-title\">{{listTitle}}</h3>\n\n        <div class=\"row\">\n            <div class=\"col-xs-12\">\n                <image-attachment v-for=\"attachment in attachments\" v-bind:attachment-prefix=\"attachmentsPrefix\" v-bind:attachment-id=\"attachment.id\" v-bind:attachment-alt=\"attachment.alt\" v-bind:attachment-url=\"attachment.url\" v-bind:attachment-caption=\"attachment.caption\">\n                </image-attachment>\n            </div>\n        </div>\n\n        <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"createAttachment()\">Add Another Attachment\n        </button>\n\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-xs-12\">\n\n        <div class=\"row\">\n            <div class=\"col-xs-6\">\n                <h3 class=\"box-title\">{{listTitle}}</h3>\n            </div>\n            <div class=\"col-xs-6\">\n                <div class=\"pull-right\">\n                    <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"changeLayout('list')\">\n                        <span class=\"fa fa-th-list\"></span>\n                    </button>\n                    <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"changeLayout('grid')\">\n                        <span class=\"fa fa-th\"></span>\n                    </button>\n                </div>\n            </div>\n        </div>\n\n\n        <div class=\"row\">\n            <div class=\"col-xs-12\">\n                <image-attachment v-for=\"attachment in attachments\" v-bind:attachment-prefix=\"attachmentsPrefix\" v-bind:attachment-id=\"attachment.id\" v-bind:attachment-alt=\"attachment.alt\" v-bind:attachment-url=\"attachment.url\" v-bind:attachment-layout=\"attachmentLayout\" v-bind:attachment-caption=\"attachment.caption\">\n                </image-attachment>\n            </div>\n        </div>\n\n        <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"createAttachment()\">\n            {{attachmentButton}}\n        </button>\n\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

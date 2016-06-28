@@ -1,58 +1,81 @@
+<style lang="sass">
+    .attachment {
+    .list {
+        width: 100%;
+        float: left;
+    .image {
+        float: left;
+        padding-right: 1rem;
+        width: 20%;
+    }
+    .form {
+        float: right;
+        padding-left: 1rem;
+        width: 80%;
+    }
+    }
+
+    .grid {
+        float: left;
+        width: 19%;
+        margin:0.5%;
+    .image {
+        float: left;
+        width: 100%;
+    }
+    .form {
+        display: none;
+    }
+    }
+
+    }
+
+</style>
+
+
 <template>
-    <div>
-        <div class="box box-default">
-            <div class="box-header with-border">
-                <div class="col-xs-2">
-                    <img v-bind:src="imageUrl" class="img-responsive"/>
-                </div>
-                <div class="col-xs-8">
-                    <h3 class="box-title">Image: {{imageUrl}}</h3>
-                </div>
-
-                <div class="col-xs-2">
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                class="fa fa-minus"></i></button>
-                    </div>
-                </div>
-                <!-- /.box-tools -->
-            </div>
-            <!-- /.box-header -->
+    <div class="attachment">
+        <div class="box box-default" v-bind:class="attachmentLayout">
             <div class="box-body">
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <label v-bind:for="imageAltName" class="col-sm-3 control-label">Alt Tag</label>
+                <div class="image">
+                    <img v-bind:src="imageUrl" class="img-responsive" title="{{imageUrl}}"/>
+                </div>
 
-                        <div class="col-sm-9">
-                            <input type="text" v-bind:value="attachmentAlt" v-bind:name="imageAltName" class="form-control"/>
+                <div class="form">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label v-bind:for="imageAltName" class="col-sm-3 control-label">Alt Tag</label>
+
+                            <div class="col-sm-9">
+                                <input type="text" v-bind:value="attachmentAlt" v-bind:name="imageAltName"
+                                       class="form-control"/>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label v-bind:for="imageCaptionName" class="col-sm-3 control-label">Display Caption</label>
+                        <div class="form-group">
+                            <label v-bind:for="imageCaptionName" class="col-sm-3 control-label">Display Caption</label>
 
-                        <div class="col-sm-9">
-                            <input type="text" v-bind:value="attachmentCaption" v-bind:name="imageCaptionName"
-                                   class="form-control"/>
+                            <div class="col-sm-9">
+                                <input type="text" v-bind:value="attachmentCaption" v-bind:name="imageCaptionName"
+                                       class="form-control"/>
+                            </div>
                         </div>
-                    </div>
 
-                    <input type="hidden" v-bind:value="attachmentId" v-bind:name="imageIdName"/>
-                    <input type="hidden" v-bind:value="imageUrl" v-bind:name="imageName"/>
-                    <button type="button" class="btn btn-primary pull-right" v-on:click="chooseImage()">Select Image
-                    </button>
+                        <input type="hidden" v-bind:value="attachmentId" v-bind:name="imageIdName"/>
+                        <input type="hidden" v-bind:value="imageUrl" v-bind:name="imageName"/>
+                        <button type="button" class="btn btn-primary pull-right" v-on:click="chooseImage()">Select Image
+                        </button>
+                    </div>
                 </div>
             </div>
-            <!-- /.box-body -->
         </div>
-        <!-- /.box -->
     </div>
 </template>
 
 <script>
 
     module.exports = {
-        props: ['attachmentPrefix', 'attachmentId', 'attachmentAlt', 'attachmentCaption', 'attachmentUrl'],
+        props: ['attachmentPrefix', 'attachmentId', 'attachmentAlt', 'attachmentCaption', 'attachmentUrl', 'attachmentLayout'],
         data: function () {
             return {
                 attachmentSuffix: this.generateUniqueSuffix(),

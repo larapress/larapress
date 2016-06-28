@@ -39,7 +39,7 @@ elixir(function (mix) {
             'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.min.js',
             'bower_components/admin-lte.scss/javascripts/app.js'
         ], 'src/Admin/Resources/Public/js/larapress_libs.js')
-            .copy('src/Admin/Resources/Public/js/larapress_libs.js', '../../public/larapress/js/larapress_libs.js')
+            .copy('src/Admin/Resources/Public/js/larapress_libs.js', '../../../public/larapress/js/larapress_libs.js')
     }
 
 
@@ -50,7 +50,7 @@ elixir(function (mix) {
         mix.sass([
             'src/Admin/Resources/Assets/sass/app.scss'
         ], 'src/Admin/Resources/Public/css/admin.css')
-            .copy('src/Admin/Resources/Public/css/admin.css', '../../public/larapress/css/admin.css');
+            .copy('src/Admin/Resources/Public/css/admin.css', '../../../public/larapress/css/admin.css');
     }
 
     if(argv.vue || argv.dev) {
@@ -60,6 +60,6 @@ elixir(function (mix) {
         mix.browserify([
             'src/Admin/Resources/Assets/js/larapress_vues.js'
         ], 'src/Admin/Resources/Public/js/larapress_vues.js')
-            .copy('src/Admin/Resources/Public/js/larapress_vues.js', '../../public/larapress/js/larapress_vues.js');
+            .copy('src/Admin/Resources/Public/js/larapress_vues.js', '../../../public/larapress/js/larapress_vues.js');
     }
 });

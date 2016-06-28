@@ -2,7 +2,22 @@
     <div class="row">
         <div class="col-xs-12">
 
-            <h3 class="box-title">{{listTitle}}</h3>
+            <div class="row">
+                <div class="col-xs-6">
+                    <h3 class="box-title">{{listTitle}}</h3>
+                </div>
+                <div class="col-xs-6">
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-primary" v-on:click="changeLayout('list')">
+                            <span class="fa fa-th-list"></span>
+                        </button>
+                        <button type="button" class="btn btn-primary"  v-on:click="changeLayout('grid')">
+                            <span class="fa fa-th"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
 
             <div class="row">
                 <div class="col-xs-12">
@@ -11,12 +26,14 @@
                                       v-bind:attachment-id="attachment.id"
                                       v-bind:attachment-alt="attachment.alt"
                                       v-bind:attachment-url="attachment.url"
+                                      v-bind:attachment-layout="attachmentLayout"
                                       v-bind:attachment-caption="attachment.caption">
                     </image-attachment>
                 </div>
             </div>
 
-            <button type="button" class="btn btn-primary" v-on:click="createAttachment()">Add Another Attachment
+            <button type="button" class="btn btn-primary" v-on:click="createAttachment()">
+                {{attachmentButton}}
             </button>
 
         </div>
@@ -30,7 +47,16 @@
         components: {
             ImageAttachment: ImageAttachment
         },
-        props: ['listTitle', 'attachmentsPrefix', 'attachmentModel', 'attachmentModelId'],
+        props: {
+            listTitle: {
+                type: String
+            },
+            attachmentsPrefix: {type: String},
+            attachmentModel: {type: String},
+            attachmentModelId: {type: Number},
+            attachmentButton: {type: String, default: 'New one'},
+            attachmentLayout: {type:String}
+        },
         data: function () {
             return {
                 attachments: []
@@ -59,6 +85,10 @@
                         .success(function (response) {
                             this.$set('attachments', response);
                         });
+            },
+            changeLayout: function(layout){
+                console.log(layout);
+                this.attachmentLayout = layout;
             }
         },
         ready: function () {
