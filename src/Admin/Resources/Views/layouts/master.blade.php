@@ -36,6 +36,7 @@
             @yield('content')
 
             <media-manager></media-manager>
+            <confirm-modal></confirm-modal>
         </div>
     </div>
 </div>

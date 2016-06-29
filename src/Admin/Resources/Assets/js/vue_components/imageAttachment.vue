@@ -1,36 +1,43 @@
 <style lang="sass">
     .attachment {
+
     .list {
         width: 100%;
         float: left;
         border: 1px solid #eeeeee;
-        padding:1rem;
-    margin-bottom:0.7rem;
+        padding: 1rem;
+        margin-bottom: 0.7rem;
+
     .image {
         float: left;
         padding-right: 1rem;
         width: 20%;
     }
+
     .form {
         float: right;
         padding-left: 1rem;
         width: 80%;
     }
+
     }
 
     .grid {
         float: left;
         width: 19%;
-        margin:0.5%;
+        margin: 0.5%;
         border: 1px solid #eeeeee;
-        padding:0.3rem;
+        padding: 0.3rem;
+
     .image {
         float: left;
         width: 100%;
     }
+
     .form {
         display: none;
     }
+
     }
 
     }
@@ -39,7 +46,7 @@
 
 
 <template>
-    <div class="attachment">
+    <div class="attachment" v-show="display">
         <div v-bind:class="attachmentLayout">
             <div class="box-body">
                 <div class="image">
@@ -68,8 +75,16 @@
 
                         <input type="hidden" v-bind:value="attachmentId" v-bind:name="imageIdName"/>
                         <input type="hidden" v-bind:value="imageUrl" v-bind:name="imageName"/>
-                        <button type="button" class="btn btn-primary pull-right" v-on:click="chooseImage()">Select Image
-                        </button>
+
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-default" v-on:click="removeImage()">
+                                Remove Attachment
+                            </button>
+                            <button type="button" class="btn btn-primary" v-on:click="chooseImage()">
+                                Select Image
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -83,6 +98,7 @@
         props: ['attachmentPrefix', 'attachmentId', 'attachmentAlt', 'attachmentCaption', 'attachmentUrl', 'attachmentLayout'],
         data: function () {
             return {
+                display: true,
                 attachmentSuffix: this.generateUniqueSuffix(),
                 attachmentName: '',
 
@@ -103,6 +119,14 @@
              */
             mediaSubmitted: function (result) {
                 if (result.context == this.context) this.imageUrl = result.value;
+            },
+            confirmationResult: function (result) {
+                if (result.context == this.context && result.proceed) {
+                    this.attachmentCaption = '';
+                    this.attachmentAlt = '';
+                    this.imageUrl = '';
+                    this.display = false;
+                }
             }
         },
         methods: {
@@ -113,6 +137,15 @@
                 this.$dispatch('mediaManagerRequested', this.context);
             },
 
+            removeImage: function () {
+                data = {
+                    title: 'Deletion Warning',
+                    message: 'Are you sure you want to remove this attachment? The image will still be kept in your media catalog, just no longer attached to this model.',
+                    context: this.context,
+                    id: this.attachmentId
+                }
+                this.$dispatch('confirmationRequested', data);
+            },
             /**
              * Generate a suffix to make attachment unique by timestamp
              */

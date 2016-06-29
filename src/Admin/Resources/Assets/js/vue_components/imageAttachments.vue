@@ -1,7 +1,7 @@
 <template>
     <div class="box box-default">
         <div class="box-header with-border">
-            <h3 class="box-title">{{attachmentsTitle}}</h3>
+            <h3 class="box-title">{{ attachmentsTitle }}</h3>
 
             <div class="box-tools pull-right">
 
@@ -19,10 +19,10 @@
                 </div>
                 <div class="col-xs-4">
                     <div class="pull-right">
-                        <button type="button" class="btn btn-primary" v-on:click="changeLayout('grid')">
+                        <button type="button" class="btn btn-primary" v-on:click="changeLayout('grid')" title="Show attachments in grid format, limited options but great for sorting the order out.">
                             <span class="fa fa-th"></span>
                         </button>
-                        <button type="button" class="btn btn-primary" v-on:click="changeLayout('list')">
+                        <button type="button" class="btn btn-primary" v-on:click="changeLayout('list')" title="Show attachments in list format, ideal for filling the details">
                             <span class="fa fa-th-list"></span>
                         </button>
                     </div>
@@ -43,7 +43,7 @@
             </div>
 
             <button type="button" class="btn btn-primary" v-on:click="createAttachment()">
-                {{attachmentButton}}
+                {{attachmentsButton}}
             </button>
 
         </div>
@@ -94,9 +94,9 @@
              */
             retrieveData: function () {
                 var data = {
-                    model: this.attachmentModel,
-                    model_id: this.attachmentModelId,
-                    context: this.attachmentsPrefix
+                    model: this.attachmentModel,       // what sort of model ie App/Movie
+                    model_id: this.attachmentModelId,  // the id of model App/Model currently ising
+                    context: this.attachmentsPrefix    // the prefix of the attachment ie movie
                 }
 
                 this.$http.post('/larapress/attachments/getByModel', data)
@@ -106,9 +106,9 @@
                         });
             },
             changeLayout: function (layout) {
-                console.log(layout);
                 this.attachmentsLayout = layout;
             }
+
         },
         ready: function () {
             this.retrieveData();

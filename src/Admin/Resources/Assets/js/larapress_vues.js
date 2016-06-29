@@ -6,6 +6,7 @@ Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#csrf_token').
 import MediaManager from './vue_components/mediaManager.vue';
 import FeatureImage from './vue_components/featureImage.vue';
 import ImageAttachments from './vue_components/imageAttachments.vue';
+import ConfirmModal from './vue_components/confirmModal.vue';
 
 new Vue({
     el: 'body',
@@ -13,7 +14,8 @@ new Vue({
     components: {
         MediaManager: MediaManager,
         FeatureImage: FeatureImage,
-        ImageAttachments: ImageAttachments
+        ImageAttachments: ImageAttachments,
+        ConfirmModal: ConfirmModal
     },
     ready: function () {
         console.log(Vue.http.headers.common['X-CSRF-TOKEN']);
@@ -32,7 +34,24 @@ new Vue({
          */
         mediaSubmitted: function (result) {
             this.$broadcast('mediaSubmitted', result);
+        },
+
+
+        /**
+         * Broadcast to say confirmation modal is requested
+         * @param data
+         */
+        confirmationRequested: function(data){
+            this.$broadcast('confirmationRequested', data);
+        },
+        /**
+         * Broadcast confirmation was selected
+         * @param result
+         */
+        confirmationResult: function(result){
+            this.$broadcast('confirmationResult', result);
         }
+
     },
     methods: {
         /**

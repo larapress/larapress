@@ -23,6 +23,7 @@ trait ImageAttachmentTrait
      */
     public function saveImageAttachments(Request $request)
     {
+        //get array of all types('context') of attachments for this model
         $this->attachmentNames = $this->getImageAttachmentNames();
 
         //first of all create the index of all input attachments
@@ -37,6 +38,7 @@ trait ImageAttachmentTrait
                 foreach ($this->inputIndex[$context]['identifiers'] as $attachmentID) {
                     $field = $context . '_' . $attachmentID . '_';
 
+                    //if no id feild, then create a new attachment
                     if ($request->get($field . 'id') == null) {
                         Attachment::create([
                             'context' => $context,
@@ -48,17 +50,21 @@ trait ImageAttachmentTrait
                             'model_id' => $this->id
                         ]);
                     } else {
-                        $attachment = Attachment::find($request->get($field . 'id'));
+                        if($request->get($field . 'url') == '' && $request->get($field . 'caption') == '' && $request->get($field . 'alt') == ''){
+                            Attachment::destroy($request->get($field . 'id'));
+                        }else{
+                            $attachment = Attachment::find($request->get($field . 'id'));
 
-                        $attachment->update([
-                            'context' => $context,
-                            'url' => $request->get($field . 'url'),
-                            'alt' => $request->get($field . 'alt'),
-                            'caption' => $request->get($field . 'caption'),
-                            'status' => 'active'
-                        ], [
-                            'id' => $request->get($field . 'id')
-                        ]);
+                            $attachment->update([
+                                'context' => $context,
+                                'url' => $request->get($field . 'url'),
+                                'alt' => $request->get($field . 'alt'),
+                                'caption' => $request->get($field . 'caption'),
+                                'status' => 'active'
+                            ], [
+                                'id' => $request->get($field . 'id')
+                            ]);
+                        }
                     }
                 }
             }
