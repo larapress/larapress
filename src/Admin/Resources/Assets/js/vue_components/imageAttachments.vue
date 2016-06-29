@@ -1,23 +1,33 @@
 <template>
-    <div class="row">
-        <div class="col-xs-12">
+    <div class="box box-default">
+        <div class="box-header with-border">
+            <h3 class="box-title">{{attachmentsTitle}}</h3>
 
-            <div class="row">
-                <div class="col-xs-6">
-                    <h3 class="box-title">{{listTitle}}</h3>
+            <div class="box-tools pull-right">
+
+                <button class="btn btn-box-tool" data-widget="collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+            <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="row" style="margin-bottom: 0.6rem">
+                <div class="col-xs-8">
+                    <p>{{ attachmentsText }}</p>
                 </div>
-                <div class="col-xs-6">
+                <div class="col-xs-4">
                     <div class="pull-right">
+                        <button type="button" class="btn btn-primary" v-on:click="changeLayout('grid')">
+                            <span class="fa fa-th"></span>
+                        </button>
                         <button type="button" class="btn btn-primary" v-on:click="changeLayout('list')">
                             <span class="fa fa-th-list"></span>
-                        </button>
-                        <button type="button" class="btn btn-primary"  v-on:click="changeLayout('grid')">
-                            <span class="fa fa-th"></span>
                         </button>
                     </div>
                 </div>
             </div>
-
 
             <div class="row">
                 <div class="col-xs-12">
@@ -26,7 +36,7 @@
                                       v-bind:attachment-id="attachment.id"
                                       v-bind:attachment-alt="attachment.alt"
                                       v-bind:attachment-url="attachment.url"
-                                      v-bind:attachment-layout="attachmentLayout"
+                                      v-bind:attachment-layout="attachmentsLayout"
                                       v-bind:attachment-caption="attachment.caption">
                     </image-attachment>
                 </div>
@@ -37,7 +47,14 @@
             </button>
 
         </div>
+        <!-- /.box-body -->
+
+        <div class="overlay" v-show="loading">
+            <i class="fa fa-refresh fa-spin"></i>
+        </div>
+
     </div>
+    <!-- /.box -->
 </template>
 
 <script>
@@ -48,17 +65,18 @@
             ImageAttachment: ImageAttachment
         },
         props: {
-            listTitle: {
-                type: String
-            },
+            attachmentsTitle: {type: String},
             attachmentsPrefix: {type: String},
+            attachmentsButton: {type: String, default: 'Add Another Attachment'},
+            attachmentsLayout: {type: String, default: 'list'},
+            attachmentsText: {type: String},
+
             attachmentModel: {type: String},
-            attachmentModelId: {type: Number},
-            attachmentButton: {type: String, default: 'New one'},
-            attachmentLayout: {type:String}
+            attachmentModelId: {type: Number}
         },
         data: function () {
             return {
+                loading: true,
                 attachments: []
             }
         },
@@ -84,11 +102,12 @@
                 this.$http.post('/larapress/attachments/getByModel', data)
                         .success(function (response) {
                             this.$set('attachments', response);
+                            this.$set('loading', false);
                         });
             },
-            changeLayout: function(layout){
+            changeLayout: function (layout) {
                 console.log(layout);
-                this.attachmentLayout = layout;
+                this.attachmentsLayout = layout;
             }
         },
         ready: function () {

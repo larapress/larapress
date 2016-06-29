@@ -3,6 +3,9 @@
     .list {
         width: 100%;
         float: left;
+        border: 1px solid #eeeeee;
+        padding:1rem;
+    margin-bottom:0.7rem;
     .image {
         float: left;
         padding-right: 1rem;
@@ -19,6 +22,8 @@
         float: left;
         width: 19%;
         margin:0.5%;
+        border: 1px solid #eeeeee;
+        padding:0.3rem;
     .image {
         float: left;
         width: 100%;
@@ -35,10 +40,10 @@
 
 <template>
     <div class="attachment">
-        <div class="box box-default" v-bind:class="attachmentLayout">
+        <div v-bind:class="attachmentLayout">
             <div class="box-body">
                 <div class="image">
-                    <img v-bind:src="imageUrl" class="img-responsive" title="{{imageUrl}}"/>
+                    <img v-bind:src="imageUrl" class="img-responsive" title="{{imageUrl}}" v-on:click="chooseImage()"/>
                 </div>
 
                 <div class="form">
