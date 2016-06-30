@@ -93,6 +93,7 @@
                     id: null,
                     priority: this.attachments.length
                 })
+                this.$dispatch('mediaManagerRequested')
             },
             /**
              * Gets the attachment data from server
@@ -121,6 +122,18 @@
                     item.order = index;
                     item.priority = index;
                 });
+            },
+            /**
+             * Generate a suffix to make attachment unique by timestamp
+             */
+            generateUniqueSuffix: function () {
+                if (!Date.now) {
+                    Date.now = function () {
+                        return new Date().getTime();
+                    }
+                }
+
+                return '_' + Math.floor(Date.now());
             }
         },
         ready: function () {

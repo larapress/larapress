@@ -4,25 +4,33 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                     <button type="button" class="close" v-on:click="closeMediaManager()" aria-label="Close"><span
+                    <button type="button" class="close" v-on:click="closeMediaManager()" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
 
                     <h4 class="modal-title">Media Manager</h4>
                 </div>
 
+
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="col-xs-3">
-                                <directories-component v-bind:working-Directory="working_directory"></directories-component>
+                                <directories-component v-bind:working-Directory="working_directory">
+                                </directories-component>
                             </div>
 
                             <div class="col-xs-9">
-                                <files-component></files-component>
-                            </div>
+                                <div class="box box-solid box-default">
+                                    <div class="box-header">
+                                        <p>Dir: {{ working_directory }}</p>
+                                    </div>
 
-                            <div class="col-xs-9">
-                                <upload-component></upload-component>
+                                    <div>
+                                        <files-component></files-component>
+
+                                        <upload-component></upload-component>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -30,10 +38,14 @@
 
 
                 <div class="modal-footer">
-                    <button v-on:click="setUpload()" v-show="showing_files" class="btn btn-primary pull-left">Upload</button>
-                    <button v-else v-on:click="setToShowFiles()" class="btn btn-default pull-left">Show Files</button>
+                    <button v-on:click="setUpload()" v-show="showing_files" class="btn btn-primary pull-left">
+                        Upload
+                    </button>
+                    <button v-else v-on:click="setToShowFiles()" class="btn btn-default pull-left">Show Files
+                    </button>
 
-                    <button type="button" class="btn btn-default" v-on:click="closeMediaManager()">Close</button>
+                    <button type="button" class="btn btn-default" v-on:click="closeMediaManager()">Close
+                    </button>
                     <button type="button" class="btn btn-primary" v-on:click="mediaSubmit()">Confirm</button>
                 </div>
             </div>
@@ -87,8 +99,10 @@
              * When a file is selected
              * @param filename - string url name for the file
              */
-            fileSelected: function (file) {
-                this.selected_file = file;
+            fileSelected: function (response) {
+                this.selected_file = response.selectedFile;
+
+                if(response.proceed) this.mediaSubmit();
             }
         },
         methods: {
