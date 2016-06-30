@@ -12032,14 +12032,21 @@ if (module.hot) {(function () {  module.hot.accept()
 'use strict';
 
 module.exports = {
+    props: ['workingDirectory'],
+
     data: function data() {
         return {
-            directories: []
+            directories: [],
+            showCreateDirectory: false,
+            showLoadingIconButton: false,
+            newDirectoryName: ''
         };
     },
+
     ready: function ready() {
         this.refreshDirectories();
     },
+
     methods: {
         refreshDirectories: function refreshDirectories() {
             this.$http.get('/larapress/media/directories').success(function (directories) {
@@ -12054,11 +12061,29 @@ module.exports = {
             selected_directory.active = true;
 
             this.$dispatch('changeOfDirectory', selected_directory.path);
+        },
+        showCreateDirectoryForm: function showCreateDirectoryForm() {
+            this.showCreateDirectory = true;
+        },
+        createDirectory: function createDirectory() {
+            this.showLoadingIconButton = true;
+            var data = {
+                newDirectoryName: this.newDirectoryName,
+                path: this.workingDirectory
+            };
+            this.$http.post('/larapress/media/create-directory', data).then(function (response) {
+                this.$set('directories', response.data.directories);
+                this.showLoadingIconButton = false;
+                this.showCreateDirectory = false;
+                this.newDirectoryName = '';
+            }).catch(function (response) {
+                console.log(response);
+            });
         }
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"sidebar\" style=\"background: #000\">\n    <ul class=\"nav sidebar-menu\">\n        <li v-for=\"directory in directories\" class=\"treeview\" v-bind:class=\"{ active : directory.active }\">\n            <a v-on:click=\"changeDirectory(directory)\" href=\"#\">{{ directory.name }}</a>\n            <ul v-show=\"directory.show_sub_directories\" class=\"nav treeview-menu\">\n                <li v-for=\"sub_directory in directory.sub_directories\" v-bind:class=\"{ active : sub_directory.active }\">\n                    <a v-on:click=\"changeDirectory(sub_directory)\" href=\"#\">{{ sub_directory.name }}</a>\n                </li>\n            </ul>\n        </li>\n    </ul>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"sidebar\" style=\"background: #000\">\n    <ul class=\"nav sidebar-menu\">\n        <li v-for=\"directory in directories\" class=\"treeview\" v-bind:class=\"{ active : directory.active }\">\n            <a v-on:click=\"changeDirectory(directory)\" href=\"#\">{{ directory.name }}</a>\n            <ul v-show=\"directory.show_sub_directories\" class=\"nav treeview-menu\">\n                <li v-for=\"sub_directory in directory.sub_directories\" v-bind:class=\"{ active : sub_directory.active }\">\n                    <a v-on:click=\"changeDirectory(sub_directory)\" href=\"#\">{{ sub_directory.name }}</a>\n                </li>\n            </ul>\n        </li>\n    </ul>\n</div>\n<div class=\"sidebar\" style=\"margin-top:1rem\">\n    <a href=\"#\" v-on:click=\"showCreateDirectoryForm\">Create Directory</a>\n\n    <div v-show=\"showCreateDirectory\">\n        <div class=\"form-group\">\n            <label>New Directory Name</label>\n            <input type=\"text\" v-model=\"newDirectoryName\" class=\"form-control\">\n        </div>\n        <div class=\"form-group\">\n            <div class=\"pull-right\">\n                <button v-on:click=\"createDirectory()\" type=\"button\" class=\"btn btn-primary\">\n                    <span v-show=\"showLoadingIconButton\" class=\"fa fa-circle-o-notch fa-spin\"></span>&nbsp; Create Directory\n                </button>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12416,7 +12441,7 @@ module.exports = {
 
     data: function data() {
         return {
-            working_directory: 'media/images', // the current selected directory
+            working_directory: 'media', // the current selected directory
             selected_file: '', // the file that has been selected
             working_context: '', // this will be to identify which el/template called media manager to send back result
             showing_files: true, // default to show files not upload
@@ -12483,7 +12508,7 @@ module.exports = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"mediaManager\" class=\"modal\" tabindex=\"-1\" role=\"dialog\" v-bind:style=\"{display: display}\">\n    <div class=\"modal-dialog modal-lg\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                 <button type=\"button\" class=\"close\" v-on:click=\"closeMediaManager()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n\n                <h4 class=\"modal-title\">Media Manager</h4>\n            </div>\n            <div class=\"modal-body\">\n                <div class=\"row\">\n                    <div class=\"col-xs-12\">\n                        <div class=\"col-xs-3\">\n                            <directories-component></directories-component>\n                        </div>\n\n                        <div class=\"col-xs-9\">\n                            <files-component></files-component>\n                        </div>\n\n                        <div class=\"col-xs-9\">\n                            <upload-component></upload-component>\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n\n            <div class=\"modal-footer\">\n                <button v-on:click=\"setUpload()\" v-show=\"showing_files\" class=\"btn btn-primary pull-left\">Upload</button>\n                <button v-else=\"\" v-on:click=\"setToShowFiles()\" class=\"btn btn-default pull-left\">Show Files</button>\n\n\n\n                <button type=\"button\" class=\"btn btn-default\" v-on:click=\"closeMediaManager()\">Close</button>\n                <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"mediaSubmit()\">Confirm</button>\n            </div>\n        </div>\n        <!-- /.modal-content -->\n    </div>\n    <!-- /.modal-dialog -->\n</div>\n<!-- /.modal -->\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"mediaManager\" class=\"modal\" tabindex=\"-1\" role=\"dialog\" v-bind:style=\"{display: display}\">\n    <div class=\"modal-dialog modal-lg\">\n        <div class=\"modal-content\">\n\n            <div class=\"modal-header\">\n                 <button type=\"button\" class=\"close\" v-on:click=\"closeMediaManager()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n\n                <h4 class=\"modal-title\">Media Manager</h4>\n            </div>\n\n            <div class=\"modal-body\">\n                <div class=\"row\">\n                    <div class=\"col-xs-12\">\n                        <div class=\"col-xs-3\">\n                            <directories-component v-bind:working-directory=\"working_directory\"></directories-component>\n                        </div>\n\n                        <div class=\"col-xs-9\">\n                            <files-component></files-component>\n                        </div>\n\n                        <div class=\"col-xs-9\">\n                            <upload-component></upload-component>\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n\n            <div class=\"modal-footer\">\n                <button v-on:click=\"setUpload()\" v-show=\"showing_files\" class=\"btn btn-primary pull-left\">Upload</button>\n                <button v-else=\"\" v-on:click=\"setToShowFiles()\" class=\"btn btn-default pull-left\">Show Files</button>\n\n                <button type=\"button\" class=\"btn btn-default\" v-on:click=\"closeMediaManager()\">Close</button>\n                <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"mediaSubmit()\">Confirm</button>\n            </div>\n        </div>\n        <!-- /.modal-content -->\n    </div>\n    <!-- /.modal-dialog -->\n</div>\n<!-- /.modal -->\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
