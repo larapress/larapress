@@ -35,6 +35,7 @@ trait ImageAttachmentTrait
         //go through index and save them to database
         foreach ($this->attachmentNames as $context) {
             if (isset($this->inputIndex[$context])) {
+                $priority = 0;
                 foreach ($this->inputIndex[$context]['identifiers'] as $attachmentID) {
                     $field = $context . '_' . $attachmentID . '_';
 
@@ -47,7 +48,8 @@ trait ImageAttachmentTrait
                             'caption' => $request->get($field . 'caption'),
                             'status' => 'active',
                             'model' => get_class(),
-                            'model_id' => $this->id
+                            'model_id' => $this->id,
+                            'priority' => $priority
                         ]);
                     } else {
                         if($request->get($field . 'url') == '' && $request->get($field . 'caption') == '' && $request->get($field . 'alt') == ''){
@@ -60,12 +62,14 @@ trait ImageAttachmentTrait
                                 'url' => $request->get($field . 'url'),
                                 'alt' => $request->get($field . 'alt'),
                                 'caption' => $request->get($field . 'caption'),
-                                'status' => 'active'
+                                'status' => 'active',
+                                'priority' => $priority
                             ], [
                                 'id' => $request->get($field . 'id')
                             ]);
                         }
                     }
+                    $priority++;
                 }
             }
         }
@@ -84,11 +88,14 @@ trait ImageAttachmentTrait
             return Attachment::where('model_id', $this->id)
                 ->where('context', $context)
                 ->where('model', $model)
+                ->orderBy('priority', 'asc')
                 ->get();
         }
 
+        //if no context, return all attachments
         return Attachment::where('model_id', $this->id)
             ->where('model', $model)
+            ->orderBy('priority', 'asc')
             ->get();
     }
 

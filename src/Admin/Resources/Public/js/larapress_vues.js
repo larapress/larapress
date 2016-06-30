@@ -11910,6 +11910,7 @@ var _confirmModal2 = _interopRequireDefault(_confirmModal);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Vue = require('vue');
+
 Vue.use(require('vue-resource'));
 
 Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#csrf_token').getAttribute('content');
@@ -12191,11 +12192,11 @@ if (module.hot) {(function () {  module.hot.accept()
 })()}
 },{"vue":4,"vue-hot-reload-api":2}],11:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
-var __vueify_style__ = __vueify_insert__.insert("/* line 4, stdin */\n.attachment .list {\n  width: 100%;\n  float: left;\n  border: 1px solid #eeeeee;\n  padding: 1rem;\n  margin-bottom: 0.7rem; }\n  /* line 11, stdin */\n  .attachment .list .image {\n    float: left;\n    padding-right: 1rem;\n    width: 20%; }\n  /* line 17, stdin */\n  .attachment .list .form {\n    float: right;\n    padding-left: 1rem;\n    width: 80%; }\n\n/* line 25, stdin */\n.attachment .grid {\n  float: left;\n  width: 19%;\n  margin: 0.5%;\n  border: 1px solid #eeeeee;\n  padding: 0.3rem; }\n  /* line 32, stdin */\n  .attachment .grid .image {\n    float: left;\n    width: 100%; }\n  /* line 37, stdin */\n  .attachment .grid .form {\n    display: none; }\n")
+var __vueify_style__ = __vueify_insert__.insert("/* line 5, stdin */\n.attachment.list {\n  width: 100%;\n  float: left;\n  border: 1px solid #eeeeee;\n  padding: 1rem;\n  margin-bottom: 0.7rem; }\n  /* line 12, stdin */\n  .attachment.list .image {\n    float: left;\n    padding-right: 1rem;\n    width: 20%; }\n  /* line 18, stdin */\n  .attachment.list .form {\n    float: right;\n    padding-left: 1rem;\n    width: 80%; }\n\n/* line 26, stdin */\n.attachment.grid {\n  float: left;\n  width: 19%;\n  height: 7rem;\n  margin: 0.5%;\n  border: 3px solid #eeeeee;\n  overflow: hidden;\n  padding: 0; }\n  /* line 35, stdin */\n  .attachment.grid .image, .attachment.grid .box-body {\n    user-drag: none;\n    user-select: none;\n    -moz-user-select: none;\n    -webkit-user-drag: none;\n    -webkit-user-select: none;\n    -ms-user-select: none;\n    margin: 0;\n    padding: 0; }\n  /* line 46, stdin */\n  .attachment.grid .form {\n    display: none; }\n")
 'use strict';
 
 module.exports = {
-    props: ['attachmentPrefix', 'attachmentId', 'attachmentAlt', 'attachmentCaption', 'attachmentUrl', 'attachmentLayout'],
+    props: ['attachmentPrefix', 'attachmentId', 'attachmentAlt', 'attachmentCaption', 'attachmentUrl', 'attachmentLayout', 'attachmentPriority'],
     data: function data() {
         return {
             display: true,
@@ -12208,6 +12209,7 @@ module.exports = {
             imageAltName: '',
             imageCaptionName: '',
             imageIdName: '',
+            imagePriorityName: '',
 
             context: '' // this is a name that gets passed back once file has been selected from broadcast
         };
@@ -12260,14 +12262,17 @@ module.exports = {
         },
 
         /**
-         * Updates the attributes of the template form
+         * Updates the attributes of the template form to have unique field names
          */
         updateAllFieldAttributes: function updateAllFieldAttributes() {
             this.attachmentName = this.attachmentPrefix + this.attachmentSuffix;
+
             this.imageName = this.attachmentName + '_url';
             this.imageAltName = this.attachmentName + '_alt';
             this.imageCaptionName = this.attachmentName + '_caption';
             this.imageIdName = this.attachmentName + '_id';
+            this.imagePriorityName = this.attachmentName + '_priority';
+
             this.context = 'attachment_' + this.attachmentName;
             this.imageUrl = this.attachmentUrl;
         }
@@ -12279,13 +12284,13 @@ module.exports = {
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"attachment\" v-show=\"display\">\n    <div v-bind:class=\"attachmentLayout\">\n        <div class=\"box-body\">\n            <div class=\"image\">\n                <img v-bind:src=\"imageUrl\" class=\"img-responsive\" title=\"{{imageUrl}}\" v-on:click=\"chooseImage()\">\n            </div>\n\n            <div class=\"form\">\n                <div class=\"form-horizontal\">\n                    <div class=\"form-group\">\n                        <label v-bind:for=\"imageAltName\" class=\"col-sm-3 control-label\">Alt Tag</label>\n\n                        <div class=\"col-sm-9\">\n                            <input type=\"text\" v-bind:value=\"attachmentAlt\" v-bind:name=\"imageAltName\" class=\"form-control\">\n                        </div>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label v-bind:for=\"imageCaptionName\" class=\"col-sm-3 control-label\">Display Caption</label>\n\n                        <div class=\"col-sm-9\">\n                            <input type=\"text\" v-bind:value=\"attachmentCaption\" v-bind:name=\"imageCaptionName\" class=\"form-control\">\n                        </div>\n                    </div>\n\n                    <input type=\"hidden\" v-bind:value=\"attachmentId\" v-bind:name=\"imageIdName\">\n                    <input type=\"hidden\" v-bind:value=\"imageUrl\" v-bind:name=\"imageName\">\n\n                    <div class=\"pull-right\">\n                        <button type=\"button\" class=\"btn btn-default\" v-on:click=\"removeImage()\">\n                            Remove Attachment\n                        </button>\n                        <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"chooseImage()\">\n                            Select Image\n                        </button>\n                    </div>\n\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"attachment\" v-bind:class=\"attachmentLayout\" v-show=\"display\">\n    <div class=\"box-body\" draggable=\"false\">\n        <div class=\"image\">\n            <img v-bind:src=\"imageUrl\" class=\"img-responsive\" draggable=\"false\" title=\"{{imageUrl}}\" v-on:click=\"chooseImage()\">\n        </div>\n\n        <div class=\"form\">\n            <div class=\"form-horizontal\">\n                <div class=\"form-group\">\n                    <label v-bind:for=\"imageAltName\" class=\"col-sm-3 control-label\">Alt Tag</label>\n\n                    <div class=\"col-sm-9\">\n                        <input type=\"text\" v-bind:value=\"attachmentAlt\" v-bind:name=\"imageAltName\" class=\"form-control\">\n                    </div>\n                </div>\n\n                <div class=\"form-group\">\n                    <label v-bind:for=\"imageCaptionName\" class=\"col-sm-3 control-label\">Display Caption</label>\n\n                    <div class=\"col-sm-9\">\n                        <input type=\"text\" v-bind:value=\"attachmentCaption\" v-bind:name=\"imageCaptionName\" class=\"form-control\">\n                    </div>\n                </div>\n\n                <input type=\"hidden\" v-bind:value=\"attachmentId\" v-bind:name=\"imageIdName\">\n                <input type=\"hidden\" v-bind:value=\"imageUrl\" v-bind:name=\"imageName\">\n                <input type=\"hidden\" v-bind:value=\"attachmentPriority\" v-bind:name=\"imagePriorityName\">\n\n                <div class=\"pull-right\">\n                    <button type=\"button\" class=\"btn btn-default\" v-on:click=\"removeImage()\">\n                        Remove Attachment\n                    </button>\n                    <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"chooseImage()\">\n                        Select Image\n                    </button>\n                </div>\n\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.dispose(function () {
-    __vueify_insert__.cache["/* line 4, stdin */\n.attachment .list {\n  width: 100%;\n  float: left;\n  border: 1px solid #eeeeee;\n  padding: 1rem;\n  margin-bottom: 0.7rem; }\n  /* line 11, stdin */\n  .attachment .list .image {\n    float: left;\n    padding-right: 1rem;\n    width: 20%; }\n  /* line 17, stdin */\n  .attachment .list .form {\n    float: right;\n    padding-left: 1rem;\n    width: 80%; }\n\n/* line 25, stdin */\n.attachment .grid {\n  float: left;\n  width: 19%;\n  margin: 0.5%;\n  border: 1px solid #eeeeee;\n  padding: 0.3rem; }\n  /* line 32, stdin */\n  .attachment .grid .image {\n    float: left;\n    width: 100%; }\n  /* line 37, stdin */\n  .attachment .grid .form {\n    display: none; }\n"] = false
+    __vueify_insert__.cache["/* line 5, stdin */\n.attachment.list {\n  width: 100%;\n  float: left;\n  border: 1px solid #eeeeee;\n  padding: 1rem;\n  margin-bottom: 0.7rem; }\n  /* line 12, stdin */\n  .attachment.list .image {\n    float: left;\n    padding-right: 1rem;\n    width: 20%; }\n  /* line 18, stdin */\n  .attachment.list .form {\n    float: right;\n    padding-left: 1rem;\n    width: 80%; }\n\n/* line 26, stdin */\n.attachment.grid {\n  float: left;\n  width: 19%;\n  height: 7rem;\n  margin: 0.5%;\n  border: 3px solid #eeeeee;\n  overflow: hidden;\n  padding: 0; }\n  /* line 35, stdin */\n  .attachment.grid .image, .attachment.grid .box-body {\n    user-drag: none;\n    user-select: none;\n    -moz-user-select: none;\n    -webkit-user-drag: none;\n    -webkit-user-select: none;\n    -ms-user-select: none;\n    margin: 0;\n    padding: 0; }\n  /* line 46, stdin */\n  .attachment.grid .form {\n    display: none; }\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
@@ -12329,7 +12334,8 @@ module.exports = {
          */
         createAttachment: function createAttachment() {
             this.attachments.push({
-                id: null
+                id: null,
+                priority: this.attachments.length
             });
         },
         /**
@@ -12349,15 +12355,31 @@ module.exports = {
         },
         changeLayout: function changeLayout(layout) {
             this.attachmentsLayout = layout;
+        },
+        reorder: function reorder(oldIndex, newIndex) {
+            // move the item in the underlying array
+            this.attachments.splice(newIndex, 0, this.attachments.splice(oldIndex, 1)[0]);
+            // update order properties based on position in array
+            this.attachments.forEach(function (item, index) {
+                item.order = index;
+                item.priority = index;
+            });
         }
-
     },
     ready: function ready() {
         this.retrieveData();
+
+        var vm = this;
+        Sortable.create(document.getElementById('sort'), {
+            animation: 180,
+            onUpdate: function onUpdate(evt) {
+                vm.reorder(evt.oldIndex, evt.newIndex);
+            }
+        });
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"box box-default\">\n    <div class=\"box-header with-border\">\n        <h3 class=\"box-title\">{{ attachmentsTitle }}</h3>\n\n        <div class=\"box-tools pull-right\">\n\n            <button class=\"btn btn-box-tool\" data-widget=\"collapse\">\n                <i class=\"fa fa-minus\"></i>\n            </button>\n        </div>\n        <!-- /.box-tools -->\n    </div>\n    <!-- /.box-header -->\n    <div class=\"box-body\">\n        <div class=\"row\" style=\"margin-bottom: 0.6rem\">\n            <div class=\"col-xs-8\">\n                <p>{{ attachmentsText }}</p>\n            </div>\n            <div class=\"col-xs-4\">\n                <div class=\"pull-right\">\n                    <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"changeLayout('grid')\" title=\"Show attachments in grid format, limited options but great for sorting the order out.\">\n                        <span class=\"fa fa-th\"></span>\n                    </button>\n                    <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"changeLayout('list')\" title=\"Show attachments in list format, ideal for filling the details\">\n                        <span class=\"fa fa-th-list\"></span>\n                    </button>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-xs-12\">\n                <image-attachment v-for=\"attachment in attachments\" v-bind:attachment-prefix=\"attachmentsPrefix\" v-bind:attachment-id=\"attachment.id\" v-bind:attachment-alt=\"attachment.alt\" v-bind:attachment-url=\"attachment.url\" v-bind:attachment-layout=\"attachmentsLayout\" v-bind:attachment-caption=\"attachment.caption\">\n                </image-attachment>\n            </div>\n        </div>\n\n        <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"createAttachment()\">\n            {{attachmentsButton}}\n        </button>\n\n    </div>\n    <!-- /.box-body -->\n\n    <div class=\"overlay\" v-show=\"loading\">\n        <i class=\"fa fa-refresh fa-spin\"></i>\n    </div>\n\n</div>\n<!-- /.box -->\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"box box-default\">\n    <div class=\"box-header with-border\">\n        <h3 class=\"box-title\">{{ attachmentsTitle }}</h3>\n\n        <div class=\"box-tools pull-right\">\n\n            <button class=\"btn btn-box-tool\" data-widget=\"collapse\">\n                <i class=\"fa fa-minus\"></i>\n            </button>\n        </div>\n        <!-- /.box-tools -->\n    </div>\n    <!-- /.box-header -->\n    <div class=\"box-body\">\n        <div class=\"row\" style=\"margin-bottom: 0.6rem\">\n            <div class=\"col-xs-8\">\n                <p>{{ attachmentsText }}</p>\n            </div>\n            <div class=\"col-xs-4\">\n                <div class=\"pull-right\">\n                    <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"changeLayout('grid')\" title=\"Show attachments in grid format, limited options but great for sorting the order out.\">\n                        <span class=\"fa fa-th\"></span>\n                    </button>\n                    <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"changeLayout('list')\" title=\"Show attachments in list format, ideal for filling the details\">\n                        <span class=\"fa fa-th-list\"></span>\n                    </button>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-xs-12\" id=\"sort\">\n                <image-attachment v-for=\"attachment in attachments\" data-index=\"{{ $index }}\" v-bind:attachment-priority=\"attachment.priority\" v-bind:attachment-prefix=\"attachmentsPrefix\" v-bind:attachment-id=\"attachment.id\" v-bind:attachment-alt=\"attachment.alt\" v-bind:attachment-url=\"attachment.url\" v-bind:attachment-layout=\"attachmentsLayout\" v-bind:attachment-caption=\"attachment.caption\">\n                </image-attachment>\n            </div>\n        </div>\n\n        <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"createAttachment()\">\n            {{attachmentsButton}}\n        </button>\n\n    </div>\n    <!-- /.box-body -->\n\n    <div class=\"overlay\" v-show=\"loading\">\n        <i class=\"fa fa-refresh fa-spin\"></i>\n    </div>\n\n</div>\n<!-- /.box -->\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

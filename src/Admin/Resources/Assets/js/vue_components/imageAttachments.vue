@@ -19,10 +19,12 @@
                 </div>
                 <div class="col-xs-4">
                     <div class="pull-right">
-                        <button type="button" class="btn btn-primary" v-on:click="changeLayout('grid')" title="Show attachments in grid format, limited options but great for sorting the order out.">
+                        <button type="button" class="btn btn-primary" v-on:click="changeLayout('grid')"
+                                title="Show attachments in grid format, limited options but great for sorting the order out.">
                             <span class="fa fa-th"></span>
                         </button>
-                        <button type="button" class="btn btn-primary" v-on:click="changeLayout('list')" title="Show attachments in list format, ideal for filling the details">
+                        <button type="button" class="btn btn-primary" v-on:click="changeLayout('list')"
+                                title="Show attachments in list format, ideal for filling the details">
                             <span class="fa fa-th-list"></span>
                         </button>
                     </div>
@@ -30,8 +32,10 @@
             </div>
 
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-xs-12" id="sort">
                     <image-attachment v-for="attachment in attachments"
+                                      data-index="{{ $index }}"
+                                      v-bind:attachment-priority="attachment.priority"
                                       v-bind:attachment-prefix="attachmentsPrefix"
                                       v-bind:attachment-id="attachment.id"
                                       v-bind:attachment-alt="attachment.alt"
@@ -86,7 +90,8 @@
              */
             createAttachment: function () {
                 this.attachments.push({
-                    id: null
+                    id: null,
+                    priority: this.attachments.length
                 })
             },
             /**
@@ -107,11 +112,27 @@
             },
             changeLayout: function (layout) {
                 this.attachmentsLayout = layout;
+            },
+            reorder: function (oldIndex, newIndex) {
+                // move the item in the underlying array
+                this.attachments.splice(newIndex, 0, this.attachments.splice(oldIndex, 1)[0]);
+                // update order properties based on position in array
+                this.attachments.forEach(function (item, index) {
+                    item.order = index;
+                    item.priority = index;
+                });
             }
-
         },
         ready: function () {
             this.retrieveData();
+
+            var vm = this;
+            Sortable.create(document.getElementById('sort'), {
+                animation: 180,
+                onUpdate: function (evt) {
+                    vm.reorder(evt.oldIndex, evt.newIndex);
+                }
+            });
         }
     }
 </script>

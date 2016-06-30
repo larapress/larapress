@@ -19,6 +19,7 @@ class Attachment extends Model
         $attachments = Attachment::where('model_id', $model_id)
             ->where('context', $context)
             ->where('model', $model)
+            ->orderBy('priority', 'asc')
             ->get();
 
         $result = [];
@@ -29,6 +30,7 @@ class Attachment extends Model
             $details->url = $attachment->url;
             $details->alt = $attachment->alt;
             $details->caption = $attachment->caption;
+            $details->priority = $attachment->priority;
 
             $result[] = $details;
         }

@@ -1,7 +1,8 @@
 <style lang="sass">
     .attachment {
+    }
 
-    .list {
+    .attachment.list {
         width: 100%;
         float: left;
         border: 1px solid #eeeeee;
@@ -22,16 +23,24 @@
 
     }
 
-    .grid {
+    .attachment.grid {
         float: left;
         width: 19%;
+        height: 7rem;
         margin: 0.5%;
-        border: 1px solid #eeeeee;
-        padding: 0.3rem;
+        border: 3px solid #eeeeee;
+        overflow: hidden;
+        padding: 0;
 
-    .image {
-        float: left;
-        width: 100%;
+    .image, .box-body {
+        user-drag: none;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-drag: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        margin: 0;
+        padding: 0;
     }
 
     .form {
@@ -39,53 +48,53 @@
     }
 
     }
-
-    }
-
 </style>
 
 
 <template>
-    <div class="attachment" v-show="display">
-        <div v-bind:class="attachmentLayout">
-            <div class="box-body">
-                <div class="image">
-                    <img v-bind:src="imageUrl" class="img-responsive" title="{{imageUrl}}" v-on:click="chooseImage()"/>
-                </div>
+    <div class="attachment" v-bind:class="attachmentLayout" v-show="display">
+        <div class="box-body" draggable="false">
+            <div class="image">
+                <img v-bind:src="imageUrl"
+                     class="img-responsive"
+                     draggable="false"
+                     title="{{imageUrl}}"
+                     v-on:click="chooseImage()"/>
+            </div>
 
-                <div class="form">
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <label v-bind:for="imageAltName" class="col-sm-3 control-label">Alt Tag</label>
+            <div class="form">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label v-bind:for="imageAltName" class="col-sm-3 control-label">Alt Tag</label>
 
-                            <div class="col-sm-9">
-                                <input type="text" v-bind:value="attachmentAlt" v-bind:name="imageAltName"
-                                       class="form-control"/>
-                            </div>
+                        <div class="col-sm-9">
+                            <input type="text" v-bind:value="attachmentAlt" v-bind:name="imageAltName"
+                                   class="form-control"/>
                         </div>
-
-                        <div class="form-group">
-                            <label v-bind:for="imageCaptionName" class="col-sm-3 control-label">Display Caption</label>
-
-                            <div class="col-sm-9">
-                                <input type="text" v-bind:value="attachmentCaption" v-bind:name="imageCaptionName"
-                                       class="form-control"/>
-                            </div>
-                        </div>
-
-                        <input type="hidden" v-bind:value="attachmentId" v-bind:name="imageIdName"/>
-                        <input type="hidden" v-bind:value="imageUrl" v-bind:name="imageName"/>
-
-                        <div class="pull-right">
-                            <button type="button" class="btn btn-default" v-on:click="removeImage()">
-                                Remove Attachment
-                            </button>
-                            <button type="button" class="btn btn-primary" v-on:click="chooseImage()">
-                                Select Image
-                            </button>
-                        </div>
-
                     </div>
+
+                    <div class="form-group">
+                        <label v-bind:for="imageCaptionName" class="col-sm-3 control-label">Display Caption</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" v-bind:value="attachmentCaption" v-bind:name="imageCaptionName"
+                                   class="form-control"/>
+                        </div>
+                    </div>
+
+                    <input type="hidden" v-bind:value="attachmentId" v-bind:name="imageIdName"/>
+                    <input type="hidden" v-bind:value="imageUrl" v-bind:name="imageName"/>
+                    <input type="hidden" v-bind:value="attachmentPriority" v-bind:name="imagePriorityName"/>
+
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-default" v-on:click="removeImage()">
+                            Remove Attachment
+                        </button>
+                        <button type="button" class="btn btn-primary" v-on:click="chooseImage()">
+                            Select Image
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -95,7 +104,13 @@
 <script>
 
     module.exports = {
-        props: ['attachmentPrefix', 'attachmentId', 'attachmentAlt', 'attachmentCaption', 'attachmentUrl', 'attachmentLayout'],
+        props: ['attachmentPrefix',
+            'attachmentId',
+            'attachmentAlt',
+            'attachmentCaption',
+            'attachmentUrl',
+            'attachmentLayout',
+            'attachmentPriority'],
         data: function () {
             return {
                 display: true,
@@ -108,6 +123,7 @@
                 imageAltName: '',
                 imageCaptionName: '',
                 imageIdName: '',
+                imagePriorityName: '',
 
                 context: '' // this is a name that gets passed back once file has been selected from broadcast
             }
@@ -160,14 +176,17 @@
             },
 
             /**
-             * Updates the attributes of the template form
+             * Updates the attributes of the template form to have unique field names
              */
             updateAllFieldAttributes: function () {
                 this.attachmentName = this.attachmentPrefix + this.attachmentSuffix;
+
                 this.imageName = this.attachmentName + '_url';
                 this.imageAltName = this.attachmentName + '_alt';
                 this.imageCaptionName = this.attachmentName + '_caption';
                 this.imageIdName = this.attachmentName + '_id';
+                this.imagePriorityName = this.attachmentName + '_priority';
+
                 this.context = 'attachment_' + this.attachmentName;
                 this.imageUrl = this.attachmentUrl;
             }
