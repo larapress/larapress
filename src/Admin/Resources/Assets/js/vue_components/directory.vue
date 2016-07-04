@@ -1,17 +1,24 @@
 <template>
-    <div class="sidebar" style="background: #000">
+    <div class="sidebar directoryPanel" style="background: #000">
         <ul class="nav sidebar-menu">
             <li v-for="directory in directories" class="treeview" v-bind:class="{ active : directory.active }">
-                <a v-on:click="changeDirectory(directory)" href="#">{{ directory.name }}</a>
+                <a v-on:click="changeDirectory(directory)" href="#">
+                    {{ directory.name }} <span v-show="directory.hasSubDirectories" class="fa fa-angle-right"></span>
+                </a>
                 <ul v-show="directory.show_sub_directories" class="nav treeview-menu">
                     <li v-for="sub_directory in directory.sub_directories"
                         v-bind:class="{ active : sub_directory.active }">
-                        <a v-on:click="changeDirectory(sub_directory)" href="#">{{ sub_directory.name }}</a>
+                        <a v-on:click="changeDirectory(sub_directory)" href="#"  v-bind:class="{ hasSubDirectories : sub_directory.hasSubDirectories}">
+                            {{ sub_directory.name }} <span v-show="sub_directory.hasSubDirectories" class="fa fa-angle-right"></span>
+                        </a>
                     </li>
                 </ul>
             </li>
         </ul>
     </div>
+
+
+
     <div class="sidebar" style="margin-top:1rem">
         <a href="#" v-on:click="showCreateDirectoryForm">Create Directory</a>
 

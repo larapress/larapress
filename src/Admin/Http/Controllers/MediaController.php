@@ -139,6 +139,8 @@ class MediaController extends Controller
             $folder->sub_directories[] = $this->createSubDirectoryList($dir);
         }
 
+        $folder->hasSubDirectories = count($folder->sub_directories) > 0;
+
       return $folder;
     }
 

@@ -12412,12 +12412,13 @@ table.text-center, table.text-center td, table.text-center th {
 
 .filePanel {
   width: 100%;
-  height: 300px;
+  height: 380px;
   float: left;
   position: relative;
   overflow-y: scroll;
   overflow-x: hidden;
-  border: 1px solid grey; }
+  border: 1px solid grey;
+  padding: 0.5rem; }
   .filePanel .fileThumb {
     width: 100%;
     height: 70px;
@@ -12432,7 +12433,8 @@ table.text-center, table.text-center td, table.text-center th {
     justify-content: flex-end;
     background-position: center;
     background-size: cover;
-    border: 5px solid #fff; }
+    border: 3px solid #fff;
+    margin-bottom: 0.3rem; }
     .filePanel .fileThumb .title {
       width: 100%;
       display: none;
@@ -12448,5 +12450,18 @@ table.text-center, table.text-center td, table.text-center th {
     display: block; }
   .filePanel .fileThumb.active {
     border-color: #0073b7; }
+
+.directoryPanel {
+  max-height: 340px;
+  width: 100%;
+  float: left;
+  position: relative;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  border: 1px solid grey; }
+  .directoryPanel .nav > li > a:hover, .directoryPanel .nav > li > a:active, .directoryPanel .nav > li > a:focus {
+    background-color: #8aa4af; }
+  .directoryPanel .hasSubDirectories:after {
+    content: '<span class="fa fa-angle-right"></span>'; }
 
 /*# sourceMappingURL=admin.css.map */

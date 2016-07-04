@@ -3,12 +3,13 @@ $fileColor: $blue;
 //this is the panel that shows the fileThumbs
 .filePanel {
   width: 100%;
-  height: 300px;
+  height: 380px;
   float: left;
   position: relative;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   border: 1px solid grey;
+  padding: 0.5rem;
 
   //these are the file thumbs
   .fileThumb {
@@ -21,7 +22,8 @@ $fileColor: $blue;
     justify-content: flex-end;
     background-position: center;
     background-size: cover;
-    border: 5px solid #fff;
+    border: 3px solid #fff;
+    margin-bottom: 0.3rem;
     .title {
       width: 100%;
       display: none;
@@ -34,7 +36,7 @@ $fileColor: $blue;
     }
   }
   .fileThumb:hover {
-    .title{
+    .title {
       display: block;
     }
   }
@@ -43,3 +45,15 @@ $fileColor: $blue;
   }
 }
 
+.directoryPanel {
+  max-height: 340px;
+  width: 100%;
+  float: left;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid grey;
+  .nav > li > a:hover, .nav > li > a:active, .nav > li > a:focus {
+    background-color: #8aa4af;
+  }
+}
