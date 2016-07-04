@@ -15,7 +15,12 @@
         </div>
         <div class="row">
             <div class="col-xs-12">
-                <h4>Recently uploaded files</h4>
+                <h4 v-if="uploading">
+                    <span class="fa fa-circle-o-notch fa-spin"></span> Uploading
+                </h4>
+                <h4 v-else>
+                    Recently uploaded files
+                </h4>
 
                 <div v-for="file in files" class="col-xs-2">
                     <a href="#"
@@ -37,7 +42,8 @@
             return {
                 files: [],
                 display: false,
-                working_directory: 'media/images'
+                working_directory: 'media/images',
+                uploading: false
             }
         },
         events: {
@@ -53,6 +59,8 @@
         },
         methods: {
             onFileChange: function (e) {
+                this.uploading = true;
+
                 var files = e.target.files || e.dataTransfer.files;
 
                 if (!files.length) return;
@@ -63,13 +71,10 @@
 
                 formData.append("file", files[0]);
 
-                this.files.push({});
-
-                var indexPointer = this.files.length - 1;
-
                 this.$http.post('/larapress/media/upload', formData)
                         .then(function (response) {
-                            this.files[indexPointer] = response.data;
+                            this.files.push(response.data);
+                            this.uploading = false;
                         });
             }
         }

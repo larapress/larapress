@@ -12811,7 +12811,8 @@ module.exports = {
         return {
             files: [],
             display: false,
-            working_directory: 'media/images'
+            working_directory: 'media/images',
+            uploading: false
         };
     },
     events: {
@@ -12827,6 +12828,8 @@ module.exports = {
     },
     methods: {
         onFileChange: function onFileChange(e) {
+            this.uploading = true;
+
             var files = e.target.files || e.dataTransfer.files;
 
             if (!files.length) return;
@@ -12837,18 +12840,15 @@ module.exports = {
 
             formData.append("file", files[0]);
 
-            this.files.push({});
-
-            var indexPointer = this.files.length - 1;
-
             this.$http.post('/larapress/media/upload', formData).then(function (response) {
-                this.files[indexPointer] = response.data;
+                this.files.push(response.data);
+                this.uploading = false;
             });
         }
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div v-show=\"display\" class=\"box filePanel\" style=\"margin-bottom: 0;\">\n    <div class=\"row\">\n        <div class=\"col-xs-12\">\n            <form action=\"/larapress/media/upload\" method=\"post\" enctype=\"multipart/form-data\">\n                <input type=\"file\" v-on:change=\"onFileChange\" name=\"media_file\">\n            </form>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col-xs-12\">\n            <h4>Recently uploaded files</h4>\n\n            <div v-for=\"file in files\" class=\"col-xs-2\">\n                <a href=\"#\" class=\"fileThumb\" v-bind:style=\"{backgroundImage : file.backgroundImage}\">\n                    <div class=\"title\">\n                        <p>{{ file.name }}</p>\n                    </div>\n                </a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div v-show=\"display\" class=\"box filePanel\" style=\"margin-bottom: 0;\">\n    <div class=\"row\">\n        <div class=\"col-xs-12\">\n            <form action=\"/larapress/media/upload\" method=\"post\" enctype=\"multipart/form-data\">\n                <input type=\"file\" v-on:change=\"onFileChange\" name=\"media_file\">\n            </form>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col-xs-12\">\n            <h4 v-if=\"uploading\">\n                <span class=\"fa fa-circle-o-notch fa-spin\"></span> Uploading\n            </h4>\n            <h4 v-else=\"\">\n                Recently uploaded files\n            </h4>\n\n            <div v-for=\"file in files\" class=\"col-xs-2\">\n                <a href=\"#\" class=\"fileThumb\" v-bind:style=\"{backgroundImage : file.backgroundImage}\">\n                    <div class=\"title\">\n                        <p>{{ file.name }}</p>\n                    </div>\n                </a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
