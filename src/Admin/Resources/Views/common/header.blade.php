@@ -1,6 +1,6 @@
 <header class="main-header">
     <a href="#" class="logo">
-        LaraPress
+        {!! config('larapress.admin.title') !!}
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top" role="navigation">
