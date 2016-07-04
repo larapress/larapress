@@ -32,12 +32,15 @@
             <div class="box-body">
                 <img v-show="imageUrl" v-bind:src="imageUrl"/>
 
-                <button type="button" class="btn btn-primary pull-right" v-on:click="chooseImage()">
-                    {{ btnText }}
-                </button>
-                <button type="button" class="btn pull-right" v-on:click="removeImage()">
-                    Remove Image
-                </button>
+                <div class="pull-right">
+                    <button type="button" class="btn" v-on:click="removeImage()">
+                        Remove Image
+                    </button>
+                    <button type="button" class="btn btn-primary" v-on:click="chooseImage()">
+                        {{ btnText }}
+                    </button>
+                </div>
+
                 <input type="hidden" value="{{ imageUrl }}" v-bind:name="featureName"/>
             </div>
             <!-- /.box-body -->
@@ -49,8 +52,13 @@
 
 <script>
     module.exports = {
-        props: ['btnText', 'featureName', 'featureTitle', 'featureValue'],
-
+        props: {
+            btnText: {},
+            featureName: {},
+            featureTitle: {},
+            featureValue: {},
+            rootDirectory: {default:''}
+        },
         data: function () {
             return {
                 btnText: 'Select Feature Image',
@@ -72,14 +80,18 @@
              * If btn pressed to select the feature image
              */
             chooseImage: function () {
-                this.$dispatch('mediaManagerRequested', this.context);
+                var data = {
+                    context:this.context,
+                    rootDirectory: this.rootDirectory
+                };
+                this.$dispatch('mediaManagerRequested', data);
             },
-            removeImage: function(){
+            removeImage: function () {
                 this.$set('imageUrl', '');
             }
 
         },
-        ready: function(){
+        ready: function () {
             this.$set('imageUrl', this.featureValue);
         }
     }

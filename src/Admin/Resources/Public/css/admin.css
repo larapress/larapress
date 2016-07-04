@@ -12415,7 +12415,7 @@ table.text-center, table.text-center td, table.text-center th {
   height: 380px;
   float: left;
   position: relative;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   border: 1px solid grey;
   padding: 0.5rem; }
@@ -12456,12 +12456,10 @@ table.text-center, table.text-center td, table.text-center th {
   width: 100%;
   float: left;
   position: relative;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   border: 1px solid grey; }
   .directoryPanel .nav > li > a:hover, .directoryPanel .nav > li > a:active, .directoryPanel .nav > li > a:focus {
     background-color: #8aa4af; }
-  .directoryPanel .hasSubDirectories:after {
-    content: '<span class="fa fa-angle-right"></span>'; }
 
 /*# sourceMappingURL=admin.css.map */

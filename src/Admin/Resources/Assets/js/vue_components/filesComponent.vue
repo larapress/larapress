@@ -8,8 +8,8 @@
                     <div v-for="file in files" class="col-xs-2">
                         <a href="#"
                            class="fileThumb"
-                           v-on:dblclick="selectedFile(file, true)"
-                           v-on:click="selectedFile(file, false)"
+                           v-on:dblclick.prevent="selectedFile(file, true)"
+                           v-on:click.prevent="selectedFile(file, false)"
                            v-bind:class="{active : file.active}"
                            v-bind:style="{backgroundImage : file.backgroundImage}">
                             <div class="title">
@@ -47,6 +47,10 @@
             },
             changeToShowFiles: function () {
                 this.display = true;
+            },
+            changeOfDirectory: function(directory){
+                this.loading = true;
+                this.refreshFiles(directory);
             }
         },
         methods: {

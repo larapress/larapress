@@ -1,4 +1,220 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/define-property"), __esModule: true };
+},{"core-js/library/fn/object/define-property":3}],2:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+
+var _defineProperty = require("../core-js/object/define-property");
+
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (obj, key, value) {
+  if (key in obj) {
+    (0, _defineProperty2.default)(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+};
+},{"../core-js/object/define-property":1}],3:[function(require,module,exports){
+require('../../modules/es6.object.define-property');
+var $Object = require('../../modules/_core').Object;
+module.exports = function defineProperty(it, key, desc){
+  return $Object.defineProperty(it, key, desc);
+};
+},{"../../modules/_core":6,"../../modules/es6.object.define-property":19}],4:[function(require,module,exports){
+module.exports = function(it){
+  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
+  return it;
+};
+},{}],5:[function(require,module,exports){
+var isObject = require('./_is-object');
+module.exports = function(it){
+  if(!isObject(it))throw TypeError(it + ' is not an object!');
+  return it;
+};
+},{"./_is-object":15}],6:[function(require,module,exports){
+var core = module.exports = {version: '2.4.0'};
+if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
+},{}],7:[function(require,module,exports){
+// optional / simple context binding
+var aFunction = require('./_a-function');
+module.exports = function(fn, that, length){
+  aFunction(fn);
+  if(that === undefined)return fn;
+  switch(length){
+    case 1: return function(a){
+      return fn.call(that, a);
+    };
+    case 2: return function(a, b){
+      return fn.call(that, a, b);
+    };
+    case 3: return function(a, b, c){
+      return fn.call(that, a, b, c);
+    };
+  }
+  return function(/* ...args */){
+    return fn.apply(that, arguments);
+  };
+};
+},{"./_a-function":4}],8:[function(require,module,exports){
+// Thank's IE8 for his funny defineProperty
+module.exports = !require('./_fails')(function(){
+  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
+});
+},{"./_fails":11}],9:[function(require,module,exports){
+var isObject = require('./_is-object')
+  , document = require('./_global').document
+  // in old IE typeof document.createElement is 'object'
+  , is = isObject(document) && isObject(document.createElement);
+module.exports = function(it){
+  return is ? document.createElement(it) : {};
+};
+},{"./_global":12,"./_is-object":15}],10:[function(require,module,exports){
+var global    = require('./_global')
+  , core      = require('./_core')
+  , ctx       = require('./_ctx')
+  , hide      = require('./_hide')
+  , PROTOTYPE = 'prototype';
+
+var $export = function(type, name, source){
+  var IS_FORCED = type & $export.F
+    , IS_GLOBAL = type & $export.G
+    , IS_STATIC = type & $export.S
+    , IS_PROTO  = type & $export.P
+    , IS_BIND   = type & $export.B
+    , IS_WRAP   = type & $export.W
+    , exports   = IS_GLOBAL ? core : core[name] || (core[name] = {})
+    , expProto  = exports[PROTOTYPE]
+    , target    = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE]
+    , key, own, out;
+  if(IS_GLOBAL)source = name;
+  for(key in source){
+    // contains in native
+    own = !IS_FORCED && target && target[key] !== undefined;
+    if(own && key in exports)continue;
+    // export native or passed
+    out = own ? target[key] : source[key];
+    // prevent global pollution for namespaces
+    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
+    // bind timers to global for call from export context
+    : IS_BIND && own ? ctx(out, global)
+    // wrap global constructors for prevent change them in library
+    : IS_WRAP && target[key] == out ? (function(C){
+      var F = function(a, b, c){
+        if(this instanceof C){
+          switch(arguments.length){
+            case 0: return new C;
+            case 1: return new C(a);
+            case 2: return new C(a, b);
+          } return new C(a, b, c);
+        } return C.apply(this, arguments);
+      };
+      F[PROTOTYPE] = C[PROTOTYPE];
+      return F;
+    // make static versions for prototype methods
+    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
+    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
+    if(IS_PROTO){
+      (exports.virtual || (exports.virtual = {}))[key] = out;
+      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
+      if(type & $export.R && expProto && !expProto[key])hide(expProto, key, out);
+    }
+  }
+};
+// type bitmap
+$export.F = 1;   // forced
+$export.G = 2;   // global
+$export.S = 4;   // static
+$export.P = 8;   // proto
+$export.B = 16;  // bind
+$export.W = 32;  // wrap
+$export.U = 64;  // safe
+$export.R = 128; // real proto method for `library` 
+module.exports = $export;
+},{"./_core":6,"./_ctx":7,"./_global":12,"./_hide":13}],11:[function(require,module,exports){
+module.exports = function(exec){
+  try {
+    return !!exec();
+  } catch(e){
+    return true;
+  }
+};
+},{}],12:[function(require,module,exports){
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+var global = module.exports = typeof window != 'undefined' && window.Math == Math
+  ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
+if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
+},{}],13:[function(require,module,exports){
+var dP         = require('./_object-dp')
+  , createDesc = require('./_property-desc');
+module.exports = require('./_descriptors') ? function(object, key, value){
+  return dP.f(object, key, createDesc(1, value));
+} : function(object, key, value){
+  object[key] = value;
+  return object;
+};
+},{"./_descriptors":8,"./_object-dp":16,"./_property-desc":17}],14:[function(require,module,exports){
+module.exports = !require('./_descriptors') && !require('./_fails')(function(){
+  return Object.defineProperty(require('./_dom-create')('div'), 'a', {get: function(){ return 7; }}).a != 7;
+});
+},{"./_descriptors":8,"./_dom-create":9,"./_fails":11}],15:[function(require,module,exports){
+module.exports = function(it){
+  return typeof it === 'object' ? it !== null : typeof it === 'function';
+};
+},{}],16:[function(require,module,exports){
+var anObject       = require('./_an-object')
+  , IE8_DOM_DEFINE = require('./_ie8-dom-define')
+  , toPrimitive    = require('./_to-primitive')
+  , dP             = Object.defineProperty;
+
+exports.f = require('./_descriptors') ? Object.defineProperty : function defineProperty(O, P, Attributes){
+  anObject(O);
+  P = toPrimitive(P, true);
+  anObject(Attributes);
+  if(IE8_DOM_DEFINE)try {
+    return dP(O, P, Attributes);
+  } catch(e){ /* empty */ }
+  if('get' in Attributes || 'set' in Attributes)throw TypeError('Accessors not supported!');
+  if('value' in Attributes)O[P] = Attributes.value;
+  return O;
+};
+},{"./_an-object":5,"./_descriptors":8,"./_ie8-dom-define":14,"./_to-primitive":18}],17:[function(require,module,exports){
+module.exports = function(bitmap, value){
+  return {
+    enumerable  : !(bitmap & 1),
+    configurable: !(bitmap & 2),
+    writable    : !(bitmap & 4),
+    value       : value
+  };
+};
+},{}],18:[function(require,module,exports){
+// 7.1.1 ToPrimitive(input [, PreferredType])
+var isObject = require('./_is-object');
+// instead of the ES6 spec version, we didn't implement @@toPrimitive case
+// and the second argument - flag - preferred type is a string
+module.exports = function(it, S){
+  if(!isObject(it))return it;
+  var fn, val;
+  if(S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+  if(typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it)))return val;
+  if(!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+  throw TypeError("Can't convert object to primitive value");
+};
+},{"./_is-object":15}],19:[function(require,module,exports){
+var $export = require('./_export');
+// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
+$export($export.S + $export.F * !require('./_descriptors'), 'Object', {defineProperty: require('./_object-dp').f});
+},{"./_descriptors":8,"./_export":10,"./_object-dp":16}],20:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -119,7 +335,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],2:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 var Vue // late bind
 var map = Object.create(null)
 var shimmed = false
@@ -420,7 +636,7 @@ function format (id) {
   return match ? match[0] : id
 }
 
-},{}],3:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 /*!
  * vue-resource v0.7.4
  * https://github.com/vuejs/vue-resource
@@ -1797,7 +2013,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 }
 
 module.exports = plugin;
-},{}],4:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v1.0.25
@@ -11868,7 +12084,7 @@ setTimeout(function () {
 
 module.exports = Vue;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":1}],5:[function(require,module,exports){
+},{"_process":20}],24:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 exports.insert = function (css) {
@@ -11888,7 +12104,7 @@ exports.insert = function (css) {
   return elem
 }
 
-},{}],6:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 'use strict';
 
 var _mediaManager = require('./vue_components/mediaManager.vue');
@@ -11930,10 +12146,10 @@ new Vue({
     events: {
         /**
          * if an event occurs anywhere requesting the media manager
-         * @param context - hook name to identify request element/template
+         * @param data - obj
          */
-        mediaManagerRequested: function mediaManagerRequested(context) {
-            this.$broadcast('mediaManagerRequested', context);
+        mediaManagerRequested: function mediaManagerRequested(data) {
+            this.$broadcast('mediaManagerRequested', data);
         },
         /**
          * if the media manager has had the submit btn pressed
@@ -11969,7 +12185,7 @@ new Vue({
     }
 });
 
-},{"./vue_components/confirmModal.vue":7,"./vue_components/featureImage.vue":9,"./vue_components/imageAttachments.vue":12,"./vue_components/mediaManager.vue":13,"vue":4,"vue-resource":3}],7:[function(require,module,exports){
+},{"./vue_components/confirmModal.vue":26,"./vue_components/featureImage.vue":28,"./vue_components/imageAttachments.vue":31,"./vue_components/mediaManager.vue":32,"vue":23,"vue-resource":22}],26:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -12028,18 +12244,20 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1f729a6f", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":4,"vue-hot-reload-api":2}],8:[function(require,module,exports){
+},{"vue":23,"vue-hot-reload-api":21}],27:[function(require,module,exports){
 'use strict';
 
 module.exports = {
-    props: ['workingDirectory'],
-
+    props: {
+        workingDirectory: { type: String }
+    },
     data: function data() {
         return {
-            directories: [],
-            showCreateDirectory: false,
-            showLoadingIconButton: false,
-            newDirectoryName: ''
+            directories: [], // array of dirs in hierachal
+            showCreateDirectory: false, // show the create dir form
+            showLoadingIconButton: false, // show the spinner on create dir form
+            newDirectoryName: '', // default folder name for createing dir
+            rootDirectory: '' // the root directory
         };
     },
 
@@ -12047,14 +12265,32 @@ module.exports = {
         this.refreshDirectories();
     },
 
+    events: {
+        /**
+         * data =  {context,rootDirectory}
+         */
+        mediaManagerRequested: function mediaManagerRequested(data) {
+            if (this.rootDirectory != data.rootDirectory) {
+                this.rootDirectory = data.rootDirectory;
+                this.refreshDirectories();
+            }
+        }
+    },
     methods: {
         refreshDirectories: function refreshDirectories() {
-            this.$http.get('/larapress/media/directories').success(function (directories) {
+            this.$dispatch('changeOfDirectory', this.rootDirectory);
+            var data = {
+                rootDirectory: this.rootDirectory
+            };
+            this.$http.post('/larapress/media/directories', data).success(function (directories) {
                 this.$set('directories', directories);
             }).error(function (error) {
                 console.log(error);
             });
         },
+        /**
+         *  When a directory is selected, dispatch to change
+         */
         changeDirectory: function changeDirectory(selected_directory) {
             selected_directory.show_sub_directories = true;
 
@@ -12062,9 +12298,15 @@ module.exports = {
 
             this.$dispatch('changeOfDirectory', selected_directory.path);
         },
+        /**
+         *  Show the form to create a new directory
+         */
         showCreateDirectoryForm: function showCreateDirectoryForm() {
             this.showCreateDirectory = true;
         },
+        /**
+         * Changes the current directory, loads files etc
+         */
         createDirectory: function createDirectory() {
             this.showLoadingIconButton = true;
             var data = {
@@ -12083,7 +12325,7 @@ module.exports = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"sidebar directoryPanel\" style=\"background: #000\">\n    <ul class=\"nav sidebar-menu\">\n        <li v-for=\"directory in directories\" class=\"treeview\" v-bind:class=\"{ active : directory.active }\">\n            <a v-on:click=\"changeDirectory(directory)\" href=\"#\">\n                {{ directory.name }} <span v-show=\"directory.hasSubDirectories\" class=\"fa fa-angle-right\"></span>\n            </a>\n            <ul v-show=\"directory.show_sub_directories\" class=\"nav treeview-menu\">\n                <li v-for=\"sub_directory in directory.sub_directories\" v-bind:class=\"{ active : sub_directory.active }\">\n                    <a v-on:click=\"changeDirectory(sub_directory)\" href=\"#\" v-bind:class=\"{ hasSubDirectories : sub_directory.hasSubDirectories}\">\n                        {{ sub_directory.name }} <span v-show=\"sub_directory.hasSubDirectories\" class=\"fa fa-angle-right\"></span>\n                    </a>\n                </li>\n            </ul>\n        </li>\n    </ul>\n</div>\n\n\n\n<div class=\"sidebar\" style=\"margin-top:1rem\">\n    <a href=\"#\" v-on:click=\"showCreateDirectoryForm\">Create Directory</a>\n\n    <div v-show=\"showCreateDirectory\">\n        <div class=\"form-group\">\n            <label>New Directory Name</label>\n            <input type=\"text\" v-model=\"newDirectoryName\" class=\"form-control\">\n        </div>\n        <div class=\"form-group\">\n            <div class=\"pull-right\">\n                <button v-on:click=\"createDirectory()\" type=\"button\" class=\"btn btn-primary\">\n                    <span v-show=\"showLoadingIconButton\" class=\"fa fa-circle-o-notch fa-spin\"></span>&nbsp; Create Directory\n                </button>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"sidebar directoryPanel\" style=\"background: #000\">\n    <ul class=\"nav sidebar-menu\">\n        <li v-for=\"directory in directories\" class=\"treeview\" v-bind:class=\"{ active : directory.active }\">\n            <a v-on:click.prevent=\"changeDirectory(directory)\" href=\"#\">\n                {{ directory.name }} <span v-show=\"directory.hasSubDirectories\" class=\"fa fa-angle-right\"></span>\n            </a>\n            <ul v-show=\"directory.show_sub_directories\" class=\"nav treeview-menu\">\n                <li v-for=\"sub_directory in directory.sub_directories\" v-bind:class=\"{ active : sub_directory.active }\">\n                    <a v-on:click.prevent=\"changeDirectory(sub_directory)\" href=\"#\">\n                        {{ sub_directory.name }} <span v-show=\"sub_directory.hasSubDirectories\" class=\"fa fa-angle-right\"></span>\n                    </a>\n                </li>\n            </ul>\n        </li>\n    </ul>\n</div>\n\n\n<div class=\"sidebar\" style=\"margin-top:1rem\">\n    <a href=\"#\" v-on:click=\"showCreateDirectoryForm\">Create Directory</a>\n\n    <div v-show=\"showCreateDirectory\">\n        <div class=\"form-group\">\n            <label>New Directory Name</label>\n            <input type=\"text\" v-model=\"newDirectoryName\" class=\"form-control\">\n        </div>\n        <div class=\"form-group\">\n            <div class=\"pull-right\">\n                <button v-on:click=\"createDirectory()\" type=\"button\" class=\"btn btn-primary\">\n                    <span v-show=\"showLoadingIconButton\" class=\"fa fa-circle-o-notch fa-spin\"></span>&nbsp; Create\n                    Directory\n                </button>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12094,14 +12336,19 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-78dcb43b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":4,"vue-hot-reload-api":2}],9:[function(require,module,exports){
+},{"vue":23,"vue-hot-reload-api":21}],28:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 4, stdin */\n.featureImage img {\n  width: 100%;\n  float: left;\n  margin-bottom: 1rem; }\n")
 'use strict';
 
 module.exports = {
-    props: ['btnText', 'featureName', 'featureTitle', 'featureValue'],
-
+    props: {
+        btnText: {},
+        featureName: {},
+        featureTitle: {},
+        featureValue: {},
+        rootDirectory: { default: '' }
+    },
     data: function data() {
         return {
             btnText: 'Select Feature Image',
@@ -12123,7 +12370,11 @@ module.exports = {
          * If btn pressed to select the feature image
          */
         chooseImage: function chooseImage() {
-            this.$dispatch('mediaManagerRequested', this.context);
+            var data = {
+                context: this.context,
+                rootDirectory: this.rootDirectory
+            };
+            this.$dispatch('mediaManagerRequested', data);
         },
         removeImage: function removeImage() {
             this.$set('imageUrl', '');
@@ -12135,7 +12386,7 @@ module.exports = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"featureImage\">\n    <div class=\"box box-default\">\n        <div class=\"box-header with-border\">\n            <div class=\"col-xs-10\">\n                <h3 class=\"box-title\">{{featureTitle}}</h3>\n            </div>\n\n            <div class=\"col-xs-2\">\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i></button>\n                </div>\n            </div>\n            <!-- /.box-tools -->\n        </div>\n        <!-- /.box-header -->\n\n\n        <div class=\"box-body\">\n            <img v-show=\"imageUrl\" v-bind:src=\"imageUrl\">\n\n            <button type=\"button\" class=\"btn btn-primary pull-right\" v-on:click=\"chooseImage()\">\n                {{ btnText }}\n            </button>\n            <button type=\"button\" class=\"btn pull-right\" v-on:click=\"removeImage()\">\n                Remove Image\n            </button>\n            <input type=\"hidden\" value=\"{{ imageUrl }}\" v-bind:name=\"featureName\">\n        </div>\n        <!-- /.box-body -->\n    </div>\n    <!-- /.box -->\n\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"featureImage\">\n    <div class=\"box box-default\">\n        <div class=\"box-header with-border\">\n            <div class=\"col-xs-10\">\n                <h3 class=\"box-title\">{{featureTitle}}</h3>\n            </div>\n\n            <div class=\"col-xs-2\">\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i></button>\n                </div>\n            </div>\n            <!-- /.box-tools -->\n        </div>\n        <!-- /.box-header -->\n\n\n        <div class=\"box-body\">\n            <img v-show=\"imageUrl\" v-bind:src=\"imageUrl\">\n\n            <div class=\"pull-right\">\n                <button type=\"button\" class=\"btn\" v-on:click=\"removeImage()\">\n                    Remove Image\n                </button>\n                <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"chooseImage()\">\n                    {{ btnText }}\n                </button>\n            </div>\n\n            <input type=\"hidden\" value=\"{{ imageUrl }}\" v-bind:name=\"featureName\">\n        </div>\n        <!-- /.box-body -->\n    </div>\n    <!-- /.box -->\n\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12150,8 +12401,14 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4e4deab2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":4,"vue-hot-reload-api":2,"vueify/lib/insert-css":5}],10:[function(require,module,exports){
+},{"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}],29:[function(require,module,exports){
 'use strict';
+
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 module.exports = {
 
@@ -12163,7 +12420,7 @@ module.exports = {
             loading: false
         };
     },
-    events: {
+    events: (0, _defineProperty3.default)({
         changeOfDirectory: function changeOfDirectory(directory) {
             this.refreshFiles(directory);
         },
@@ -12173,7 +12430,10 @@ module.exports = {
         changeToShowFiles: function changeToShowFiles() {
             this.display = true;
         }
-    },
+    }, 'changeOfDirectory', function changeOfDirectory(directory) {
+        this.loading = true;
+        this.refreshFiles(directory);
+    }),
     methods: {
         /**
          * Reload all the information about a directory
@@ -12208,7 +12468,7 @@ module.exports = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-xs-12\">\n        <div v-show=\"display\" class=\"box filePanel\" style=\"margin-bottom: 0;\">\n            <h3 v-show=\"files.length < 1\" class=\"text-center\" style=\"margin-top: 3rem\">Directory is empty</h3>\n\n            <div class=\"row\">\n                <div v-for=\"file in files\" class=\"col-xs-2\">\n                    <a href=\"#\" class=\"fileThumb\" v-on:dblclick=\"selectedFile(file, true)\" v-on:click=\"selectedFile(file, false)\" v-bind:class=\"{active : file.active}\" v-bind:style=\"{backgroundImage : file.backgroundImage}\">\n                        <div class=\"title\">\n                            <p>{{ file.name }}</p>\n                        </div>\n                    </a>\n                </div>\n            </div>\n\n            <div class=\"overlay\" v-show=\"loading\">\n                <i class=\"fa fa-refresh fa-spin\"></i>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-xs-12\">\n        <div v-show=\"display\" class=\"box filePanel\" style=\"margin-bottom: 0;\">\n            <h3 v-show=\"files.length < 1\" class=\"text-center\" style=\"margin-top: 3rem\">Directory is empty</h3>\n\n            <div class=\"row\">\n                <div v-for=\"file in files\" class=\"col-xs-2\">\n                    <a href=\"#\" class=\"fileThumb\" v-on:dblclick.prevent=\"selectedFile(file, true)\" v-on:click.prevent=\"selectedFile(file, false)\" v-bind:class=\"{active : file.active}\" v-bind:style=\"{backgroundImage : file.backgroundImage}\">\n                        <div class=\"title\">\n                            <p>{{ file.name }}</p>\n                        </div>\n                    </a>\n                </div>\n            </div>\n\n            <div class=\"overlay\" v-show=\"loading\">\n                <i class=\"fa fa-refresh fa-spin\"></i>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12219,13 +12479,22 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ba439030", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":4,"vue-hot-reload-api":2}],11:[function(require,module,exports){
+},{"babel-runtime/helpers/defineProperty":2,"vue":23,"vue-hot-reload-api":21}],30:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 5, stdin */\n.attachment.list {\n  width: 100%;\n  float: left;\n  border: 1px solid #eeeeee;\n  padding: 1rem;\n  margin-bottom: 0.7rem; }\n  /* line 12, stdin */\n  .attachment.list .image {\n    float: left;\n    padding-right: 1rem;\n    width: 20%; }\n  /* line 18, stdin */\n  .attachment.list .form {\n    float: right;\n    padding-left: 1rem;\n    width: 80%; }\n\n/* line 26, stdin */\n.attachment.grid {\n  float: left;\n  width: 19%;\n  height: 7rem;\n  margin: 0.5%;\n  border: 3px solid #eeeeee;\n  overflow: hidden;\n  padding: 0; }\n  /* line 35, stdin */\n  .attachment.grid .image, .attachment.grid .box-body {\n    user-drag: none;\n    user-select: none;\n    -moz-user-select: none;\n    -webkit-user-drag: none;\n    -webkit-user-select: none;\n    -ms-user-select: none;\n    margin: 0;\n    padding: 0; }\n  /* line 46, stdin */\n  .attachment.grid .form {\n    display: none; }\n")
 'use strict';
 
 module.exports = {
-    props: ['attachmentPrefix', 'attachmentId', 'attachmentAlt', 'attachmentCaption', 'attachmentUrl', 'attachmentLayout', 'attachmentPriority'],
+    props: {
+        attachmentPrefix: {},
+        attachmentId: {},
+        attachmentAlt: {},
+        attachmentCaption: {},
+        attachmentUrl: {},
+        attachmentLayout: {},
+        attachmentPriority: {},
+        rootDirectory: { default: '' }
+    },
     data: function data() {
         return {
             display: true,
@@ -12262,10 +12531,14 @@ module.exports = {
     },
     methods: {
         /**
-         * If btn pressed to select the feature image
+         * If btn pressed to select image
          */
         chooseImage: function chooseImage() {
-            this.$dispatch('mediaManagerRequested', this.context);
+            var data = {
+                context: this.context,
+                rootDirectory: this.rootDirectory
+            };
+            this.$dispatch('mediaManagerRequested', data);
         },
 
         removeImage: function removeImage() {
@@ -12316,7 +12589,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-66b17dac", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":4,"vue-hot-reload-api":2,"vueify/lib/insert-css":5}],12:[function(require,module,exports){
+},{"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}],31:[function(require,module,exports){
 'use strict';
 
 var _imageAttachment = require('./imageAttachment.vue');
@@ -12337,7 +12610,8 @@ module.exports = {
         attachmentsText: { type: String },
 
         attachmentModel: { type: String },
-        attachmentModelId: { type: Number }
+        attachmentModelId: { type: Number },
+        rootDirectory: { type: String }
     },
     data: function data() {
         return {
@@ -12409,7 +12683,7 @@ module.exports = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"box box-default\">\n    <div class=\"box-header with-border\">\n        <h3 class=\"box-title\">{{ attachmentsTitle }}</h3>\n\n        <div class=\"box-tools pull-right\">\n\n            <button class=\"btn btn-box-tool\" data-widget=\"collapse\">\n                <i class=\"fa fa-minus\"></i>\n            </button>\n        </div>\n        <!-- /.box-tools -->\n    </div>\n    <!-- /.box-header -->\n    <div class=\"box-body\">\n        <div class=\"row\" style=\"margin-bottom: 0.6rem\">\n            <div class=\"col-xs-8\">\n                <p>{{ attachmentsText }}</p>\n            </div>\n            <div class=\"col-xs-4\">\n                <div class=\"pull-right\">\n                    <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"changeLayout('grid')\" title=\"Show attachments in grid format, limited options but great for sorting the order out.\">\n                        <span class=\"fa fa-th\"></span>\n                    </button>\n                    <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"changeLayout('list')\" title=\"Show attachments in list format, ideal for filling the details\">\n                        <span class=\"fa fa-th-list\"></span>\n                    </button>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-xs-12\" id=\"sort\">\n                <image-attachment v-for=\"attachment in attachments\" data-index=\"{{ $index }}\" v-bind:attachment-priority=\"attachment.priority\" v-bind:attachment-prefix=\"attachmentsPrefix\" v-bind:attachment-id=\"attachment.id\" v-bind:attachment-alt=\"attachment.alt\" v-bind:attachment-url=\"attachment.url\" v-bind:attachment-layout=\"attachmentsLayout\" v-bind:attachment-caption=\"attachment.caption\">\n                </image-attachment>\n            </div>\n        </div>\n\n        <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"createAttachment()\">\n            {{attachmentsButton}}\n        </button>\n\n    </div>\n    <!-- /.box-body -->\n\n    <div class=\"overlay\" v-show=\"loading\">\n        <i class=\"fa fa-refresh fa-spin\"></i>\n    </div>\n\n</div>\n<!-- /.box -->\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"box box-default\">\n    <div class=\"box-header with-border\">\n        <h3 class=\"box-title\">{{ attachmentsTitle }}</h3>\n\n        <div class=\"box-tools pull-right\">\n\n            <button class=\"btn btn-box-tool\" data-widget=\"collapse\">\n                <i class=\"fa fa-minus\"></i>\n            </button>\n        </div>\n        <!-- /.box-tools -->\n    </div>\n    <!-- /.box-header -->\n    <div class=\"box-body\">\n        <div class=\"row\" style=\"margin-bottom: 0.6rem\">\n            <div class=\"col-xs-8\">\n                <p>{{ attachmentsText }}</p>\n            </div>\n            <div class=\"col-xs-4\">\n                <div class=\"pull-right\">\n                    <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"changeLayout('grid')\" title=\"Show attachments in grid format, limited options but great for sorting the order out.\">\n                        <span class=\"fa fa-th\"></span>\n                    </button>\n                    <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"changeLayout('list')\" title=\"Show attachments in list format, ideal for filling the details\">\n                        <span class=\"fa fa-th-list\"></span>\n                    </button>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-xs-12\" id=\"sort\">\n                <image-attachment v-for=\"attachment in attachments\" data-index=\"{{ $index }}\" v-bind:attachment-priority=\"attachment.priority\" v-bind:attachment-prefix=\"attachmentsPrefix\" v-bind:attachment-id=\"attachment.id\" v-bind:attachment-alt=\"attachment.alt\" v-bind:attachment-url=\"attachment.url\" v-bind:attachment-layout=\"attachmentsLayout\" v-bind:attachment-caption=\"attachment.caption\" v-bind:root-directory=\"rootDirectory\">\n                </image-attachment>\n            </div>\n        </div>\n\n        <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"createAttachment()\">\n            {{attachmentsButton}}\n        </button>\n\n    </div>\n    <!-- /.box-body -->\n\n    <div class=\"overlay\" v-show=\"loading\">\n        <i class=\"fa fa-refresh fa-spin\"></i>\n    </div>\n\n</div>\n<!-- /.box -->\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12420,7 +12694,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7329d8f7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./imageAttachment.vue":11,"vue":4,"vue-hot-reload-api":2}],13:[function(require,module,exports){
+},{"./imageAttachment.vue":30,"vue":23,"vue-hot-reload-api":21}],32:[function(require,module,exports){
 'use strict';
 
 var _directory = require('./directory.vue');
@@ -12461,15 +12735,16 @@ module.exports = {
         changeOfDirectory: function changeOfDirectory(directory) {
             this.working_directory = directory;
             this.$broadcast('changeOfDirectory', directory);
-            console.log('Working Directory: ' + this.working_directory);
         },
         /**
          * When a el/template requests the media manager
-         * @param context - Identifier of the calling el/template
+         * @param data =  {context,rootDirectory}
          */
-        mediaManagerRequested: function mediaManagerRequested(context) {
+        mediaManagerRequested: function mediaManagerRequested(data) {
             this.display = 'block';
-            this.working_context = context;
+            this.working_context = data.context;
+            this.working_directory = 'media/' + data.rootDirectory;
+            this.$broadcast('mediaManagerRequested', data);
         },
         /**
          * When a file is selected
@@ -12526,7 +12801,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-43c27fcb", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./directory.vue":8,"./filesComponent.vue":10,"./uploadComponent.vue":14,"vue":4,"vue-hot-reload-api":2}],14:[function(require,module,exports){
+},{"./directory.vue":27,"./filesComponent.vue":29,"./uploadComponent.vue":33,"vue":23,"vue-hot-reload-api":21}],33:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.fileThumb {\n  border-color: #aaaaaa !important; }\n")
 "use strict";
@@ -12588,6 +12863,6 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-60caf5ca", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":4,"vue-hot-reload-api":2,"vueify/lib/insert-css":5}]},{},[6]);
+},{"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}]},{},[25]);
 
 //# sourceMappingURL=larapress_vues.js.map

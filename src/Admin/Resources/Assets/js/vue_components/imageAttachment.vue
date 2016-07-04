@@ -104,13 +104,16 @@
 <script>
 
     module.exports = {
-        props: ['attachmentPrefix',
-            'attachmentId',
-            'attachmentAlt',
-            'attachmentCaption',
-            'attachmentUrl',
-            'attachmentLayout',
-            'attachmentPriority'],
+        props: {
+            attachmentPrefix: {},
+            attachmentId: {},
+            attachmentAlt: {},
+            attachmentCaption: {},
+            attachmentUrl: {},
+            attachmentLayout: {},
+            attachmentPriority: {},
+            rootDirectory:{default:''}
+        },
         data: function () {
             return {
                 display: true,
@@ -147,10 +150,14 @@
         },
         methods: {
             /**
-             * If btn pressed to select the feature image
+             * If btn pressed to select image
              */
             chooseImage: function () {
-                this.$dispatch('mediaManagerRequested', this.context);
+                var data = {
+                    context: this.context,
+                    rootDirectory: this.rootDirectory
+                };
+                this.$dispatch('mediaManagerRequested', data);
             },
 
             removeImage: function () {

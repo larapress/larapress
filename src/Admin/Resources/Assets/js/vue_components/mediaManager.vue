@@ -85,16 +85,17 @@
             changeOfDirectory: function (directory) {
                 this.working_directory = directory;
                 this.$broadcast('changeOfDirectory', directory);
-                console.log('Working Directory: ' + this.working_directory);
             },
             /**
              * When a el/template requests the media manager
-             * @param context - Identifier of the calling el/template
+             * @param data =  {context,rootDirectory}
              */
-            mediaManagerRequested: function (context) {
+            mediaManagerRequested: function (data) {
                 this.display = 'block';
-                this.working_context = context;
-            },
+                this.working_context = data.context;
+                this.working_directory = 'media/'+ data.rootDirectory;
+                this.$broadcast('mediaManagerRequested', data);
+           },
             /**
              * When a file is selected
              * @param filename - string url name for the file

@@ -24,10 +24,10 @@ new Vue({
     events: {
         /**
          * if an event occurs anywhere requesting the media manager
-         * @param context - hook name to identify request element/template
+         * @param data - obj
          */
-        mediaManagerRequested: function (context) {
-            this.$broadcast('mediaManagerRequested', context);
+        mediaManagerRequested: function (data) {
+            this.$broadcast('mediaManagerRequested', data);
         },
         /**
          * if the media manager has had the submit btn pressed

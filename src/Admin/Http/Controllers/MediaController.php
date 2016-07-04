@@ -17,9 +17,9 @@ class MediaController extends Controller
      * Returns json response with all the directories
      * @return mixed
      */
-    public function directories()
+    public function directories(Request $request)
     {
-        $result = $this->createFullDirectoryList();
+        $result = $this->createFullDirectoryList($request);
 
         return response()->json($result);
     }
@@ -94,7 +94,7 @@ class MediaController extends Controller
 
         $response->directory = $directory;
 
-        $response->directories = $this->createFullDirectoryList();
+        $response->directories = $this->createFullDirectoryList($request);
 
         return response()->json($response);
     }
@@ -104,10 +104,12 @@ class MediaController extends Controller
      * Returns an array of all directories
      * @return array
      */
-    protected function createFullDirectoryList(){
+    protected function createFullDirectoryList(Request $request){
+        $rootDirectory = 'media/' .$request->get('rootDirectory');
+
         $result = [];
 
-        foreach (Storage::directories('media') as $dir) {
+        foreach (Storage::directories($rootDirectory) as $dir) {
             $result[] = $this->createSubDirectoryList($dir);
         }
 

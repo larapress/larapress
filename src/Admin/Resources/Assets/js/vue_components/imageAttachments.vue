@@ -41,7 +41,8 @@
                                       v-bind:attachment-alt="attachment.alt"
                                       v-bind:attachment-url="attachment.url"
                                       v-bind:attachment-layout="attachmentsLayout"
-                                      v-bind:attachment-caption="attachment.caption">
+                                      v-bind:attachment-caption="attachment.caption"
+                                      v-bind:root-directory="rootDirectory">
                     </image-attachment>
                 </div>
             </div>
@@ -76,7 +77,8 @@
             attachmentsText: {type: String},
 
             attachmentModel: {type: String},
-            attachmentModelId: {type: Number}
+            attachmentModelId: {type: Number},
+            rootDirectory: {type: String}
         },
         data: function () {
             return {

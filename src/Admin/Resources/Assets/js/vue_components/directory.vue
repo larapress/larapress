@@ -2,14 +2,15 @@
     <div class="sidebar directoryPanel" style="background: #000">
         <ul class="nav sidebar-menu">
             <li v-for="directory in directories" class="treeview" v-bind:class="{ active : directory.active }">
-                <a v-on:click="changeDirectory(directory)" href="#">
+                <a v-on:click.prevent="changeDirectory(directory)" href="#">
                     {{ directory.name }} <span v-show="directory.hasSubDirectories" class="fa fa-angle-right"></span>
                 </a>
                 <ul v-show="directory.show_sub_directories" class="nav treeview-menu">
                     <li v-for="sub_directory in directory.sub_directories"
                         v-bind:class="{ active : sub_directory.active }">
-                        <a v-on:click="changeDirectory(sub_directory)" href="#"  v-bind:class="{ hasSubDirectories : sub_directory.hasSubDirectories}">
-                            {{ sub_directory.name }} <span v-show="sub_directory.hasSubDirectories" class="fa fa-angle-right"></span>
+                        <a v-on:click.prevent="changeDirectory(sub_directory)" href="#">
+                            {{ sub_directory.name }} <span v-show="sub_directory.hasSubDirectories"
+                                                           class="fa fa-angle-right"></span>
                         </a>
                     </li>
                 </ul>
@@ -18,19 +19,19 @@
     </div>
 
 
-
     <div class="sidebar" style="margin-top:1rem">
         <a href="#" v-on:click="showCreateDirectoryForm">Create Directory</a>
 
         <div v-show="showCreateDirectory">
             <div class="form-group">
                 <label>New Directory Name</label>
-                <input type="text" v-model="newDirectoryName" class="form-control" />
+                <input type="text" v-model="newDirectoryName" class="form-control"/>
             </div>
             <div class="form-group">
                 <div class="pull-right">
                     <button v-on:click="createDirectory()" type="button" class="btn btn-primary">
-                        <span v-show="showLoadingIconButton" class="fa fa-circle-o-notch fa-spin"></span>&nbsp; Create Directory
+                        <span v-show="showLoadingIconButton" class="fa fa-circle-o-notch fa-spin"></span>&nbsp; Create
+                        Directory
                     </button>
                 </div>
             </div>
@@ -41,14 +42,16 @@
 
 <script>
     module.exports = {
-        props: ['workingDirectory'],
-
+        props:{
+            workingDirectory: {type: String}
+        },
         data: function () {
             return {
-                directories: [],
-                showCreateDirectory: false,
-                showLoadingIconButton:false,
-                newDirectoryName: ''
+                directories: [],              // array of dirs in hierachal
+                showCreateDirectory: false,   // show the create dir form
+                showLoadingIconButton: false, // show the spinner on create dir form
+                newDirectoryName: '',         // default folder name for createing dir
+                rootDirectory: ''             // the root directory
             }
         },
 
@@ -56,14 +59,32 @@
             this.refreshDirectories();
         },
 
+        events:{
+            /**
+             * data =  {context,rootDirectory}
+             */
+            mediaManagerRequested: function(data){
+                if(this.rootDirectory != data.rootDirectory){
+                    this.rootDirectory = data.rootDirectory;
+                    this.refreshDirectories();
+                }
+            }
+        },
         methods: {
             refreshDirectories: function () {
-                this.$http.get('/larapress/media/directories').success(function (directories) {
+                this.$dispatch('changeOfDirectory', this.rootDirectory);
+                var data = {
+                    rootDirectory: this.rootDirectory
+                };
+                this.$http.post('/larapress/media/directories', data).success(function (directories) {
                     this.$set('directories', directories);
                 }).error(function (error) {
                     console.log(error);
                 });
             },
+            /**
+             *  When a directory is selected, dispatch to change
+             */
             changeDirectory: function (selected_directory) {
                 selected_directory.show_sub_directories = true;
 
@@ -71,9 +92,15 @@
 
                 this.$dispatch('changeOfDirectory', selected_directory.path);
             },
+            /**
+             *  Show the form to create a new directory
+             */
             showCreateDirectoryForm: function () {
                 this.showCreateDirectory = true;
             },
+            /**
+             * Changes the current directory, loads files etc
+             */
             createDirectory: function () {
                 this.showLoadingIconButton = true;
                 var data = {
