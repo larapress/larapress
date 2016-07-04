@@ -93,7 +93,9 @@
             mediaManagerRequested: function (data) {
                 this.display = 'block';
                 this.working_context = data.context;
-                this.working_directory = 'media/'+ data.rootDirectory;
+                this.working_directory = 'media/' + data.rootDirectory;
+
+                //pass on down the call to refresh directories
                 this.$broadcast('mediaManagerRequested', data);
            },
             /**

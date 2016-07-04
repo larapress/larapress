@@ -105,7 +105,7 @@ class MediaController extends Controller
      * @return array
      */
     protected function createFullDirectoryList(Request $request){
-        $rootDirectory = 'media/' .$request->get('rootDirectory');
+        $rootDirectory = $request->get('rootDirectory');
 
         $result = [];
 

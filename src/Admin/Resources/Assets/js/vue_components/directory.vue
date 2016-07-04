@@ -64,14 +64,19 @@
              * data =  {context,rootDirectory}
              */
             mediaManagerRequested: function(data){
+                console.log('media.js');
+                console.log(data);
+                console.log(this.rootDirectory);
                 if(this.rootDirectory != data.rootDirectory){
                     this.rootDirectory = data.rootDirectory;
+                    console.log('refreshing dirs');
                     this.refreshDirectories();
                 }
             }
         },
         methods: {
             refreshDirectories: function () {
+                console.log(this.rootDirectory);
                 this.$dispatch('changeOfDirectory', this.rootDirectory);
                 var data = {
                     rootDirectory: this.rootDirectory

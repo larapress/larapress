@@ -82,7 +82,7 @@
             chooseImage: function () {
                 var data = {
                     context:this.context,
-                    rootDirectory: this.rootDirectory
+                    rootDirectory: 'media/' + this.rootDirectory
                 };
                 this.$dispatch('mediaManagerRequested', data);
             },

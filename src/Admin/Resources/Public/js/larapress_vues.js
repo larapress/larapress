@@ -12270,14 +12270,19 @@ module.exports = {
          * data =  {context,rootDirectory}
          */
         mediaManagerRequested: function mediaManagerRequested(data) {
+            console.log('media.js');
+            console.log(data);
+            console.log(this.rootDirectory);
             if (this.rootDirectory != data.rootDirectory) {
                 this.rootDirectory = data.rootDirectory;
+                console.log('refreshing dirs');
                 this.refreshDirectories();
             }
         }
     },
     methods: {
         refreshDirectories: function refreshDirectories() {
+            console.log(this.rootDirectory);
             this.$dispatch('changeOfDirectory', this.rootDirectory);
             var data = {
                 rootDirectory: this.rootDirectory
@@ -12372,7 +12377,7 @@ module.exports = {
         chooseImage: function chooseImage() {
             var data = {
                 context: this.context,
-                rootDirectory: this.rootDirectory
+                rootDirectory: 'media/' + this.rootDirectory
             };
             this.$dispatch('mediaManagerRequested', data);
         },
@@ -12520,6 +12525,9 @@ module.exports = {
         mediaSubmitted: function mediaSubmitted(result) {
             if (result.context == this.context) this.imageUrl = result.value;
         },
+        /**
+         * If delete was pressed and confirmation model was confirmed
+         */
         confirmationResult: function confirmationResult(result) {
             if (result.context == this.context && result.proceed) {
                 this.attachmentCaption = '';
@@ -12531,12 +12539,12 @@ module.exports = {
     },
     methods: {
         /**
-         * If btn pressed to select image
+         * If btn pressed to select image, request the media manager
          */
         chooseImage: function chooseImage() {
             var data = {
                 context: this.context,
-                rootDirectory: this.rootDirectory
+                rootDirectory: 'media/' + this.rootDirectory
             };
             this.$dispatch('mediaManagerRequested', data);
         },
@@ -12552,7 +12560,7 @@ module.exports = {
         },
 
         /**
-         * Updates the attributes of the template form to have unique field names
+         * Updates the attributes of the template form to have unique field names to allow multiple
          */
         updateAllFieldAttributes: function updateAllFieldAttributes() {
             this.attachmentName = this.attachmentPrefix + this.attachmentSuffix;
@@ -12624,11 +12632,12 @@ module.exports = {
          * Creates a new attachment dynamically
          */
         createAttachment: function createAttachment() {
-            this.attachments.push({
+            var data = {
                 id: null,
                 priority: this.attachments.length
-            });
-            this.$dispatch('mediaManagerRequested');
+            };
+
+            this.attachments.push(data);
         },
         /**
          * Gets the attachment data from server
@@ -12744,6 +12753,8 @@ module.exports = {
             this.display = 'block';
             this.working_context = data.context;
             this.working_directory = 'media/' + data.rootDirectory;
+
+            //pass on down the call to refresh directories
             this.$broadcast('mediaManagerRequested', data);
         },
         /**

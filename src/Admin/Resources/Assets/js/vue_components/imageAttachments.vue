@@ -91,11 +91,12 @@
              * Creates a new attachment dynamically
              */
             createAttachment: function () {
-                this.attachments.push({
+                var data = {
                     id: null,
                     priority: this.attachments.length
-                })
-                this.$dispatch('mediaManagerRequested')
+                };
+
+                this.attachments.push(data);
             },
             /**
              * Gets the attachment data from server
@@ -105,7 +106,7 @@
                     model: this.attachmentModel,       // what sort of model ie App/Movie
                     model_id: this.attachmentModelId,  // the id of model App/Model currently ising
                     context: this.attachmentsPrefix    // the prefix of the attachment ie movie
-                }
+                };
 
                 this.$http.post('/larapress/attachments/getByModel', data)
                         .success(function (response) {

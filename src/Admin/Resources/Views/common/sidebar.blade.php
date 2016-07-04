@@ -28,7 +28,7 @@
                 @if(count($item['sub_menu']) == 0)
 
                     <li>
-                        <a href="{!!$item['route']!!}">{!!$item['display']!!}</a>
+                        <a href="{!! route($item['route'], isset($item['route_data']) ? $item['route_data'] : []) !!}">{!!$item['display']!!}</a>
                     </li>
 
                 @else

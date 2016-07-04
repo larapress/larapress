@@ -139,6 +139,9 @@
             mediaSubmitted: function (result) {
                 if (result.context == this.context) this.imageUrl = result.value;
             },
+            /**
+             * If delete was pressed and confirmation model was confirmed
+             */
             confirmationResult: function (result) {
                 if (result.context == this.context && result.proceed) {
                     this.attachmentCaption = '';
@@ -150,12 +153,12 @@
         },
         methods: {
             /**
-             * If btn pressed to select image
+             * If btn pressed to select image, request the media manager
              */
             chooseImage: function () {
                 var data = {
                     context: this.context,
-                    rootDirectory: this.rootDirectory
+                    rootDirectory: 'media/' + this.rootDirectory
                 };
                 this.$dispatch('mediaManagerRequested', data);
             },
@@ -166,12 +169,12 @@
                     message: 'Are you sure you want to remove this attachment? The image will still be kept in your media catalog, just no longer attached to this model.',
                     context: this.context,
                     id: this.attachmentId
-                }
+                };
                 this.$dispatch('confirmationRequested', data);
             },
 
             /**
-             * Updates the attributes of the template form to have unique field names
+             * Updates the attributes of the template form to have unique field names to allow multiple
              */
             updateAllFieldAttributes: function () {
                 this.attachmentName = this.attachmentPrefix + this.attachmentSuffix;
