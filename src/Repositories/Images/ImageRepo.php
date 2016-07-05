@@ -1,8 +1,8 @@
 <?php
 namespace Larapress\Repositories\Images;
 
+use Intervention\Image\ImageManager;
 
-use Intervention\Image\Facades\Image;
 
 /**
  * Class ImageRepo
@@ -10,23 +10,27 @@ use Intervention\Image\Facades\Image;
  */
 class ImageRepo
 {
-    protected $originalsPath;
-
     protected $cachePath;
+
+    protected $originalsPath;
 
     protected $sizes;
 
     protected $publicUrl;
 
+    protected $manager;
+
     public function __construct()
     {
-        $this->originalsPath = $this->setOriginalsPath();
-
         $this->cachePath = $this->setCachePath();
+
+        $this->originalsPath = $this->setOriginalsPath();
 
         $this->publicUrl = $this->setPublicUrl();
 
         $this->sizes = $this->setImageSizes();
+
+        $this->manager = new ImageManager();
     }
 
 
@@ -44,7 +48,7 @@ class ImageRepo
             try{
                 if (!file_exists($this->cachePath . $requestedFile)) $this->generateFile($imageFile, $size);
             }catch(\Exception $e){
-                return false;
+                return $e->getMessage();
             }
 
             return $this->publicUrl . $requestedFile;
@@ -67,17 +71,7 @@ class ImageRepo
         }
     }
     
-    /**
-     * Returns the path for the orignal files, ideal for saving images
-     * @return string
-     */
-    public function getOriginalPath()
-    {
-        return $this->originalsPath;
-    }
-
-
-    /**
+     /**
      * This makes the cached image file
      * @param $imageFile
      * @param $size
@@ -91,8 +85,13 @@ class ImageRepo
 
         if (!file_exists($originalFile)) throw new \Exception('Original file not found, ' . $originalFile);
 
+        //create the cache dir
+        $path = pathinfo($imageFile);
+        $cacheDirectory = $this->cachePath . $path['dirname'];
+        if(!file_exists($cacheDirectory)) mkdir($cacheDirectory, 0777);
+
         try{
-            $image = Image::make($originalFile);
+            $image = $this->manager->make($originalFile);
         }catch(\Exception $e){
             dd($e);
         }
@@ -178,17 +177,14 @@ class ImageRepo
         return $cachePath;
     }
 
+
     /**
-     * Sets the original path to store original images and create dir if not done
+     * Sets the originals path
      * @return string
      */
     protected function setOriginalsPath()
     {
-        $originalsPath = public_path() . config('larapress.images.paths.original');
-
-        if (!file_exists($originalsPath)) mkdir($originalsPath, 0777, true);
-
-        return $originalsPath;
+        return public_path();
     }
 
 }

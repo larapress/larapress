@@ -14,7 +14,6 @@ return
         ]
     ],
         'paths' => [
-            'cache' => '/images/cache/',
-            'original' => '/storage/album/'
+            'cache' => '/cache'
         ]
     ];
