@@ -107,10 +107,14 @@ class MediaController extends Controller
     protected function createFullDirectoryList(Request $request){
         $rootDirectory = $request->get('rootDirectory');
 
-        $result = [];
+        $result = new \stdClass();
+
+        $result->parent_directory = dirname($rootDirectory);
+
+        $result->directories = [];
 
         foreach (Storage::directories($rootDirectory) as $dir) {
-            $result[] = $this->createSubDirectoryList($dir);
+            $result->directories[] = $this->createSubDirectoryList($dir);
         }
 
         return $result;
@@ -134,6 +138,8 @@ class MediaController extends Controller
         $folder->show_sub_directories = false;
 
         $folder->active = false;
+
+        $folder->parent_directory = dirname($dir);
 
         $directories = Storage::directories($dir);
 

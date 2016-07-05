@@ -13,23 +13,21 @@
 
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-xs-12">
-                            <div class="col-xs-3">
-                                <directories-component v-bind:working-Directory="working_directory">
-                                </directories-component>
-                            </div>
+                        <div class="col-xs-3">
+                            <directories-component v-bind:working-Directory="working_directory">
+                            </directories-component>
+                        </div>
 
-                            <div class="col-xs-9">
-                                <div class="box box-solid box-default">
-                                    <div class="box-header">
-                                        <p>Dir: {{ working_directory }}</p>
-                                    </div>
+                        <div class="col-xs-9">
+                            <div class="box box-solid box-default">
+                                <div class="box-header">
+                                    <p>Dir: {{ working_directory }}</p>
+                                </div>
 
-                                    <div>
-                                        <files-component></files-component>
+                                <div>
+                                    <files-component></files-component>
 
-                                        <upload-component></upload-component>
-                                    </div>
+                                    <upload-component></upload-component>
                                 </div>
                             </div>
                         </div>
@@ -97,7 +95,7 @@
 
                 //pass on down the call to refresh directories
                 this.$broadcast('mediaManagerRequested', data);
-           },
+            },
             /**
              * When a file is selected
              * @param filename - string url name for the file
@@ -105,7 +103,7 @@
             fileSelected: function (response) {
                 this.selected_file = response.selectedFile;
 
-                if(response.proceed) this.mediaSubmit();
+                if (response.proceed) this.mediaSubmit();
             }
         },
         methods: {

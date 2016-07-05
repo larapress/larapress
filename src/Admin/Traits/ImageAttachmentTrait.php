@@ -10,12 +10,12 @@ trait ImageAttachmentTrait
     /**
      * This array indexs all the required input records
      */
-    private $inputIndex;
+    protected $inputIndex;
 
     /**
      * This is an array of the attachment names, typically there will only be one
      */
-    private $attachmentNames;
+    protected $attachmentNames;
 
 
     /**
@@ -105,7 +105,7 @@ trait ImageAttachmentTrait
      * '_'. The first is the attachment name, second is the unique id for the records to that field,
      * the third is the fields, ie 'alt, caption, url'
      */
-    private function addToInputIndex($fieldName)
+    protected function addToInputIndex($fieldName)
     {
         $parts = explode('_', $fieldName);
 
@@ -125,7 +125,7 @@ trait ImageAttachmentTrait
     /**
      * Returns the defined image attachment names as array
      */
-    private function getImageAttachmentNames()
+    protected function getImageAttachmentNames()
     {
         if (is_array($this->imageAttachmentNames)) return $this->imageAttachmentNames;
 
