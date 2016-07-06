@@ -54,19 +54,19 @@ class MediaController extends Controller
     public function upload(Request $request)
     {
         if ($request->hasFile('file')) {
-            $file = $request->file('file')->getClientOriginalName();
             $path = $this->getStorageRoot() . $request->get('directory');
             $dir = $request->get('directory');
+            $filename = $request->has('filename') ? $request->get('filename') : $request->file('file')->getClientOriginalName();
 
             $result = new \stdClass();
-            $result->name = basename($file);
+            $result->name = $filename;
             $result->directory = $dir;
-            $result->path = '/' . $dir . '/' . basename($file);
-            $result->fullPath = \URL::to($dir) . '/' . basename($file);
+            $result->path = '/' . $dir . '/' . $filename;
+            $result->fullPath = \URL::to($dir) . '/' . $filename;
             $result->backgroundImage = "url('$result->path')";
             $result->active = false;
 
-            $request->file('file')->move($path, $file);
+            $request->file('file')->move($path, $filename);
             
             return response()->json($result);
         }

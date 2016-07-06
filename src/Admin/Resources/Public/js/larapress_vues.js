@@ -12371,27 +12371,46 @@ var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 4, stdin */\n.featureImage img {\n  width: 100%;\n  float: left;\n  margin-bottom: 1rem; }\n")
 'use strict';
 
+var _uploadButton = require('./uploadButton.vue');
+
+var _uploadButton2 = _interopRequireDefault(_uploadButton);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 module.exports = {
+    components: {
+        UploadButton: _uploadButton2.default
+    },
+
     props: {
-        btnText: {},
-        featureName: {},
-        featureTitle: {},
-        featureValue: {},
-        rootDirectory: { default: '' }
+        featureName: {}, // name of the feature image
+        featureTitle: {}, // title to show at top of box
+        featureValue: {}, // existing url of image
+
+        imageSource: { default: 'upload' }, // where the image found, 'media' or 'upload'
+
+        rootDirectory: { default: '' }, // rootDirectory for media manager to load
+        btnText: { default: 'Select Feature Image' }, // text on the button
+
+        uploadDirectory: { default: '/media' }, // directory to upload file to
+        uploadFilename: {} // name the file could be called
     },
     data: function data() {
         return {
-            btnText: 'Select Feature Image',
             imageUrl: false,
-            context: this.featureName // this is a name that gets passed back once file has been selected from broadcast
+            context: this.featureName, // this is a name that gets passed back once file has been selected from broadcast
+            loading: false
         };
     },
     events: {
         /**
-         * if a file was selected then update file name
+         * if a file was selected from media manager then update file name
          * @param result - object containing context,value
          */
         mediaSubmitted: function mediaSubmitted(result) {
+            if (result.context == this.context) this.imageUrl = result.value;
+        },
+        uploadSubmitted: function uploadSubmitted(result) {
             if (result.context == this.context) this.imageUrl = result.value;
         }
     },
@@ -12409,14 +12428,14 @@ module.exports = {
         removeImage: function removeImage() {
             this.$set('imageUrl', '');
         }
-
     },
+
     ready: function ready() {
         this.$set('imageUrl', this.featureValue);
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"featureImage\">\n    <div class=\"box box-default\">\n        <div class=\"box-header with-border\">\n            <div class=\"col-xs-10\">\n                <h3 class=\"box-title\">{{featureTitle}}</h3>\n            </div>\n\n            <div class=\"col-xs-2\">\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i></button>\n                </div>\n            </div>\n            <!-- /.box-tools -->\n        </div>\n        <!-- /.box-header -->\n\n\n        <div class=\"box-body\">\n            <img v-show=\"imageUrl\" v-bind:src=\"imageUrl\">\n\n            <div class=\"pull-right\">\n                <button type=\"button\" class=\"btn\" v-on:click=\"removeImage()\">\n                    Remove Image\n                </button>\n                <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"chooseImage()\">\n                    {{ btnText }}\n                </button>\n            </div>\n\n            <input type=\"hidden\" value=\"{{ imageUrl }}\" v-bind:name=\"featureName\">\n        </div>\n        <!-- /.box-body -->\n    </div>\n    <!-- /.box -->\n\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"featureImage\">\n    <div class=\"box box-default\">\n        <div class=\"box-header with-border\">\n            <div class=\"col-xs-10\">\n                <h3 class=\"box-title\">{{featureTitle}}</h3>\n            </div>\n\n            <div class=\"col-xs-2\">\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i></button>\n                </div>\n            </div>\n            <!-- /.box-tools -->\n        </div>\n        <!-- /.box-header -->\n\n\n        <div class=\"box-body\">\n            <img v-show=\"imageUrl\" v-bind:src=\"imageUrl\">\n\n            <div class=\"pull-right\">\n                <button type=\"button\" class=\"btn\" v-on:click=\"removeImage()\">\n                    Remove Image\n                </button>\n\n                <!-- If source of image should be from media source -->\n                <button v-if=\"imageSource == 'media'\" type=\"button\" class=\"btn btn-primary\" v-on:click=\"chooseImage()\">\n                    {{ btnText }}\n                </button>\n\n                <!-- If source of image should be from uploading -->\n                <div v-if=\"imageSource == 'upload'\" class=\"upload-container\">\n                    <upload-button v-bind:upload-btn-text=\"btnText\" v-bind:upload-directory=\"uploadDirectory\" v-bind:upload-filename=\"uploadFilename\" v-bind:upload-context=\"context\">\n                    </upload-button>\n                </div>\n            </div>\n\n            <input type=\"hidden\" value=\"{{ imageUrl }}\" v-bind:name=\"featureName\">\n        </div>\n        <!-- /.box-body -->\n    </div>\n    <!-- /.box -->\n\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12431,7 +12450,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4e4deab2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}],29:[function(require,module,exports){
+},{"./uploadButton.vue":33,"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}],29:[function(require,module,exports){
 'use strict';
 
 var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
@@ -12837,7 +12856,70 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-43c27fcb", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./directory.vue":27,"./filesComponent.vue":29,"./uploadComponent.vue":33,"vue":23,"vue-hot-reload-api":21}],33:[function(require,module,exports){
+},{"./directory.vue":27,"./filesComponent.vue":29,"./uploadComponent.vue":34,"vue":23,"vue-hot-reload-api":21}],33:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.upload-container {\n  display: inline-block; }\n  /* line 5, stdin */\n  .upload-container .btn-upload {\n    overflow: hidden; }\n  /* line 9, stdin */\n  .upload-container input[type=\"file\"] {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    opacity: 0;\n    top: 0;\n    left: 0; }\n")
+'use strict';
+
+module.exports = {
+    props: {
+        uploadBtnText: { default: 'Upload Image' }, // text on the upload button
+        uploadDirectory: { default: '/media' }, // directory to upload file to
+        uploadFilename: {}, // name the file could be called
+        uploadContext: {} // identifier to caller component
+    },
+    data: function data() {
+        return {
+            uploading: false
+        };
+    },
+    methods: {
+        /**
+         * When a file is selected from file selector, upload it and dispatch result up
+         * @param e
+         */
+        onFileChange: function onFileChange(e) {
+            this.uploading = true;
+
+            var files = e.target.files || e.dataTransfer.files;
+
+            if (!files.length) return;
+
+            var formData = new FormData();
+
+            formData.append("directory", this.uploadDirectory);
+
+            formData.append("filename", this.uploadFilename);
+
+            formData.append("file", files[0]);
+
+            this.$http.post('/larapress/media/upload', formData).then(function (response) {
+                this.$dispatch('uploadSubmitted', {
+                    context: this.uploadContext,
+                    value: this.uploadDirectory + '/' + this.uploadFilename
+                });
+                this.$set('uploading', false);
+            });
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"upload-container\">\n    <form action=\"/larapress/media/upload\" method=\"post\" enctype=\"multipart/form-data\">\n        <div class=\"btn btn-primary btn-upload\">\n            <span v-show=\"uploading\" class=\"fa fa-circle-o-notch fa-spin\"></span> {{ uploadBtnText }}\n            <input type=\"file\" v-on:change=\"onFileChange\" name=\"media_file\" class=\"btn btn-primary\">\n        </div>\n    </form>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["/* line 2, stdin */\n.upload-container {\n  display: inline-block; }\n  /* line 5, stdin */\n  .upload-container .btn-upload {\n    overflow: hidden; }\n  /* line 9, stdin */\n  .upload-container input[type=\"file\"] {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    opacity: 0;\n    top: 0;\n    left: 0; }\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-22854835", module.exports)
+  } else {
+    hotAPI.update("_v-22854835", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}],34:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.fileThumb {\n  border-color: #aaaaaa !important; }\n")
 "use strict";

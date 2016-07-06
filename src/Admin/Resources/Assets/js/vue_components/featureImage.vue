@@ -36,9 +36,22 @@
                     <button type="button" class="btn" v-on:click="removeImage()">
                         Remove Image
                     </button>
-                    <button type="button" class="btn btn-primary" v-on:click="chooseImage()">
+
+                    <!-- If source of image should be from media source -->
+                    <button v-if="imageSource == 'media'" type="button" class="btn btn-primary"
+                            v-on:click="chooseImage()">
                         {{ btnText }}
                     </button>
+
+                    <!-- If source of image should be from uploading -->
+                    <div v-if="imageSource == 'upload'" class="upload-container">
+                        <upload-button
+                                v-bind:upload-btn-text="btnText"
+                                v-bind:upload-directory="uploadDirectory"
+                                v-bind:upload-filename="uploadFilename"
+                                v-bind:upload-context="context">
+                        </upload-button>
+                    </div>
                 </div>
 
                 <input type="hidden" value="{{ imageUrl }}" v-bind:name="featureName"/>
@@ -51,27 +64,42 @@
 </template>
 
 <script>
+    import UploadButton from './uploadButton.vue';
+
     module.exports = {
+        components: {
+            UploadButton: UploadButton
+        },
+
         props: {
-            btnText: {},
-            featureName: {},
-            featureTitle: {},
-            featureValue: {},
-            rootDirectory: {default:''}
+            featureName: {},                                    // name of the feature image
+            featureTitle: {},                                   // title to show at top of box
+            featureValue: {},                                   // existing url of image
+
+            imageSource: {default: 'upload'},                   // where the image found, 'media' or 'upload'
+
+            rootDirectory: {default: ''},                       // rootDirectory for media manager to load
+            btnText: {default: 'Select Feature Image'},         // text on the button
+
+            uploadDirectory: {default: '/media'},               // directory to upload file to
+            uploadFilename: {}                                  // name the file could be called
         },
         data: function () {
             return {
-                btnText: 'Select Feature Image',
                 imageUrl: false,
-                context: this.featureName // this is a name that gets passed back once file has been selected from broadcast
+                context: this.featureName, // this is a name that gets passed back once file has been selected from broadcast
+                loading: false
             }
         },
         events: {
             /**
-             * if a file was selected then update file name
+             * if a file was selected from media manager then update file name
              * @param result - object containing context,value
              */
             mediaSubmitted: function (result) {
+                if (result.context == this.context) this.imageUrl = result.value;
+            },
+            uploadSubmitted: function(result){
                 if (result.context == this.context) this.imageUrl = result.value;
             }
         },
@@ -81,7 +109,7 @@
              */
             chooseImage: function () {
                 var data = {
-                    context:this.context,
+                    context: this.context,
                     rootDirectory: 'media/' + this.rootDirectory
                 };
                 this.$dispatch('mediaManagerRequested', data);
@@ -89,8 +117,8 @@
             removeImage: function () {
                 this.$set('imageUrl', '');
             }
-
         },
+
         ready: function () {
             this.$set('imageUrl', this.featureValue);
         }
