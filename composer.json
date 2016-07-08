@@ -1,0 +1,30 @@
+{
+	"name": "larapress/larapress",
+	"description": "Simple CMS for my apps",
+	"keywords": [
+		"laravel"
+	],
+	"homepage": "https://www.samjoyce.co.uk",
+	"authors": [
+		{
+			"name": "Sam Joyce",
+			"email": "dev@samjoyce.co.uk",
+			"homepage": "http://www.samjoyce.co.uk/"
+		}
+	],
+	"license": "MIT License",
+	"require": {
+		"php": ">=5.4.0",
+		"illuminate/support": "5.*",
+		"illuminate/view": "5.*",
+        "illuminate/html": "5.0.*@dev",
+        "davejamesmiller/laravel-breadcrumbs": "~3.0",
+        "intervention/image": "2.3.*",
+        "laravelcollective/html": "~5.0"
+    },
+	"autoload": {
+		"psr-4": {
+			"Larapress\\": "src/"
+		}
+	}
+}

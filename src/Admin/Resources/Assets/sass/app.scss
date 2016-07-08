@@ -1,0 +1,13 @@
+// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+//librairies
+@import "../../../../../bower_components/admin-lte.scss/main";
+@import "../../../../../bower_components/components-font-awesome/scss/font-awesome";
+
+
+
+//framework overrides
+@import "overrides/content";
+
+@import "components/modal";
+@import "components/media_manager";
