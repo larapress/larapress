@@ -11,6 +11,7 @@
         </div>
 
         @if(!isset($page))
+<<<<<<< HEAD
             <div class="form-group">
                 <label for="slug">Slug</label>
                 <input type="text" id="slug"
@@ -18,6 +19,15 @@
                        value="{!!old('slug', isset($page->slug) ? $page->slug : null)!!}"
                        class="form-control"/>
             </div>
+=======
+        <div class="form-group">
+            <label for="slug">Slug</label>
+            <input type="text" id="slug"
+                   name="slug"
+                   value="{!!old('slug', isset($page->slug) ? $page->slug : null)!!}"
+                   class="form-control"/>
+        </div>
+>>>>>>> fff4db27ce01ad026fbb2c60543739dbed00691e
         @endif
 
         <div class="form-group">
@@ -27,13 +37,21 @@
                    value="{!!old('description', isset($page->description) ? $page->description : null)!!}"
                    class="form-control"/>
         </div>
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> fff4db27ce01ad026fbb2c60543739dbed00691e
         <div class="form-group">
             <label for="body">Content</label>
             <textarea id="body"
                       name="body"
+<<<<<<< HEAD
                       class="form-control HTMLeditor"
                       style="height:40rem">
+=======
+                      class="form-control HTMLeditor">
+>>>>>>> fff4db27ce01ad026fbb2c60543739dbed00691e
                 {!!old('body', isset($page->body) ? $page->body : null)!!}
             </textarea>
         </div>

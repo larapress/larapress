@@ -46,6 +46,7 @@
 </div>
 
 
+<<<<<<< HEAD
 <script src="/larapress/js/larapress_libs.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.4.2/Sortable.min.js"></script>
 <script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
@@ -53,6 +54,17 @@
 <script src="/larapress//js/larapress_vues.js"></script>
 <script src="/larapress//js/larapress_core.js"></script>
 
+=======
+
+@if(env('APP_ENV') == 'local')
+    <script src="/larapress/js/larapress_libs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.4.2/Sortable.min.js"></script>
+    <script src="/larapress//js/larapress_vues.js"></script>
+
+@else
+    <script src="/js/main.js"></script>
+@endif
+>>>>>>> fff4db27ce01ad026fbb2c60543739dbed00691e
 
 @yield('scripts')
 </body>

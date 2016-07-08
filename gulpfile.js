@@ -37,8 +37,8 @@ elixir(function (mix) {
         mix.scripts([
             'src/Admin/Resources/Assets/js/lib/ajquery-2.2.3.min.js',
             'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.min.js',
-            'bower_components/admin-lte.scss/javascripts/app.js',
-            'bower_components/tinymce/tinymce.js'
+            'bower_components/tinymce/tinymce.js',
+            'bower_components/admin-lte.scss/javascripts/app.js'
         ], 'src/Admin/Resources/Public/js/larapress_libs.js')
             .copy('src/Admin/Resources/Public/js/larapress_libs.js', '../../../public/larapress/js/larapress_libs.js')
     }
@@ -73,4 +73,5 @@ elixir(function (mix) {
             'src/Admin/Resources/Public/js/larapress_core.js')
             .copy('src/Admin/Resources/Public/js/larapress_core.js', '../../../public/larapress/js/larapress_core.js')
     }
+
 });

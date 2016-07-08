@@ -6,8 +6,11 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+<<<<<<< HEAD
 @import url(../../../../../bower_components/tinymce/skins/lightgray/content.min.css);
 @import url(../../../../../bower_components/tinymce/skins/lightgray/skin.min.css);
+=======
+>>>>>>> fff4db27ce01ad026fbb2c60543739dbed00691e
 html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
