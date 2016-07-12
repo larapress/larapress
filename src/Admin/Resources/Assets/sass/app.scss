@@ -1,11 +1,18 @@
 // @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
 //librairies
-@import "../../../../../bower_components/admin-lte.scss/main";
+@import "../../../../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+
+//importing admin css, not using main import file as it @imports font which can really bottleneck
+$icon-font-path: '../fonts/';
+@import "../../../../../bower_components/admin-lte.scss/scss/admin-lte";
+@import "../../../../../bower_components/admin-lte.scss/scss/skins/all-skins";
 @import "../../../../../bower_components/components-font-awesome/scss/font-awesome";
+
 
 //framework overrides
 @import "overrides/content";
 
+// Larapress stuff
 @import "components/modal";
 @import "components/media_manager";
