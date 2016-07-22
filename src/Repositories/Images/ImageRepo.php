@@ -96,7 +96,7 @@ class ImageRepo
             dd($e);
         }
 
-        if (isset($size['height'])) {
+        if (isset($this->sizes[$size]['height'])) {
             $image->resize($this->sizes[$size]["width"], $this->sizes[$size]["height"])->save($destinationFile, 100);
         } else {
             $image->resize($this->sizes[$size]["width"], null, function ($constraint) {
