@@ -19,7 +19,18 @@ class PostsController extends Controller
     {
         $posts = Post::where('status', '!=', 'trashed')->paginate(30);
 
-        return view('larapress::posts.index')->with('posts', $posts);
+        $title = 'All blog posts';
+
+        return view('larapress::posts.index')->with('posts', $posts)->with('title', $title);
+    }
+
+    public function category($category)
+    {
+        $posts = Post::inCategory($category);
+
+        $title = 'All blog posts in ' . $category;
+
+        return view('larapress::posts.index')->with('posts', $posts)->with('title', $title);
     }
 
     public function search(Request $request)

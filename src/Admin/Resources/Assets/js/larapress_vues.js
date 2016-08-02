@@ -8,6 +8,7 @@ import MediaManager from './vue_components/mediaManager.vue';
 import FeatureImage from './vue_components/featureImage.vue';
 import ImageAttachments from './vue_components/imageAttachments.vue';
 import ConfirmModal from './vue_components/confirmModal.vue';
+import PostCategories from './vue_components/postCategories.vue';
 
 new Vue({
     el: 'body',
@@ -16,7 +17,8 @@ new Vue({
         MediaManager: MediaManager,
         FeatureImage: FeatureImage,
         ImageAttachments: ImageAttachments,
-        ConfirmModal: ConfirmModal
+        ConfirmModal: ConfirmModal,
+        PostCategories: PostCategories
     },
     ready: function () {
         console.log(Vue.http.headers.common['X-CSRF-TOKEN']);

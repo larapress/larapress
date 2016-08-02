@@ -19,8 +19,10 @@ class CreatePostsTable extends Migration
             $table->string('slug');
             $table->string('description')->nullable();
             $table->text('body')->nullable();
-            $table->integer('category_id')->nullable();
             $table->enum('status', ['draft', 'published', 'trashed']);
+            $table->string('category')->nullable();
+            $table->string('sub_category')->nullable();
+            $table->string('cover_image')->nullable();
         });
     }
 

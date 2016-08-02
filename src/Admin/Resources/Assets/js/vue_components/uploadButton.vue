@@ -23,7 +23,7 @@
         <form action="/larapress/media/upload" method="post" enctype="multipart/form-data">
             <div class="btn btn-primary btn-upload">
                 <span v-show="uploading" class="fa fa-circle-o-notch fa-spin"></span> {{ uploadBtnText }}
-                <input type="file" v-on:change="onFileChange" name="media_file"
+                <input type="file" v-on:change="onFileChange" v-bind:name="uploadContext"
                        class="btn btn-primary"/>
             </div>
         </form>
@@ -35,7 +35,7 @@
         props: {
             uploadBtnText: {default: 'Upload Image'},           // text on the upload button
             uploadDirectory: {default: '/media'},               // directory to upload file to
-            uploadFilename: {},                                 // name the file could be called
+            uploadFilename: {default: false},                   // name the file could be called
             uploadContext: {}                                   // identifier to caller component
         },
         data: function () {
@@ -54,10 +54,12 @@
                 var files = e.target.files || e.dataTransfer.files;
 
                 if (!files.length) return;
-
                 var formData = new FormData();
 
                 formData.append("directory", this.uploadDirectory);
+
+                //if a filename was not selected, use original
+                if(this.uploadFilename == false) this.uploadFilename = files[0].name;
 
                 formData.append("filename", this.uploadFilename);
 

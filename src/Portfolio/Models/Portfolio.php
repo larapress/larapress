@@ -8,5 +8,5 @@ class Portfolio extends Model
 {
     protected $table = 'LP_portfolio';
 
-    protected $fillable = ['title', 'content', 'status'];
+    protected $fillable = ['title', 'body', 'status', 'slug', 'description', 'website', 'launched_date', 'cover_image'];
 }

@@ -35,6 +35,10 @@ class SaveNewPost extends Job implements ShouldQueue
             'description' => $request->get('description'),
             'slug' => str_slug($request->slug),
             'body' => $request->body,
+            'category' => $request->category,
+            'sub_category' => $request->sub_category,
+            'cover_image' => $request->cover_image
+
         ]);
 
         \Session::flash('success', 'Your post has been saved.');

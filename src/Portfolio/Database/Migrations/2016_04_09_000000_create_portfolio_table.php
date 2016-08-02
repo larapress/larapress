@@ -23,6 +23,7 @@ class CreatePortfolioTable extends Migration
             $table->date('launched_date');
             $table->enum('status', ['draft', 'published', 'trashed']);
             $table->integer('sequence');
+            $table->string('cover_image');
         });
     }
 

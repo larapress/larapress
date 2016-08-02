@@ -5,7 +5,7 @@ namespace Larapress\Portfolio\Events;
 use \App\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Larapress\Pages\Models\Page;
+use Larapress\Portfolio\Models\Portfolio;
 
 class PortfolioWasSaved extends Event
 {
@@ -16,9 +16,9 @@ class PortfolioWasSaved extends Event
      *
      * @return void
      */
-    public function __construct(Page $page)
+    public function __construct(Portfolio $project)
     {
-        $this->page = $page;
+        $this->project = $project;
     }
 
     /**

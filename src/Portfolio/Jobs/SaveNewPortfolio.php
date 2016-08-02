@@ -30,15 +30,19 @@ class SaveNewPortfolio extends Job implements ShouldQueue
      */
     public function handle(Request $request)
     {
-        $page = Portfolio::create([
+        $project = Portfolio::create([
             'title' => $request->title,
-            'description' => $request->get('description'),
+            'description' => $request->description,
             'slug' => str_slug($request->slug),
             'body' => $request->body,
+            'status' => $request->status,
+            'website' => $request->website,
+            'launched_date' => $request->launched_date,
+            'cover_image' => $request->cover_image,
         ]);
 
-        \Session::flash('success', 'Your page has been saved.');
+        \Session::flash('success', 'Your project has been saved.');
 
-        event(new \Larapress\Portfolio\Events\PortfolioWasSaved($page));
+        event(new \Larapress\Portfolio\Events\PortfolioWasSaved($project));
     }
 }

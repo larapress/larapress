@@ -36,13 +36,6 @@
                 {!!old('body', isset($post->body) ? $post->body : null)!!}
             </textarea>
         </div>
-
-        <image-attachments
-                list-title="Post Gallery Images"
-                attachments-prefix="post-image"
-                attachment-model="\Larapress\Posts\Models\Post"
-                attachment-model-id="{!!isset($post->id) ? $post->id : null!!}">
-        </image-attachments>
     </div>
 
     <div class="col-xs-4">
@@ -55,10 +48,18 @@
             </select>
         </div>
 
+        <post-categories dropdown-import='{!!json_encode(config('larapress.categories'))!!}'
+                selected-category="{!! isset($post->category) ? $post->category : null !!}"
+                selected-sub-category="{!! isset($post->sub_category) ? $post->sub_category : null !!}">
+        </post-categories>
+
         <div class="form-group" style="width:100%;float: left;">
             <feature-image btn-text="Select Post Cover"
                            feature-name="cover_image"
-                           feature-title="Cover Image">
+                           feature-title="Cover Image"
+                           feature-value="{!! isset($post->cover_image) ? $post->cover_image : null !!}"
+                           upload-directory="/media/images/posts"
+                    >
             </feature-image>
         </div>
 

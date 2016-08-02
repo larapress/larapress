@@ -216,7 +216,6 @@ var $export = require('./_export');
 $export($export.S + $export.F * !require('./_descriptors'), 'Object', {defineProperty: require('./_object-dp').f});
 },{"./_descriptors":8,"./_export":10,"./_object-dp":16}],20:[function(require,module,exports){
 // shim for using process in browser
-
 var process = module.exports = {};
 
 // cached from whatever global is present so that test runners that stub it
@@ -228,21 +227,35 @@ var cachedSetTimeout;
 var cachedClearTimeout;
 
 (function () {
-  try {
-    cachedSetTimeout = setTimeout;
-  } catch (e) {
-    cachedSetTimeout = function () {
-      throw new Error('setTimeout is not defined');
+    try {
+        cachedSetTimeout = setTimeout;
+    } catch (e) {
+        cachedSetTimeout = function () {
+            throw new Error('setTimeout is not defined');
+        }
     }
-  }
-  try {
-    cachedClearTimeout = clearTimeout;
-  } catch (e) {
-    cachedClearTimeout = function () {
-      throw new Error('clearTimeout is not defined');
+    try {
+        cachedClearTimeout = clearTimeout;
+    } catch (e) {
+        cachedClearTimeout = function () {
+            throw new Error('clearTimeout is not defined');
+        }
     }
-  }
 } ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        return setTimeout(fun, 0);
+    } else {
+        return cachedSetTimeout.call(null, fun, 0);
+    }
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        clearTimeout(marker);
+    } else {
+        cachedClearTimeout.call(null, marker);
+    }
+}
 var queue = [];
 var draining = false;
 var currentQueue;
@@ -267,7 +280,7 @@ function drainQueue() {
     if (draining) {
         return;
     }
-    var timeout = cachedSetTimeout(cleanUpNextTick);
+    var timeout = runTimeout(cleanUpNextTick);
     draining = true;
 
     var len = queue.length;
@@ -284,7 +297,7 @@ function drainQueue() {
     }
     currentQueue = null;
     draining = false;
-    cachedClearTimeout(timeout);
+    runClearTimeout(timeout);
 }
 
 process.nextTick = function (fun) {
@@ -296,7 +309,7 @@ process.nextTick = function (fun) {
     }
     queue.push(new Item(fun, args));
     if (queue.length === 1 && !draining) {
-        cachedSetTimeout(drainQueue, 0);
+        runTimeout(drainQueue);
     }
 };
 
@@ -2016,7 +2029,7 @@ module.exports = plugin;
 },{}],23:[function(require,module,exports){
 (function (process,global){
 /*!
- * Vue.js v1.0.25
+ * Vue.js v1.0.26
  * (c) 2016 Evan You
  * Released under the MIT License.
  */
@@ -5426,7 +5439,7 @@ function traverse(val, seen) {
   }
   var isA = isArray(val);
   var isO = isObject(val);
-  if (isA || isO) {
+  if ((isA || isO) && Object.isExtensible(val)) {
     if (val.__ob__) {
       var depId = val.__ob__.dep.id;
       if (seen.has(depId)) {
@@ -6912,13 +6925,13 @@ var select = {
     this.vm.$on('hook:attached', function () {
       nextTick(_this.forceUpdate);
     });
+    if (!inDoc(el)) {
+      nextTick(this.forceUpdate);
+    }
   },
 
   update: function update(value) {
     var el = this.el;
-    if (!inDoc(el)) {
-      return nextTick(this.forceUpdate);
-    }
     el.selectedIndex = -1;
     var multi = this.multiple && isArray(value);
     var options = el.options;
@@ -11866,7 +11879,13 @@ var filters = {
 
   pluralize: function pluralize(value) {
     var args = toArray(arguments, 1);
-    return args.length > 1 ? args[value % 10 - 1] || args[args.length - 1] : args[0] + (value === 1 ? '' : 's');
+    var length = args.length;
+    if (length > 1) {
+      var index = value % 10 - 1;
+      return index in args ? args[index] : args[length - 1];
+    } else {
+      return args[0] + (value === 1 ? '' : 's');
+    }
   },
 
   /**
@@ -12068,7 +12087,7 @@ function installGlobalAPI (Vue) {
 
 installGlobalAPI(Vue);
 
-Vue.version = '1.0.25';
+Vue.version = '1.0.26';
 
 // devtools global hook
 /* istanbul ignore next */
@@ -12123,6 +12142,10 @@ var _confirmModal = require('./vue_components/confirmModal.vue');
 
 var _confirmModal2 = _interopRequireDefault(_confirmModal);
 
+var _postCategories = require('./vue_components/postCategories.vue');
+
+var _postCategories2 = _interopRequireDefault(_postCategories);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Vue = require('vue');
@@ -12138,7 +12161,8 @@ new Vue({
         MediaManager: _mediaManager2.default,
         FeatureImage: _featureImage2.default,
         ImageAttachments: _imageAttachments2.default,
-        ConfirmModal: _confirmModal2.default
+        ConfirmModal: _confirmModal2.default,
+        PostCategories: _postCategories2.default
     },
     ready: function ready() {
         console.log(Vue.http.headers.common['X-CSRF-TOKEN']);
@@ -12185,7 +12209,7 @@ new Vue({
     }
 });
 
-},{"./vue_components/confirmModal.vue":26,"./vue_components/featureImage.vue":28,"./vue_components/imageAttachments.vue":31,"./vue_components/mediaManager.vue":32,"vue":23,"vue-resource":22}],26:[function(require,module,exports){
+},{"./vue_components/confirmModal.vue":26,"./vue_components/featureImage.vue":28,"./vue_components/imageAttachments.vue":31,"./vue_components/mediaManager.vue":32,"./vue_components/postCategories.vue":33,"vue":23,"vue-resource":22}],26:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -12239,9 +12263,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1f729a6f", module.exports)
+    hotAPI.createRecord("_v-361f6d29", module.exports)
   } else {
-    hotAPI.update("_v-1f729a6f", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-361f6d29", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":23,"vue-hot-reload-api":21}],27:[function(require,module,exports){
@@ -12361,9 +12385,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-78dcb43b", module.exports)
+    hotAPI.createRecord("_v-7d9d6bc1", module.exports)
   } else {
-    hotAPI.update("_v-78dcb43b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-7d9d6bc1", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":23,"vue-hot-reload-api":21}],28:[function(require,module,exports){
@@ -12445,12 +12469,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4e4deab2", module.exports)
+    hotAPI.createRecord("_v-20f4453e", module.exports)
   } else {
-    hotAPI.update("_v-4e4deab2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-20f4453e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./uploadButton.vue":33,"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}],29:[function(require,module,exports){
+},{"./uploadButton.vue":34,"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}],29:[function(require,module,exports){
 'use strict';
 
 var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
@@ -12523,9 +12547,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-ba439030", module.exports)
+    hotAPI.createRecord("_v-7cbd77bc", module.exports)
   } else {
-    hotAPI.update("_v-ba439030", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-7cbd77bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/helpers/defineProperty":2,"vue":23,"vue-hot-reload-api":21}],30:[function(require,module,exports){
@@ -12636,9 +12660,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-66b17dac", module.exports)
+    hotAPI.createRecord("_v-204ff8b2", module.exports)
   } else {
-    hotAPI.update("_v-66b17dac", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-204ff8b2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}],31:[function(require,module,exports){
@@ -12742,9 +12766,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-7329d8f7", module.exports)
+    hotAPI.createRecord("_v-254a829e", module.exports)
   } else {
-    hotAPI.update("_v-7329d8f7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-254a829e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./imageAttachment.vue":30,"vue":23,"vue-hot-reload-api":21}],32:[function(require,module,exports){
@@ -12851,12 +12875,54 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-43c27fcb", module.exports)
+    hotAPI.createRecord("_v-5a6f5285", module.exports)
   } else {
-    hotAPI.update("_v-43c27fcb", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5a6f5285", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./directory.vue":27,"./filesComponent.vue":29,"./uploadComponent.vue":34,"vue":23,"vue-hot-reload-api":21}],33:[function(require,module,exports){
+},{"./directory.vue":27,"./filesComponent.vue":29,"./uploadComponent.vue":35,"vue":23,"vue-hot-reload-api":21}],33:[function(require,module,exports){
+'use strict';
+
+module.exports = {
+    props: {
+        DropdownImport: { default: [] },
+        SelectedCategory: {},
+        SelectedSubCategory: {}
+    },
+    data: function data() {
+        return {
+            Dropdown: [],
+            ChildDropdown: []
+        };
+    },
+    methods: {
+        updateDropdowns: function updateDropdowns(category) {
+            var self = this;
+            this.Dropdown.forEach(function (item) {
+                if (item.value == category) {
+                    self.$set('ChildDropdown', item.sub_categories);
+                }
+            });
+        }
+    },
+    ready: function ready() {
+        this.Dropdown = JSON.parse(this.DropdownImport);
+        this.updateDropdowns(this.SelectedCategory);
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"form-group\">\n    <label for=\"category\">Category</label>\n    <select name=\"category\" class=\"form-control\" v-model=\"SelectedCategory\" v-on:change=\"updateDropdowns(SelectedCategory)\">\n        <option v-for=\"item in Dropdown\" v-bind:value=\"item.value\">{{ item.display }}\n        </option>\n    </select>\n</div>\n\n<div class=\"form-group\">\n    <label for=\"sub_category\">Sub Category</label>\n    <select name=\"sub_category\" class=\"form-control\" v-model=\"SelectedSubCategory\">\n        <option v-for=\"item in ChildDropdown\" v-bind:value=\"item.value\">{{ item.display }}</option>\n    </select>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-af43b890", module.exports)
+  } else {
+    hotAPI.update("_v-af43b890", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":23,"vue-hot-reload-api":21}],34:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.upload-container {\n  display: inline-block; }\n  /* line 5, stdin */\n  .upload-container .btn-upload {\n    overflow: hidden; }\n  /* line 9, stdin */\n  .upload-container input[type=\"file\"] {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    opacity: 0;\n    top: 0;\n    left: 0; }\n")
 'use strict';
@@ -12865,7 +12931,7 @@ module.exports = {
     props: {
         uploadBtnText: { default: 'Upload Image' }, // text on the upload button
         uploadDirectory: { default: '/media' }, // directory to upload file to
-        uploadFilename: {}, // name the file could be called
+        uploadFilename: { default: false }, // name the file could be called
         uploadContext: {} // identifier to caller component
     },
     data: function data() {
@@ -12884,10 +12950,12 @@ module.exports = {
             var files = e.target.files || e.dataTransfer.files;
 
             if (!files.length) return;
-
             var formData = new FormData();
 
             formData.append("directory", this.uploadDirectory);
+
+            //if a filename was not selected, use original
+            if (this.uploadFilename == false) this.uploadFilename = files[0].name;
 
             formData.append("filename", this.uploadFilename);
 
@@ -12904,7 +12972,7 @@ module.exports = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"upload-container\">\n    <form action=\"/larapress/media/upload\" method=\"post\" enctype=\"multipart/form-data\">\n        <div class=\"btn btn-primary btn-upload\">\n            <span v-show=\"uploading\" class=\"fa fa-circle-o-notch fa-spin\"></span> {{ uploadBtnText }}\n            <input type=\"file\" v-on:change=\"onFileChange\" name=\"media_file\" class=\"btn btn-primary\">\n        </div>\n    </form>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"upload-container\">\n    <form action=\"/larapress/media/upload\" method=\"post\" enctype=\"multipart/form-data\">\n        <div class=\"btn btn-primary btn-upload\">\n            <span v-show=\"uploading\" class=\"fa fa-circle-o-notch fa-spin\"></span> {{ uploadBtnText }}\n            <input type=\"file\" v-on:change=\"onFileChange\" v-bind:name=\"uploadContext\" class=\"btn btn-primary\">\n        </div>\n    </form>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12914,12 +12982,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-22854835", module.exports)
+    hotAPI.createRecord("_v-39321aef", module.exports)
   } else {
-    hotAPI.update("_v-22854835", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-39321aef", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}],34:[function(require,module,exports){
+},{"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}],35:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.fileThumb {\n  border-color: #aaaaaa !important; }\n")
 "use strict";
@@ -12976,9 +13044,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-60caf5ca", module.exports)
+    hotAPI.createRecord("_v-1a6970d0", module.exports)
   } else {
-    hotAPI.update("_v-60caf5ca", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1a6970d0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}]},{},[25]);

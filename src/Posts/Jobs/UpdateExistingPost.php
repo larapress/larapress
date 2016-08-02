@@ -39,7 +39,10 @@ class UpdateExistingPost extends Job implements ShouldQueue
         $post->update([
             'title' => $request->get('title'),
             'description' => $request->get('description'),
-            'body' => $request->get('body')
+            'body' => $request->get('body'),
+            'category' => $request->category,
+            'sub_category' => $request->sub_category,
+            'cover_image' => $request->cover_image
         ]);
 
         \Session::flash('success', 'Your post has been saved successfully');

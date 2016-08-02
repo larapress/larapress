@@ -56,7 +56,7 @@ class MediaController extends Controller
         if ($request->hasFile('file')) {
             $path = $this->getStorageRoot() . $request->get('directory');
             $dir = $request->get('directory');
-            $filename = $request->has('filename') ? $request->get('filename') : $request->file('file')->getClientOriginalName();
+            $filename = ($request->get('filename') != '') ? $request->get('filename') : $request->file('file')->getClientOriginalName();
 
             $result = new \stdClass();
             $result->name = $filename;

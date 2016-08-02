@@ -32,14 +32,18 @@ class UpdateExistingPortfolio extends Job implements ShouldQueue
      */
     public function handle(Request $request)
     {
-        $page = Page::findOrFail($this->id);
+        $project = Portfolio::findOrFail($this->id);
 
-        $page->update([
-            'title' => $request->get('title'),
-            'description' => $request->get('description'),
-            'body' => $request->get('body')
+        $project->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'body' => $request->body,
+            'status' => $request->status,
+            'website' => $request->website,
+            'launched_date' => $request->launched_date,
+            'cover_image' => $request->cover_image,
         ]);
 
-        \Session::flash('success', 'Your page has been saved successfully');
+        \Session::flash('success', 'Your project has been updated successfully');
     }
 }

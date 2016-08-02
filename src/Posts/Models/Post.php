@@ -13,7 +13,7 @@ class Post extends Model
 
     protected $table = 'LP_posts';
 
-    protected $fillable = ['title', 'body', 'status', 'slug', 'description'];
+    protected $fillable = ['title', 'body', 'status', 'slug', 'description', 'category', 'sub_category', 'cover_image'];
 
     public function comments(){
         return $this->hasMany(Comment::class);
@@ -21,5 +21,13 @@ class Post extends Model
 
     public function category(){
         return $this->belongsTo(Category::class);
+    }
+
+    static public function inCategory($category, $qty = 30){
+        return Post::where('category', '=', $category)->paginate($qty);
+    }
+
+    static public function getAllCategories(){
+        return config('larapress::categories');
     }
 }

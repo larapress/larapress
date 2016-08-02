@@ -2,9 +2,9 @@
 
 namespace Larapress\Portfolio\Listeners;
 
-use Larapress\Pages\Events\PageWasSaved;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Larapress\Portfolio\Events\PortfolioWasSaved;
 
 class TestListener
 {
@@ -24,7 +24,7 @@ class TestListener
      * @param  PageWasSaved  $event
      * @return void
      */
-    public function handle(PageWasSaved $event)
+    public function handle(PortfolioWasSaved $event)
     {
 
     }

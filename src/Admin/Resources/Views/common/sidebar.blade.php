@@ -40,7 +40,7 @@
                         </a>
                         <ul class="treeview-menu">
                             @foreach($item['sub_menu'] as $subItem)
-                                <li><a href="{!!route($subItem['route'])!!}">{!!$subItem['display']!!}</a></li>
+                                <li><a href="{!! route($subItem['route'], isset($subItem['route_data']) ? $subItem['route_data'] : []) !!}">{!!$subItem['display']!!}</a></li>
                             @endforeach
                         </ul>
                     </li>
