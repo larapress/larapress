@@ -12,6 +12,6 @@ class Administrator extends Model
     protected $table = 'LP_administrators';
 
     public function user(){
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
     }
 }

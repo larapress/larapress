@@ -21,8 +21,6 @@
 <div class="wrapper">
     @include('larapress::common.header')
 
-    @include('larapress::common.sidebar')
-
     <div class="content-wrapper">
         <div class="col-xs-12">
             @if(\Session::has('success'))
@@ -43,8 +41,6 @@
 
             @yield('content')
 
-            <media-manager></media-manager>
-            <confirm-modal></confirm-modal>
         </div>
     </div>
 </div>
@@ -52,14 +48,6 @@
 <div class="row">
     @include('larapress::common.footer')
 </div>
-
-
-<script src="/larapress/js/larapress_libs.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.4.2/Sortable.min.js"></script>
-
-<script src="/larapress//js/larapress_vues.js"></script>
-<script src="/larapress//js/larapress_core.js"></script>
-
 
 @yield('scripts')
 </body>

@@ -1,13 +1,13 @@
 <?php
 
-namespace Larapress\Posts\Events;
+namespace Larapress\Admin\Events;
 
 use \App\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Larapress\Admin\Models\Administrator;
 
-class AdministratorWasCreated extends Event
+class AdministratorWasUpdated extends Event
 {
     use SerializesModels;
 

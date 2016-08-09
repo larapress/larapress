@@ -1,13 +1,13 @@
-@extends('larapress::layouts.master')
+@extends('larapress::layouts.plain')
 
 @section('content')
 <div class="col-xs-6 col-xs-offset-3" style="margin-top: 10rem">
-    <form method="POST" action="/auth/login">
+    <form method="POST" action="{!! route('larapress.auth') !!}">
         {!! csrf_field() !!}
 
         <div class="form-group">
             <label for="name">Email</label>
-            <input type="email" name="email" value="{{ old('email') }}"  class="form-control">
+            <input type="email" name="email" value=""  class="form-control">
         </div>
 
         <div class="form-group">

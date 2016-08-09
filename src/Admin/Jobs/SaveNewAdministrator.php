@@ -1,9 +1,12 @@
 <?php
 
-namespace Larapress\Posts\Jobs;
+namespace Larapress\Admin\Jobs;
 
+use Larapress\Admin\Events\AdministratorWasCreated;
+use Larapress\Admin\Events\test;
 use Larapress\Admin\Models\Administrator;
 use App\Jobs\Job;
+use App\User;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -32,8 +35,8 @@ class SaveNewAdministrator extends Job implements ShouldQueue
     {
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->name,
-            'password' => hash($request->name)
+            'email' => $request->email,
+            'password' => \Hash::make($request->password)
 
         ]);
 
@@ -45,6 +48,6 @@ class SaveNewAdministrator extends Job implements ShouldQueue
 
         \Session::flash('success', 'Administrator has been created.');
 
-        event(new \Larapress\Admin\Events\AdministratorWasCreated($administrator));
+        event(new AdministratorWasCreated($administrator));
     }
 }

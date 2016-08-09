@@ -7,7 +7,7 @@
                 <img src="/larapress/images/user.jpg" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-                <p>User Name</p>
+                <p><?php if(\Auth::check()) echo \Auth::user()->name ?></p>
             </div>
         </div>
         <!-- /.user-panel -->

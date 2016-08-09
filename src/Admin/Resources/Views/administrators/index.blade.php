@@ -39,7 +39,7 @@
         <h2>There are no administrators</h2>
     @else
         @foreach($administrators as $administrator)
-            @include('larapress::administrator.panel')
+            @include('larapress::administrators.panel')
         @endforeach
 
         <div class="row">
