@@ -18,6 +18,10 @@ class AdministratorsController extends Controller
    }
 
     public function create(){
+        if (\Gate::denies('create', Administrator::class)) {
+            abort(403);
+        }
+
         return view('larapress::administrators.create');
     }
 

@@ -37,4 +37,8 @@ class AdminController extends Controller
 
         return view('larapress::login');
     }
+
+    public function deny(){
+        return view('larapress::deny');
+    }
 }

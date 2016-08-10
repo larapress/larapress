@@ -13,15 +13,14 @@ class LarapressAuth
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Closure $next
-     * @param  string|null $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $roleFile)
+    public function handle($request, Closure $next)
     {
         if (!\Auth::check()) {
             return redirect()->route('larapress.login');
         }
-dd($roleFile);
+
         try {
             $administrator = Administrator::where('user_id', \Auth::user()->id)
                 ->where('status', 'active')

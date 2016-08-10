@@ -5,11 +5,12 @@
     \Route::post('/larapress/auth', ['as' => 'larapress.auth', 'uses' => '\Larapress\Admin\Http\Controllers\AdminController@auth']);
 });
 
-\Route::group(['middleware' => ['web', '\Larapress\Admin\Http\Middleware\LarapressAuth:dsds']], function(){
+\Route::group(['middleware' => ['web', 'larapress', '\Larapress\Admin\Http\Middleware\LarapressRole:authorization.admin']], function(){
 
     //login and admin
     \Route::get('/larapress/dashboard', ['as' => 'larapress.dashboard', 'uses' => '\Larapress\Admin\Http\Controllers\AdminController@dashboard']);
     \Route::get('/larapress/logout', ['as' => 'larapress.logout', 'uses' => '\Larapress\Admin\Http\Controllers\AdminController@logout']);
+    \Route::get('/larapress/deny', ['as' => 'larapress.deny', 'uses' => '\Larapress\Admin\Http\Controllers\AdminController@deny']);
 
     //administrators
     \Route::post('/larapress/administrators/search', ['as' => 'larapress.administrators.search', 'uses' => '\Larapress\Admin\Http\Controllers\AdministratorsController@search']);
