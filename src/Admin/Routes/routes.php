@@ -5,7 +5,7 @@
     \Route::post('/larapress/auth', ['as' => 'larapress.auth', 'uses' => '\Larapress\Admin\Http\Controllers\AdminController@auth']);
 });
 
-\Route::group(['middleware' => ['web', 'larapress', '\Larapress\Admin\Http\Middleware\LarapressRole:authorization.admin']], function(){
+\Route::group(['middleware' => ['web', 'larapress']], function(){
 
     //login and admin
     \Route::get('/larapress/dashboard', ['as' => 'larapress.dashboard', 'uses' => '\Larapress\Admin\Http\Controllers\AdminController@dashboard']);

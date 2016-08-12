@@ -27,9 +27,11 @@
 
                 @if(count($item['sub_menu']) == 0)
 
+                    @can($item['method'], $item['model'])
                     <li>
                         <a href="{!! route($item['route'], isset($item['route_data']) ? $item['route_data'] : []) !!}">{!!$item['display']!!}</a>
                     </li>
+                    @endcan
 
                 @else
 
@@ -40,7 +42,9 @@
                         </a>
                         <ul class="treeview-menu">
                             @foreach($item['sub_menu'] as $subItem)
+                                @can($subItem['method'], $subItem['model'])
                                 <li><a href="{!! route($subItem['route'], isset($subItem['route_data']) ? $subItem['route_data'] : []) !!}">{!!$subItem['display']!!}</a></li>
+                                @endcan
                             @endforeach
                         </ul>
                     </li>

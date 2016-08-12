@@ -13,10 +13,14 @@ return [
             [
                 'route' => 'larapress.pages.index',
                 'display' => 'All Pages',
+                'method' => 'index',
+                'model' =>  '\Larapress\Pages\Models\Page'
             ],
             [
                 'route' => 'larapress.pages.create',
                 'display' => 'Create Page',
+                'method' => 'create',
+                'model' =>  '\Larapress\Pages\Models\Page'
             ]
         ]
     ]

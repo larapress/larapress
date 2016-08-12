@@ -3,10 +3,7 @@ namespace Larapress\Admin\Policies;
 
 use App\User;
 
-class AdministratorPolicy
+class AdministratorPolicy extends LarapressPolicy
 {
-    public function create(User $user, $model)
-    {
-        return true;
-    }
+    protected  $configFile = 'larapress.authorization.administrators';
 }

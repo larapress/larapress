@@ -1,8 +1,6 @@
 <?php
 
 return [
-    'larapress_dashboard' => ['admin'],
-
     'larapress_administrators_index' => ['admin'],
     'larapress_administrators_create' => ['admin'],
     'larapress_administrators_store' => ['admin'],
