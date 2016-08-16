@@ -8,6 +8,6 @@ use Illuminate\Foundation\Auth\ResetsPasswords;
 class AdminController extends Controller
 {
     public function dashboard(){
-        return view('larapress::dashboard');
+        return view(config('larapress.settings.dashboard_view'));
     }
 }
