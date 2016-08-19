@@ -1,6 +1,7 @@
 <style lang="sass">
     .upload-container {
         display: inline-block;
+        position: relative;
 
     .btn-upload {
         overflow: hidden;
@@ -21,7 +22,7 @@
 <template>
     <div class="upload-container">
         <form action="/larapress/media/upload" method="post" enctype="multipart/form-data">
-            <div class="btn btn-primary btn-upload">
+            <div v-bind:class="classes" class="btn-upload">
                 <span v-show="uploading" class="fa fa-circle-o-notch fa-spin"></span> {{ uploadBtnText }}
                 <input type="file" v-on:change="onFileChange" v-bind:name="uploadContext"
                        class="btn btn-primary"/>
@@ -36,7 +37,8 @@
             uploadBtnText: {default: 'Upload Image'},           // text on the upload button
             uploadDirectory: {default: '/media'},               // directory to upload file to
             uploadFilename: {default: false},                   // name the file could be called
-            uploadContext: {}                                   // identifier to caller component
+            uploadContext: {},                                  // identifier to caller component
+            classes: {default: 'btn btn-primary'}
         },
         data: function () {
             return {
@@ -50,7 +52,7 @@
              */
             onFileChange: function (e) {
                 this.uploading = true;
-
+                console.log(this.uploading);
                 var files = e.target.files || e.dataTransfer.files;
 
                 if (!files.length) return;
@@ -59,7 +61,7 @@
                 formData.append("directory", this.uploadDirectory);
 
                 //if a filename was not selected, use original
-                if(this.uploadFilename == false) this.uploadFilename = files[0].name;
+                if (this.uploadFilename == false) this.uploadFilename = files[0].name;
 
                 formData.append("filename", this.uploadFilename);
 

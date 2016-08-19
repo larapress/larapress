@@ -216,6 +216,7 @@ var $export = require('./_export');
 $export($export.S + $export.F * !require('./_descriptors'), 'Object', {defineProperty: require('./_object-dp').f});
 },{"./_descriptors":8,"./_export":10,"./_object-dp":16}],20:[function(require,module,exports){
 // shim for using process in browser
+
 var process = module.exports = {};
 
 // cached from whatever global is present so that test runners that stub it
@@ -227,35 +228,21 @@ var cachedSetTimeout;
 var cachedClearTimeout;
 
 (function () {
-    try {
-        cachedSetTimeout = setTimeout;
-    } catch (e) {
-        cachedSetTimeout = function () {
-            throw new Error('setTimeout is not defined');
-        }
+  try {
+    cachedSetTimeout = setTimeout;
+  } catch (e) {
+    cachedSetTimeout = function () {
+      throw new Error('setTimeout is not defined');
     }
-    try {
-        cachedClearTimeout = clearTimeout;
-    } catch (e) {
-        cachedClearTimeout = function () {
-            throw new Error('clearTimeout is not defined');
-        }
+  }
+  try {
+    cachedClearTimeout = clearTimeout;
+  } catch (e) {
+    cachedClearTimeout = function () {
+      throw new Error('clearTimeout is not defined');
     }
+  }
 } ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        return setTimeout(fun, 0);
-    } else {
-        return cachedSetTimeout.call(null, fun, 0);
-    }
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        clearTimeout(marker);
-    } else {
-        cachedClearTimeout.call(null, marker);
-    }
-}
 var queue = [];
 var draining = false;
 var currentQueue;
@@ -280,7 +267,7 @@ function drainQueue() {
     if (draining) {
         return;
     }
-    var timeout = runTimeout(cleanUpNextTick);
+    var timeout = cachedSetTimeout(cleanUpNextTick);
     draining = true;
 
     var len = queue.length;
@@ -297,7 +284,7 @@ function drainQueue() {
     }
     currentQueue = null;
     draining = false;
-    runClearTimeout(timeout);
+    cachedClearTimeout(timeout);
 }
 
 process.nextTick = function (fun) {
@@ -309,7 +296,7 @@ process.nextTick = function (fun) {
     }
     queue.push(new Item(fun, args));
     if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
+        cachedSetTimeout(drainQueue, 0);
     }
 };
 
@@ -12146,6 +12133,10 @@ var _postCategories = require('./vue_components/postCategories.vue');
 
 var _postCategories2 = _interopRequireDefault(_postCategories);
 
+var _uploadButton = require('./vue_components/uploadButton.vue');
+
+var _uploadButton2 = _interopRequireDefault(_uploadButton);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Vue = require('vue');
@@ -12162,7 +12153,8 @@ new Vue({
         FeatureImage: _featureImage2.default,
         ImageAttachments: _imageAttachments2.default,
         ConfirmModal: _confirmModal2.default,
-        PostCategories: _postCategories2.default
+        PostCategories: _postCategories2.default,
+        UploadButton: _uploadButton2.default
     },
     ready: function ready() {
         console.log(Vue.http.headers.common['X-CSRF-TOKEN']);
@@ -12209,7 +12201,7 @@ new Vue({
     }
 });
 
-},{"./vue_components/confirmModal.vue":26,"./vue_components/featureImage.vue":28,"./vue_components/imageAttachments.vue":31,"./vue_components/mediaManager.vue":32,"./vue_components/postCategories.vue":33,"vue":23,"vue-resource":22}],26:[function(require,module,exports){
+},{"./vue_components/confirmModal.vue":26,"./vue_components/featureImage.vue":28,"./vue_components/imageAttachments.vue":31,"./vue_components/mediaManager.vue":32,"./vue_components/postCategories.vue":33,"./vue_components/uploadButton.vue":34,"vue":23,"vue-resource":22}],26:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -12263,9 +12255,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-361f6d29", module.exports)
+    hotAPI.createRecord("_v-d889446a", module.exports)
   } else {
-    hotAPI.update("_v-361f6d29", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-d889446a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":23,"vue-hot-reload-api":21}],27:[function(require,module,exports){
@@ -12385,9 +12377,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-7d9d6bc1", module.exports)
+    hotAPI.createRecord("_v-f023e342", module.exports)
   } else {
-    hotAPI.update("_v-7d9d6bc1", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-f023e342", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":23,"vue-hot-reload-api":21}],28:[function(require,module,exports){
@@ -12469,9 +12461,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-20f4453e", module.exports)
+    hotAPI.createRecord("_v-4d21ce03", module.exports)
   } else {
-    hotAPI.update("_v-20f4453e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-4d21ce03", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./uploadButton.vue":34,"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}],29:[function(require,module,exports){
@@ -12547,9 +12539,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-7cbd77bc", module.exports)
+    hotAPI.createRecord("_v-28039444", module.exports)
   } else {
-    hotAPI.update("_v-7cbd77bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-28039444", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/helpers/defineProperty":2,"vue":23,"vue-hot-reload-api":21}],30:[function(require,module,exports){
@@ -12660,9 +12652,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-204ff8b2", module.exports)
+    hotAPI.createRecord("_v-f390a660", module.exports)
   } else {
-    hotAPI.update("_v-204ff8b2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-f390a660", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}],31:[function(require,module,exports){
@@ -12766,9 +12758,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-254a829e", module.exports)
+    hotAPI.createRecord("_v-44698e53", module.exports)
   } else {
-    hotAPI.update("_v-254a829e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-44698e53", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./imageAttachment.vue":30,"vue":23,"vue-hot-reload-api":21}],32:[function(require,module,exports){
@@ -12875,9 +12867,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5a6f5285", module.exports)
+    hotAPI.createRecord("_v-8fe979b2", module.exports)
   } else {
-    hotAPI.update("_v-5a6f5285", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-8fe979b2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./directory.vue":27,"./filesComponent.vue":29,"./uploadComponent.vue":35,"vue":23,"vue-hot-reload-api":21}],33:[function(require,module,exports){
@@ -12917,14 +12909,14 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-af43b890", module.exports)
+    hotAPI.createRecord("_v-0ec073da", module.exports)
   } else {
-    hotAPI.update("_v-af43b890", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0ec073da", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":23,"vue-hot-reload-api":21}],34:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
-var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.upload-container {\n  display: inline-block; }\n  /* line 5, stdin */\n  .upload-container .btn-upload {\n    overflow: hidden; }\n  /* line 9, stdin */\n  .upload-container input[type=\"file\"] {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    opacity: 0;\n    top: 0;\n    left: 0; }\n")
+var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.upload-container {\n  display: inline-block;\n  position: relative; }\n  /* line 6, stdin */\n  .upload-container .btn-upload {\n    overflow: hidden; }\n  /* line 10, stdin */\n  .upload-container input[type=\"file\"] {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    opacity: 0;\n    top: 0;\n    left: 0; }\n")
 'use strict';
 
 module.exports = {
@@ -12932,7 +12924,8 @@ module.exports = {
         uploadBtnText: { default: 'Upload Image' }, // text on the upload button
         uploadDirectory: { default: '/media' }, // directory to upload file to
         uploadFilename: { default: false }, // name the file could be called
-        uploadContext: {} // identifier to caller component
+        uploadContext: {}, // identifier to caller component
+        classes: { default: 'btn btn-primary' }
     },
     data: function data() {
         return {
@@ -12946,7 +12939,7 @@ module.exports = {
          */
         onFileChange: function onFileChange(e) {
             this.uploading = true;
-
+            console.log(this.uploading);
             var files = e.target.files || e.dataTransfer.files;
 
             if (!files.length) return;
@@ -12972,19 +12965,19 @@ module.exports = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"upload-container\">\n    <form action=\"/larapress/media/upload\" method=\"post\" enctype=\"multipart/form-data\">\n        <div class=\"btn btn-primary btn-upload\">\n            <span v-show=\"uploading\" class=\"fa fa-circle-o-notch fa-spin\"></span> {{ uploadBtnText }}\n            <input type=\"file\" v-on:change=\"onFileChange\" v-bind:name=\"uploadContext\" class=\"btn btn-primary\">\n        </div>\n    </form>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"upload-container\">\n    <form action=\"/larapress/media/upload\" method=\"post\" enctype=\"multipart/form-data\">\n        <div v-bind:class=\"classes\" class=\"btn-upload\">\n            <span v-show=\"uploading\" class=\"fa fa-circle-o-notch fa-spin\"></span> {{ uploadBtnText }}\n            <input type=\"file\" v-on:change=\"onFileChange\" v-bind:name=\"uploadContext\" class=\"btn btn-primary\">\n        </div>\n    </form>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.dispose(function () {
-    __vueify_insert__.cache["/* line 2, stdin */\n.upload-container {\n  display: inline-block; }\n  /* line 5, stdin */\n  .upload-container .btn-upload {\n    overflow: hidden; }\n  /* line 9, stdin */\n  .upload-container input[type=\"file\"] {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    opacity: 0;\n    top: 0;\n    left: 0; }\n"] = false
+    __vueify_insert__.cache["/* line 2, stdin */\n.upload-container {\n  display: inline-block;\n  position: relative; }\n  /* line 6, stdin */\n  .upload-container .btn-upload {\n    overflow: hidden; }\n  /* line 10, stdin */\n  .upload-container input[type=\"file\"] {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    opacity: 0;\n    top: 0;\n    left: 0; }\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-39321aef", module.exports)
+    hotAPI.createRecord("_v-d263e8de", module.exports)
   } else {
-    hotAPI.update("_v-39321aef", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-d263e8de", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}],35:[function(require,module,exports){
@@ -13044,9 +13037,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1a6970d0", module.exports)
+    hotAPI.createRecord("_v-ff5db624", module.exports)
   } else {
-    hotAPI.update("_v-1a6970d0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-ff5db624", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}]},{},[25]);
