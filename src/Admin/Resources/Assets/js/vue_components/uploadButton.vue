@@ -38,7 +38,11 @@
             uploadDirectory: {default: '/media'},               // directory to upload file to
             uploadFilename: {default: false},                   // name the file could be called
             uploadContext: {},                                  // identifier to caller component
-            classes: {default: 'btn btn-primary'}
+            modelName: {default: null},                         // model to be updated if required
+            modelId: {default: null},                           // model id
+            modelField: {default: null},                        // model field to update
+            modelValue: {default: null},                        // model value
+            classes: {default: 'btn btn-primary'}               // css classes
         },
         data: function () {
             return {
@@ -67,6 +71,15 @@
 
                 formData.append("file", files[0]);
 
+                if(this.modelName){
+                    formData.append("model", JSON.stringify({
+                        modelName: this.modelName,
+                        modelId: this.modelId,
+                        modelField: this.modelField,
+                        modelValue: this.modelValue
+                    }));
+                }
+
                 this.$http.post('/larapress/media/upload', formData)
                         .then(function (response) {
                             this.$dispatch('uploadSubmitted',
@@ -75,6 +88,7 @@
                                         value: this.uploadDirectory + '/' + this.uploadFilename
                                     }
                             );
+                            console.log(response);
                             this.$set('uploading', false);
                         });
             }

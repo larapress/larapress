@@ -67,7 +67,19 @@ class MediaController extends Controller
             $result->active = false;
 
             $request->file('file')->move($path, $filename);
-            
+
+            // if a model has been assigne dto be updated
+            if ($request->has('model')) {
+                $modelData = json_decode($request->get('model'));
+
+                $model = $modelData->modelName::updateOrCreate(['id' => $modelData->modelId],
+                    [
+                       $modelData->modelField => $modelData->modelValue
+                    ]);
+
+                $result->model = $model;
+            }
+
             return response()->json($result);
         }
 
@@ -104,7 +116,8 @@ class MediaController extends Controller
      * Returns an array of all directories
      * @return array
      */
-    protected function createFullDirectoryList(Request $request){
+    protected function createFullDirectoryList(Request $request)
+    {
         $rootDirectory = $request->get('rootDirectory');
 
         $result = new \stdClass();
@@ -149,7 +162,7 @@ class MediaController extends Controller
 
         $folder->hasSubDirectories = count($folder->sub_directories) > 0;
 
-      return $folder;
+        return $folder;
     }
 
     private function getStorageRoot()

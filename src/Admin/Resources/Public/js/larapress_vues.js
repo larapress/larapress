@@ -1,6 +1,8 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/json/stringify"), __esModule: true };
+},{"core-js/library/fn/json/stringify":4}],2:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/define-property"), __esModule: true };
-},{"core-js/library/fn/object/define-property":3}],2:[function(require,module,exports){
+},{"core-js/library/fn/object/define-property":5}],3:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -25,27 +27,33 @@ exports.default = function (obj, key, value) {
 
   return obj;
 };
-},{"../core-js/object/define-property":1}],3:[function(require,module,exports){
+},{"../core-js/object/define-property":2}],4:[function(require,module,exports){
+var core  = require('../../modules/_core')
+  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
+module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
+  return $JSON.stringify.apply($JSON, arguments);
+};
+},{"../../modules/_core":8}],5:[function(require,module,exports){
 require('../../modules/es6.object.define-property');
 var $Object = require('../../modules/_core').Object;
 module.exports = function defineProperty(it, key, desc){
   return $Object.defineProperty(it, key, desc);
 };
-},{"../../modules/_core":6,"../../modules/es6.object.define-property":19}],4:[function(require,module,exports){
+},{"../../modules/_core":8,"../../modules/es6.object.define-property":21}],6:[function(require,module,exports){
 module.exports = function(it){
   if(typeof it != 'function')throw TypeError(it + ' is not a function!');
   return it;
 };
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var isObject = require('./_is-object');
 module.exports = function(it){
   if(!isObject(it))throw TypeError(it + ' is not an object!');
   return it;
 };
-},{"./_is-object":15}],6:[function(require,module,exports){
+},{"./_is-object":17}],8:[function(require,module,exports){
 var core = module.exports = {version: '2.4.0'};
 if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 // optional / simple context binding
 var aFunction = require('./_a-function');
 module.exports = function(fn, that, length){
@@ -66,12 +74,12 @@ module.exports = function(fn, that, length){
     return fn.apply(that, arguments);
   };
 };
-},{"./_a-function":4}],8:[function(require,module,exports){
+},{"./_a-function":6}],10:[function(require,module,exports){
 // Thank's IE8 for his funny defineProperty
 module.exports = !require('./_fails')(function(){
   return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
 });
-},{"./_fails":11}],9:[function(require,module,exports){
+},{"./_fails":13}],11:[function(require,module,exports){
 var isObject = require('./_is-object')
   , document = require('./_global').document
   // in old IE typeof document.createElement is 'object'
@@ -79,7 +87,7 @@ var isObject = require('./_is-object')
 module.exports = function(it){
   return is ? document.createElement(it) : {};
 };
-},{"./_global":12,"./_is-object":15}],10:[function(require,module,exports){
+},{"./_global":14,"./_is-object":17}],12:[function(require,module,exports){
 var global    = require('./_global')
   , core      = require('./_core')
   , ctx       = require('./_ctx')
@@ -141,7 +149,7 @@ $export.W = 32;  // wrap
 $export.U = 64;  // safe
 $export.R = 128; // real proto method for `library` 
 module.exports = $export;
-},{"./_core":6,"./_ctx":7,"./_global":12,"./_hide":13}],11:[function(require,module,exports){
+},{"./_core":8,"./_ctx":9,"./_global":14,"./_hide":15}],13:[function(require,module,exports){
 module.exports = function(exec){
   try {
     return !!exec();
@@ -149,12 +157,12 @@ module.exports = function(exec){
     return true;
   }
 };
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
 var global = module.exports = typeof window != 'undefined' && window.Math == Math
   ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
 if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
-},{}],13:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 var dP         = require('./_object-dp')
   , createDesc = require('./_property-desc');
 module.exports = require('./_descriptors') ? function(object, key, value){
@@ -163,15 +171,15 @@ module.exports = require('./_descriptors') ? function(object, key, value){
   object[key] = value;
   return object;
 };
-},{"./_descriptors":8,"./_object-dp":16,"./_property-desc":17}],14:[function(require,module,exports){
+},{"./_descriptors":10,"./_object-dp":18,"./_property-desc":19}],16:[function(require,module,exports){
 module.exports = !require('./_descriptors') && !require('./_fails')(function(){
   return Object.defineProperty(require('./_dom-create')('div'), 'a', {get: function(){ return 7; }}).a != 7;
 });
-},{"./_descriptors":8,"./_dom-create":9,"./_fails":11}],15:[function(require,module,exports){
+},{"./_descriptors":10,"./_dom-create":11,"./_fails":13}],17:[function(require,module,exports){
 module.exports = function(it){
   return typeof it === 'object' ? it !== null : typeof it === 'function';
 };
-},{}],16:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var anObject       = require('./_an-object')
   , IE8_DOM_DEFINE = require('./_ie8-dom-define')
   , toPrimitive    = require('./_to-primitive')
@@ -188,7 +196,7 @@ exports.f = require('./_descriptors') ? Object.defineProperty : function defineP
   if('value' in Attributes)O[P] = Attributes.value;
   return O;
 };
-},{"./_an-object":5,"./_descriptors":8,"./_ie8-dom-define":14,"./_to-primitive":18}],17:[function(require,module,exports){
+},{"./_an-object":7,"./_descriptors":10,"./_ie8-dom-define":16,"./_to-primitive":20}],19:[function(require,module,exports){
 module.exports = function(bitmap, value){
   return {
     enumerable  : !(bitmap & 1),
@@ -197,7 +205,7 @@ module.exports = function(bitmap, value){
     value       : value
   };
 };
-},{}],18:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 // 7.1.1 ToPrimitive(input [, PreferredType])
 var isObject = require('./_is-object');
 // instead of the ES6 spec version, we didn't implement @@toPrimitive case
@@ -210,11 +218,11 @@ module.exports = function(it, S){
   if(!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
   throw TypeError("Can't convert object to primitive value");
 };
-},{"./_is-object":15}],19:[function(require,module,exports){
+},{"./_is-object":17}],21:[function(require,module,exports){
 var $export = require('./_export');
 // 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
 $export($export.S + $export.F * !require('./_descriptors'), 'Object', {defineProperty: require('./_object-dp').f});
-},{"./_descriptors":8,"./_export":10,"./_object-dp":16}],20:[function(require,module,exports){
+},{"./_descriptors":10,"./_export":12,"./_object-dp":18}],22:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -335,7 +343,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],21:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 var Vue // late bind
 var map = Object.create(null)
 var shimmed = false
@@ -636,7 +644,7 @@ function format (id) {
   return match ? match[0] : id
 }
 
-},{}],22:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 /*!
  * vue-resource v0.7.4
  * https://github.com/vuejs/vue-resource
@@ -2013,7 +2021,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 }
 
 module.exports = plugin;
-},{}],23:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v1.0.26
@@ -12090,7 +12098,7 @@ setTimeout(function () {
 
 module.exports = Vue;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":20}],24:[function(require,module,exports){
+},{"_process":22}],26:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 exports.insert = function (css) {
@@ -12110,7 +12118,7 @@ exports.insert = function (css) {
   return elem
 }
 
-},{}],25:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 'use strict';
 
 var _mediaManager = require('./vue_components/mediaManager.vue');
@@ -12201,7 +12209,7 @@ new Vue({
     }
 });
 
-},{"./vue_components/confirmModal.vue":26,"./vue_components/featureImage.vue":28,"./vue_components/imageAttachments.vue":31,"./vue_components/mediaManager.vue":32,"./vue_components/postCategories.vue":33,"./vue_components/uploadButton.vue":34,"vue":23,"vue-resource":22}],26:[function(require,module,exports){
+},{"./vue_components/confirmModal.vue":28,"./vue_components/featureImage.vue":30,"./vue_components/imageAttachments.vue":33,"./vue_components/mediaManager.vue":34,"./vue_components/postCategories.vue":35,"./vue_components/uploadButton.vue":36,"vue":25,"vue-resource":24}],28:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -12260,7 +12268,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-d889446a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":23,"vue-hot-reload-api":21}],27:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":23}],29:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -12382,7 +12390,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-f023e342", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":23,"vue-hot-reload-api":21}],28:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":23}],30:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 4, stdin */\n.featureImage img {\n  width: 100%;\n  float: left;\n  margin-bottom: 1rem; }\n")
 'use strict';
@@ -12466,7 +12474,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4d21ce03", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./uploadButton.vue":34,"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}],29:[function(require,module,exports){
+},{"./uploadButton.vue":36,"vue":25,"vue-hot-reload-api":23,"vueify/lib/insert-css":26}],31:[function(require,module,exports){
 'use strict';
 
 var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
@@ -12544,7 +12552,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-28039444", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/helpers/defineProperty":2,"vue":23,"vue-hot-reload-api":21}],30:[function(require,module,exports){
+},{"babel-runtime/helpers/defineProperty":3,"vue":25,"vue-hot-reload-api":23}],32:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 5, stdin */\n.attachment.list {\n  width: 100%;\n  float: left;\n  border: 1px solid #eeeeee;\n  padding: 1rem;\n  margin-bottom: 0.7rem; }\n  /* line 12, stdin */\n  .attachment.list .image {\n    float: left;\n    padding-right: 1rem;\n    width: 20%; }\n  /* line 18, stdin */\n  .attachment.list .form {\n    float: right;\n    padding-left: 1rem;\n    width: 80%; }\n\n/* line 26, stdin */\n.attachment.grid {\n  float: left;\n  width: 19%;\n  height: 7rem;\n  margin: 0.5%;\n  border: 3px solid #eeeeee;\n  overflow: hidden;\n  padding: 0; }\n  /* line 35, stdin */\n  .attachment.grid .image, .attachment.grid .box-body {\n    user-drag: none;\n    user-select: none;\n    -moz-user-select: none;\n    -webkit-user-drag: none;\n    -webkit-user-select: none;\n    -ms-user-select: none;\n    margin: 0;\n    padding: 0; }\n  /* line 46, stdin */\n  .attachment.grid .form {\n    display: none; }\n")
 'use strict';
@@ -12657,7 +12665,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-f390a660", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}],31:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":23,"vueify/lib/insert-css":26}],33:[function(require,module,exports){
 'use strict';
 
 var _imageAttachment = require('./imageAttachment.vue');
@@ -12763,7 +12771,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-44698e53", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./imageAttachment.vue":30,"vue":23,"vue-hot-reload-api":21}],32:[function(require,module,exports){
+},{"./imageAttachment.vue":32,"vue":25,"vue-hot-reload-api":23}],34:[function(require,module,exports){
 'use strict';
 
 var _directory = require('./directory.vue');
@@ -12872,7 +12880,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-8fe979b2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./directory.vue":27,"./filesComponent.vue":29,"./uploadComponent.vue":35,"vue":23,"vue-hot-reload-api":21}],33:[function(require,module,exports){
+},{"./directory.vue":29,"./filesComponent.vue":31,"./uploadComponent.vue":37,"vue":25,"vue-hot-reload-api":23}],35:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -12914,10 +12922,16 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0ec073da", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":23,"vue-hot-reload-api":21}],34:[function(require,module,exports){
+},{"vue":25,"vue-hot-reload-api":23}],36:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.upload-container {\n  display: inline-block;\n  position: relative; }\n  /* line 6, stdin */\n  .upload-container .btn-upload {\n    overflow: hidden; }\n  /* line 10, stdin */\n  .upload-container input[type=\"file\"] {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    opacity: 0;\n    top: 0;\n    left: 0; }\n")
 'use strict';
+
+var _stringify = require('babel-runtime/core-js/json/stringify');
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 module.exports = {
     props: {
@@ -12925,7 +12939,11 @@ module.exports = {
         uploadDirectory: { default: '/media' }, // directory to upload file to
         uploadFilename: { default: false }, // name the file could be called
         uploadContext: {}, // identifier to caller component
-        classes: { default: 'btn btn-primary' }
+        modelName: { default: null }, // model to be updated if required
+        modelId: { default: null }, // model id
+        modelField: { default: null }, // model field to update
+        modelValue: { default: null }, // model value
+        classes: { default: 'btn btn-primary' } // css classes
     },
     data: function data() {
         return {
@@ -12954,11 +12972,21 @@ module.exports = {
 
             formData.append("file", files[0]);
 
+            if (this.modelName) {
+                formData.append("model", (0, _stringify2.default)({
+                    modelName: this.modelName,
+                    modelId: this.modelId,
+                    modelField: this.modelField,
+                    modelValue: this.modelValue
+                }));
+            }
+
             this.$http.post('/larapress/media/upload', formData).then(function (response) {
                 this.$dispatch('uploadSubmitted', {
                     context: this.uploadContext,
                     value: this.uploadDirectory + '/' + this.uploadFilename
                 });
+                console.log(response);
                 this.$set('uploading', false);
             });
         }
@@ -12980,7 +13008,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-d263e8de", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}],35:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":1,"vue":25,"vue-hot-reload-api":23,"vueify/lib/insert-css":26}],37:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.fileThumb {\n  border-color: #aaaaaa !important; }\n")
 "use strict";
@@ -13042,6 +13070,6 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ff5db624", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":23,"vue-hot-reload-api":21,"vueify/lib/insert-css":24}]},{},[25]);
+},{"vue":25,"vue-hot-reload-api":23,"vueify/lib/insert-css":26}]},{},[27]);
 
 //# sourceMappingURL=larapress_vues.js.map
