@@ -7,7 +7,7 @@
                 <img src="/larapress/images/user.jpg" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-                <p>User Name</p>
+                <p><?php if(\Auth::check()) echo \Auth::user()->name ?></p>
             </div>
         </div>
         <!-- /.user-panel -->
@@ -27,9 +27,11 @@
 
                 @if(count($item['sub_menu']) == 0)
 
+                    @can($item['method'], $item['model'])
                     <li>
                         <a href="{!! route($item['route'], isset($item['route_data']) ? $item['route_data'] : []) !!}">{!!$item['display']!!}</a>
                     </li>
+                    @endcan
 
                 @else
 
@@ -40,7 +42,9 @@
                         </a>
                         <ul class="treeview-menu">
                             @foreach($item['sub_menu'] as $subItem)
+                                @can($subItem['method'], $subItem['model'])
                                 <li><a href="{!! route($subItem['route'], isset($subItem['route_data']) ? $subItem['route_data'] : []) !!}">{!!$subItem['display']!!}</a></li>
+                                @endcan
                             @endforeach
                         </ul>
                     </li>

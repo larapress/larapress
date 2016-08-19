@@ -2,8 +2,11 @@
 
 namespace Larapress\Admin\Providers;
 
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
+use Larapress\Admin\Models\Administrator;
+use Larapress\Admin\Policies\AdministratorPolicy;
 
 class LarapressAdminServiceProvider extends ServiceProvider
 {
@@ -12,7 +15,7 @@ class LarapressAdminServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(DispatcherContract $events)
+    public function boot(DispatcherContract $events, Gate $gate)
     {
         $this->publishes([
             realpath(__DIR__ . '/../Database/Migrations') => $this->app->databasePath() . '/migrations',
@@ -45,6 +48,8 @@ class LarapressAdminServiceProvider extends ServiceProvider
         parent::boot($events);
 
         $events->listen(\Larapress\Pages\Events\PageWasSaved::class, \Larapress\Pages\Listeners\TestListener::class);
+
+        $gate->policy(Administrator::class, AdministratorPolicy::class);
     }
 
     /**

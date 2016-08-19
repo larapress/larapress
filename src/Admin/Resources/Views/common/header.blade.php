@@ -32,6 +32,9 @@
                                 <small>Member since Nov. 2012</small>
                             </p>
                         </li>
+                        <li>
+                            <a href="{!! route('larapress.logout') !!}">Log Out</a>
+                        </li>
                     </ul>
                 </li>
             </ul>

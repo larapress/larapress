@@ -13,24 +13,22 @@ class LarapressAuth
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Closure $next
-     * @param  string|null $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next)
     {
-        return $next($request);
-
-        if (!Auth::check()) {
-            return redirect()->guest('login');
+        if (!\Auth::check()) {
+            return redirect()->route('larapress.login');
         }
 
         try {
-            Administrator::where('user_id', \Auth::user()->id)
+            $administrator = Administrator::where('user_id', \Auth::user()->id)
                 ->where('status', 'active')
                 ->firstOrFail();
-
         } catch (\Exception $e) {
-            return redirect()->guest('login');
+            \Auth::logout();
+
+            return redirect()->route('larapress.login');
         }
 
         return $next($request);
