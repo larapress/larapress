@@ -2,6 +2,7 @@
 
 namespace Larapress\Admin\Jobs;
 
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Larapress\Admin\Events\AdministratorWasUpdated;
 use Larapress\Admin\Events\test;
 use Larapress\Admin\Models\Administrator;
@@ -14,19 +15,23 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UpdateAdministrator extends Job implements ShouldQueue
 {
-    use InteractsWithQueue, SerializesModels;
+    use InteractsWithQueue, SerializesModels, DispatchesJobs;
 
 
     protected $id;
+
+    protected $input;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($id)
+    public function __construct($id, $input)
     {
         $this->id = $id;
+
+        $this->input = $input;
     }
 
     /**
@@ -34,20 +39,20 @@ class UpdateAdministrator extends Job implements ShouldQueue
      *
      * @return void
      */
-    public function handle(Request $request)
+    public function handle()
     {
         $administrator = Administrator::findOrFail($this->id);
 
         $administrator->update([
-            'role' => $request->role,
-            'status' => $request->status
+            'role' => $this->input["role"],
+            'status' => $this->input["status"]
         ]);
 
         $user = User::findOrFail($administrator->user_id);
 
         $user->update([
-            'name' => $request->name,
-            'email' => $request->email
+            'name' => $this->input["name"],
+            'email' => $this->input["email"]
         ]);
 
         \Session::flash('success', 'Administrator has been updated.');

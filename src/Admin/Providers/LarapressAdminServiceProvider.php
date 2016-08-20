@@ -47,9 +47,14 @@ class LarapressAdminServiceProvider extends ServiceProvider
 
         parent::boot($events);
 
+        //events
         $events->listen(\Larapress\Pages\Events\PageWasSaved::class, \Larapress\Pages\Listeners\TestListener::class);
 
+        //roles
         $gate->policy(Administrator::class, AdministratorPolicy::class);
+
+        //console register
+        $this->commands([\Larapress\Admin\Console\CreateAdministrator::class]);
     }
 
     /**

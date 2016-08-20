@@ -16,14 +16,16 @@ class SaveNewAdministrator extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
+    protected $input;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($input)
     {
-        //
+        $this->input = $input;
     }
 
     /**
@@ -31,19 +33,18 @@ class SaveNewAdministrator extends Job implements ShouldQueue
      *
      * @return void
      */
-    public function handle(Request $request)
+    public function handle()
     {
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => \Hash::make($request->password)
-
+            'name' => $this->input["name"],
+            'email' => $this->input["email"],
+            'password' => \Hash::make($this->input["password"])
         ]);
 
         $administrator = Administrator::create([
             'user_id' => $user->id,
-            'role' => 'admin',
-            'status' => 'active'
+            'role' => $this->input["role"],
+            'status' => isset($this->input["status"]) ? $this->input["status"] : true
         ]);
 
         \Session::flash('success', 'Administrator has been created.');

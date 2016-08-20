@@ -28,10 +28,17 @@ class AdministratorsController extends Controller
     public function store(Request $request){
         $this->validate($request, config('larapress.administrators.create_form'));
 
-        $this->dispatch(new SaveNewAdministrator($request));
+        $this->dispatch(new SaveNewAdministrator([
+            'name' => $request->get('name'),
+            'email' => $request->get('email'),
+            'password' => $request->get('password'),
+            'role' => 'admin',
+            'active' => 'true'
+        ]));
 
         return redirect()->route('larapress.administrators.index');
     }
+
 
     public function edit($id){
         $administrator = Administrator::findOrFail($id);
@@ -39,8 +46,15 @@ class AdministratorsController extends Controller
         return view('larapress::administrators.edit')->with('administrator', $administrator);
     }
 
+
     public function update(Request $request, $id){
-        $this->dispatch(new UpdateAdministrator($id));
+        $this->dispatch(new UpdateAdministrator($id, [
+            'name' => $request->get('name'),
+            'email' => $request->get('email'),
+            'password' => $request->get('password'),
+            'role' => 'admin',
+            'active' => 'true'
+        ]));
 
         return redirect()->route('larapress.administrators.index');
     }
