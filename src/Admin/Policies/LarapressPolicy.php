@@ -20,7 +20,7 @@ abstract class LarapressPolicy
      * @param $model
      */
     public function before(User $user, $model){
-        $this->checkRouteAgainstConfig($this->configFile, $user->administrator->role);
+        return $this->checkRouteAgainstConfig($this->configFile, $user->administrator->role);
     }
 
     /**
