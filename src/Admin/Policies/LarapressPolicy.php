@@ -19,29 +19,28 @@ abstract class LarapressPolicy
      * @param User $user
      * @param $model
      */
-    public function before(User $user, $model){
-        return $this->checkRouteAgainstConfig($this->configFile, $user->administrator->role);
+    public function before(User $user, $capability){
+        return $this->checkRouteAgainstConfig($this->configFile, $user->administrator->role, $capability);
     }
 
     /**
      * Checks to see if route is allowed in a given role
      * @param $file
      */
-    protected function checkRouteAgainstConfig($file, $role){
-        $allowedRoles = $this->getArrayOfRolesFromConfig($file, $this->request->route()->getName());
+    protected function checkRouteAgainstConfig($file, $role, $capability){
+        $allowedRoles = $this->getArrayOfRolesFromConfig($file, $capability);
 
         return in_array($role, $allowedRoles);
     }
 
     /**
-     * Retreives array of roles from config file, based on route name.
-     * Route names '.' is changes to '_' to allow for Laravels config format
+     * Retreives array of roles from config file, based on capability.
      * @param $file
      * @param $route
      * @return array
      */
-    protected function getArrayOfRolesFromConfig($file, $route){
-        $roles =  config($file . '.'. str_replace('.', '_', $route));
+    protected function getArrayOfRolesFromConfig($file, $capability){
+        $roles =  config($file . '.'. $capability);
 
         return ($roles != null) ? $roles : [];
     }

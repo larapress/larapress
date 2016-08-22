@@ -12,6 +12,8 @@ use Larapress\Admin\Jobs\SaveNewAdministrator;
 class AdministratorsController extends Controller
 {
     public function index(){
+        $this->authorize('index', Administrator::class);
+
         $administrators = Administrator::where('status', '!=', 'trashed')->paginate(30);
 
         return view('larapress::administrators.index')->with('administrators', $administrators);
@@ -24,6 +26,8 @@ class AdministratorsController extends Controller
     }
 
     public function store(Request $request){
+        $this->authorize('store', Administrator::class);
+
         $this->validate($request, config('larapress.administrators.create_form'));
 
         $this->dispatch(new SaveNewAdministrator([
@@ -39,6 +43,8 @@ class AdministratorsController extends Controller
 
 
     public function edit($id){
+        $this->authorize('edit', Administrator::class);
+
         $administrator = Administrator::findOrFail($id);
 
         return view('larapress::administrators.edit')->with('administrator', $administrator);
@@ -46,6 +52,8 @@ class AdministratorsController extends Controller
 
 
     public function update(Request $request, $id){
+        $this->authorize('update', Administrator::class);
+
         $this->dispatch(new UpdateAdministrator($id, [
             'name' => $request->get('name'),
             'email' => $request->get('email'),
