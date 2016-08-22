@@ -2,8 +2,11 @@
 
 namespace Larapress\Pages\Providers;
 
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
+use Larapress\Pages\Policies\PagePolicy;
+use Larapress\Pages\Models\Page;
 
 class LarapressPagesServiceProvider extends ServiceProvider
 {
@@ -12,7 +15,7 @@ class LarapressPagesServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(DispatcherContract $events)
+    public function boot(DispatcherContract $events, Gate $gate)
     {
         $this->publishes([
             realpath(__DIR__ . '/../Database/Migrations') => $this->app->databasePath() . '/migrations',
@@ -31,6 +34,10 @@ class LarapressPagesServiceProvider extends ServiceProvider
         parent::boot($events);
 
         $events->listen(\Larapress\Pages\Events\PageWasSaved::class, \Larapress\Pages\Listeners\TestListener::class);
+
+        //roles
+        $gate->policy(Page::class, PagePolicy::class);
+
     }
 
     /**
