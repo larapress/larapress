@@ -23,7 +23,7 @@
 
     @include('larapress::common.sidebar')
 
-    <div class="content-wrapper">
+    <div id="admin-area" class="content-wrapper">
         <div class="col-xs-12">
             @if(\Session::has('success'))
                 <div class="alert alert-success">
@@ -59,6 +59,9 @@
 
 <script src="/larapress//js/larapress_vues.js"></script>
 <script src="/larapress//js/larapress_core.js"></script>
+
+<!-- tempoary -->
+<script src="/js/admin.js"></script>
 
 
 @yield('scripts')

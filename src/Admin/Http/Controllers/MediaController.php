@@ -2,6 +2,7 @@
 
 namespace Larapress\Admin\Http\Controllers;
 
+use App\Film;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -72,7 +73,9 @@ class MediaController extends Controller
             if ($request->has('model')) {
                 $modelData = json_decode($request->get('model'));
 
-                $model = $modelData->modelName::updateOrCreate(['id' => $modelData->modelId],
+                $model = new $modelData->modelName;
+
+                $model::updateOrCreate(['id' => $modelData->modelId],
                     [
                        $modelData->modelField => $modelData->modelValue
                     ]);

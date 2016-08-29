@@ -1,5 +1,4 @@
 <?php
 
 return [
-    'dashboard_view' => 'larapress::dashboard'
-];
+    'dashboard_view' => 'larapress::dashboard'];
