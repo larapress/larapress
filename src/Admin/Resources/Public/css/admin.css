@@ -12404,7 +12404,8 @@ table.text-center, table.text-center td, table.text-center th {
 
 .content-wrapper {
   float: left;
-  width: 80%; }
+  width: 80%;
+  min-height: 60rem; }
 
 .modal-lg {
   width: 80%; }
