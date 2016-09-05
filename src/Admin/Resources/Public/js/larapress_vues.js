@@ -12481,6 +12481,8 @@ var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
 
 var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 
+var _events;
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 module.exports = {
@@ -12493,7 +12495,7 @@ module.exports = {
             loading: false
         };
     },
-    events: (0, _defineProperty3.default)({
+    events: (_events = {
         changeOfDirectory: function changeOfDirectory(directory) {
             this.refreshFiles(directory);
         },
@@ -12503,10 +12505,12 @@ module.exports = {
         changeToShowFiles: function changeToShowFiles() {
             this.display = true;
         }
-    }, 'changeOfDirectory', function changeOfDirectory(directory) {
+    }, (0, _defineProperty3.default)(_events, 'changeOfDirectory', function changeOfDirectory(directory) {
         this.loading = true;
         this.refreshFiles(directory);
-    }),
+    }), (0, _defineProperty3.default)(_events, 'fileUploaded', function fileUploaded(fileData) {
+        this.files.unshift(fileData);
+    }), _events),
     methods: {
         /**
          * Reload all the information about a directory
@@ -12782,9 +12786,9 @@ var _filesComponent = require('./filesComponent.vue');
 
 var _filesComponent2 = _interopRequireDefault(_filesComponent);
 
-var _uploadComponent = require('./uploadComponent.vue');
+var _uploadButton = require('./uploadButton.vue');
 
-var _uploadComponent2 = _interopRequireDefault(_uploadComponent);
+var _uploadButton2 = _interopRequireDefault(_uploadButton);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -12792,12 +12796,12 @@ module.exports = {
     components: {
         DirectoriesComponent: _directory2.default,
         FilesComponent: _filesComponent2.default,
-        UploadComponent: _uploadComponent2.default
+        UploadButton: _uploadButton2.default
     },
 
     data: function data() {
         return {
-            working_directory: 'media', // the current selected directory
+            working_directory: '/media', // the current selected directory
             selected_file: '', // the file that has been selected
             working_context: '', // this will be to identify which el/template called media manager to send back result
             showing_files: true, // default to show files not upload
@@ -12833,23 +12837,17 @@ module.exports = {
             this.selected_file = response.selectedFile;
 
             if (response.proceed) this.mediaSubmit();
+        },
+        /**
+         * When a file is uploaded
+         */
+        uploadSubmitted: function uploadSubmitted(response) {
+            if (response.context == 'mediaManager') {
+                this.$broadcast('fileUploaded', response.data);
+            }
         }
     },
     methods: {
-        /**
-         * if upload btn pressed to show upload screen
-         */
-        setUpload: function setUpload() {
-            this.showing_files = false;
-            this.$broadcast('changeToUpload');
-        },
-        /**
-         * if files btn pressed to show files and hide upload
-         */
-        setToShowFiles: function setToShowFiles() {
-            this.showing_files = true;
-            this.$broadcast('changeToShowFiles');
-        },
         /**
          * if the close btn has been pressed
          */
@@ -12869,7 +12867,7 @@ module.exports = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"mediaManager\" class=\"modal\" tabindex=\"-1\" role=\"dialog\" v-bind:style=\"{display: display}\">\n    <div class=\"modal-dialog modal-lg\">\n        <div class=\"modal-content\">\n\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" v-on:click=\"closeMediaManager()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n\n                <h4 class=\"modal-title\">Media Manager</h4>\n            </div>\n\n\n            <div class=\"modal-body\">\n                <div class=\"row\">\n                    <div class=\"col-xs-3\">\n                        <directories-component v-bind:working-directory=\"working_directory\">\n                        </directories-component>\n                    </div>\n\n                    <div class=\"col-xs-9\">\n                        <div class=\"box box-solid box-default\">\n                            <div class=\"box-header\">\n                                <p>Dir: {{ working_directory }}</p>\n                            </div>\n\n                            <div>\n                                <files-component></files-component>\n\n                                <upload-component></upload-component>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n\n            <div class=\"modal-footer\">\n                <button v-on:click=\"setUpload()\" v-show=\"showing_files\" class=\"btn btn-primary pull-left\">\n                    Upload\n                </button>\n                <button v-else=\"\" v-on:click=\"setToShowFiles()\" class=\"btn btn-default pull-left\">Show Files\n                </button>\n\n                <button type=\"button\" class=\"btn btn-default\" v-on:click=\"closeMediaManager()\">Close\n                </button>\n                <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"mediaSubmit()\">Confirm</button>\n            </div>\n        </div>\n        <!-- /.modal-content -->\n    </div>\n    <!-- /.modal-dialog -->\n</div>\n<!-- /.modal -->\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"mediaManager\" class=\"modal\" tabindex=\"-1\" role=\"dialog\" v-bind:style=\"{display: display}\">\n    <div class=\"modal-dialog modal-lg\">\n        <div class=\"modal-content\">\n\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" v-on:click=\"closeMediaManager()\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n\n                <h4 class=\"modal-title\">Media Manager</h4>\n            </div>\n\n\n            <div class=\"modal-body\">\n                <div class=\"row\">\n                    <div class=\"col-xs-3\">\n                        <directories-component v-bind:working-directory=\"working_directory\">\n                        </directories-component>\n                    </div>\n\n                    <div class=\"col-xs-9\">\n                        <div class=\"box box-solid box-default\">\n                            <div class=\"box-header\">\n                                <div class=\"row\">\n                                    <div class=\"col-xs-10\">\n                                        <p>Dir: {{ working_directory }}</p>\n                                    </div>\n                                    <div class=\"col-xs-2 pull-right\">\n                                        <upload-button upload-btn-text=\"Upload\" v-bind:upload-directory=\"working_directory\" upload-context=\"mediaManager\" classes=\"btn btn-primary pull-right\">\n                                        </upload-button>\n                                    </div>\n                                </div>\n                            </div>\n\n                            <div>\n                                <files-component></files-component>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n\n            <div class=\"modal-footer\">\n                <button type=\"button\" class=\"btn btn-default\" v-on:click=\"closeMediaManager()\">\n                    Close\n                </button>\n                <button type=\"button\" class=\"btn btn-primary\" v-on:click=\"mediaSubmit()\">\n                    Confirm\n                </button>\n            </div>\n        </div>\n        <!-- /.modal-content -->\n    </div>\n    <!-- /.modal-dialog -->\n</div>\n<!-- /.modal -->\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12880,7 +12878,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-8fe979b2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./directory.vue":29,"./filesComponent.vue":31,"./uploadComponent.vue":37,"vue":25,"vue-hot-reload-api":23}],35:[function(require,module,exports){
+},{"./directory.vue":29,"./filesComponent.vue":31,"./uploadButton.vue":36,"vue":25,"vue-hot-reload-api":23}],35:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -12984,16 +12982,16 @@ module.exports = {
             this.$http.post('/larapress/media/upload', formData).then(function (response) {
                 this.$dispatch('uploadSubmitted', {
                     context: this.uploadContext,
-                    value: this.uploadDirectory + '/' + this.uploadFilename
+                    value: this.uploadDirectory + '/' + this.uploadFilename,
+                    data: response.data
                 });
-                console.log(response);
                 this.$set('uploading', false);
             });
         }
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"upload-container\">\n    <form action=\"/larapress/media/upload\" method=\"post\" enctype=\"multipart/form-data\">\n        <div v-bind:class=\"classes\" class=\"btn-upload\">\n            <span v-show=\"uploading\" class=\"fa fa-circle-o-notch fa-spin\"></span> {{ uploadBtnText }}\n            <input type=\"file\" v-on:change=\"onFileChange\" v-bind:name=\"uploadContext\" class=\"btn btn-primary\">\n        </div>\n    </form>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"upload-container\">\n    <form action=\"/larapress/media/upload\" method=\"post\" enctype=\"multipart/form-data\">\n        <div v-bind:class=\"classes\" class=\"btn-upload\">\n            <span v-show=\"uploading\" class=\"fa fa-circle-o-notch fa-spin\"></span> {{ uploadBtnText }}\n            <input type=\"file\" v-on:change=\"onFileChange\" v-bind:name=\"uploadContext\">\n        </div>\n    </form>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -13008,68 +13006,6 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-d263e8de", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":1,"vue":25,"vue-hot-reload-api":23,"vueify/lib/insert-css":26}],37:[function(require,module,exports){
-var __vueify_insert__ = require("vueify/lib/insert-css")
-var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.fileThumb {\n  border-color: #aaaaaa !important; }\n")
-"use strict";
-
-module.exports = {
-    data: function data() {
-        return {
-            files: [],
-            display: false,
-            working_directory: 'media/images',
-            uploading: false
-        };
-    },
-    events: {
-        changeOfDirectory: function changeOfDirectory(directory) {
-            this.working_directory = directory;
-        },
-        changeToUpload: function changeToUpload() {
-            this.display = true;
-        },
-        changeToShowFiles: function changeToShowFiles() {
-            this.display = false;
-        }
-    },
-    methods: {
-        onFileChange: function onFileChange(e) {
-            this.uploading = true;
-
-            var files = e.target.files || e.dataTransfer.files;
-
-            if (!files.length) return;
-
-            var formData = new FormData();
-
-            formData.append("directory", this.working_directory);
-
-            formData.append("file", files[0]);
-
-            this.$http.post('/larapress/media/upload', formData).then(function (response) {
-                this.files.push(response.data);
-                this.uploading = false;
-            });
-        }
-    }
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div v-show=\"display\" class=\"box filePanel\" style=\"margin-bottom: 0;\">\n    <div class=\"row\">\n        <div class=\"col-xs-12\">\n            <form action=\"/larapress/media/upload\" method=\"post\" enctype=\"multipart/form-data\">\n                <input type=\"file\" v-on:change=\"onFileChange\" name=\"media_file\">\n            </form>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col-xs-12\">\n            <h4 v-if=\"uploading\">\n                <span class=\"fa fa-circle-o-notch fa-spin\"></span> Uploading\n            </h4>\n            <h4 v-else=\"\">\n                Recently uploaded files\n            </h4>\n\n            <div v-for=\"file in files\" class=\"col-xs-2\">\n                <a href=\"#\" class=\"fileThumb\" v-bind:style=\"{backgroundImage : file.backgroundImage}\">\n                    <div class=\"title\">\n                        <p>{{ file.name }}</p>\n                    </div>\n                </a>\n            </div>\n        </div>\n    </div>\n</div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  module.hot.dispose(function () {
-    __vueify_insert__.cache["/* line 2, stdin */\n.fileThumb {\n  border-color: #aaaaaa !important; }\n"] = false
-    document.head.removeChild(__vueify_style__)
-  })
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-ff5db624", module.exports)
-  } else {
-    hotAPI.update("_v-ff5db624", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":25,"vue-hot-reload-api":23,"vueify/lib/insert-css":26}]},{},[27]);
+},{"babel-runtime/core-js/json/stringify":1,"vue":25,"vue-hot-reload-api":23,"vueify/lib/insert-css":26}]},{},[27]);
 
 //# sourceMappingURL=larapress_vues.js.map

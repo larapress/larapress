@@ -21,13 +21,22 @@
                         <div class="col-xs-9">
                             <div class="box box-solid box-default">
                                 <div class="box-header">
-                                    <p>Dir: {{ working_directory }}</p>
+                                    <div class="row">
+                                        <div class="col-xs-10">
+                                            <p>Dir: {{ working_directory }}</p>
+                                        </div>
+                                        <div class="col-xs-2 pull-right">
+                                            <upload-button upload-btn-text="Upload"
+                                                           v-bind:upload-directory="working_directory"
+                                                           upload-context="mediaManager"
+                                                           classes="btn btn-primary pull-right">
+                                            </upload-button>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div>
                                     <files-component></files-component>
-
-                                    <upload-component></upload-component>
                                 </div>
                             </div>
                         </div>
@@ -36,15 +45,13 @@
 
 
                 <div class="modal-footer">
-                    <button v-on:click="setUpload()" v-show="showing_files" class="btn btn-primary pull-left">
-                        Upload
+                    <button type="button" class="btn btn-default"
+                            v-on:click="closeMediaManager()">
+                        Close
                     </button>
-                    <button v-else v-on:click="setToShowFiles()" class="btn btn-default pull-left">Show Files
+                    <button type="button" class="btn btn-primary" v-on:click="mediaSubmit()">
+                        Confirm
                     </button>
-
-                    <button type="button" class="btn btn-default" v-on:click="closeMediaManager()">Close
-                    </button>
-                    <button type="button" class="btn btn-primary" v-on:click="mediaSubmit()">Confirm</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -57,22 +64,22 @@
 <script>
     import DirectoriesComponent from './directory.vue';
     import FilesComponent from './filesComponent.vue';
-    import UploadComponent from './uploadComponent.vue';
+    import UploadButton from './uploadButton.vue';
 
     module.exports = {
         components: {
             DirectoriesComponent: DirectoriesComponent,
             FilesComponent: FilesComponent,
-            UploadComponent: UploadComponent
+            UploadButton: UploadButton
         },
 
         data: function () {
             return {
-                working_directory: 'media',         // the current selected directory
+                working_directory: '/media',        // the current selected directory
                 selected_file: '',                  // the file that has been selected
                 working_context: '',                // this will be to identify which el/template called media manager to send back result
                 showing_files: true,                // default to show files not upload
-                display: 'none'                      // default to hide the media manager
+                display: 'none'                     // default to hide the media manager
             }
         },
         //change the directory/refresh on load
@@ -104,23 +111,17 @@
                 this.selected_file = response.selectedFile;
 
                 if (response.proceed) this.mediaSubmit();
+            },
+            /**
+             * When a file is uploaded
+             */
+            uploadSubmitted: function (response) {
+                if (response.context == 'mediaManager') {
+                    this.$broadcast('fileUploaded', response.data);
+                }
             }
         },
         methods: {
-            /**
-             * if upload btn pressed to show upload screen
-             */
-            setUpload: function () {
-                this.showing_files = false;
-                this.$broadcast('changeToUpload');
-            },
-            /**
-             * if files btn pressed to show files and hide upload
-             */
-            setToShowFiles: function () {
-                this.showing_files = true;
-                this.$broadcast('changeToShowFiles');
-            },
             /**
              * if the close btn has been pressed
              */

@@ -51,6 +51,9 @@
             changeOfDirectory: function(directory){
                 this.loading = true;
                 this.refreshFiles(directory);
+            },
+            fileUploaded: function(fileData){
+                this.files.unshift(fileData);
             }
         },
         methods: {

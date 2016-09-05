@@ -24,8 +24,7 @@
         <form action="/larapress/media/upload" method="post" enctype="multipart/form-data">
             <div v-bind:class="classes" class="btn-upload">
                 <span v-show="uploading" class="fa fa-circle-o-notch fa-spin"></span> {{ uploadBtnText }}
-                <input type="file" v-on:change="onFileChange" v-bind:name="uploadContext"
-                       class="btn btn-primary"/>
+                <input type="file" v-on:change="onFileChange" v-bind:name="uploadContext" />
             </div>
         </form>
     </div>
@@ -85,10 +84,10 @@
                             this.$dispatch('uploadSubmitted',
                                     {
                                         context: this.uploadContext,
-                                        value: this.uploadDirectory + '/' + this.uploadFilename
+                                        value: this.uploadDirectory + '/' + this.uploadFilename,
+                                        data: response.data
                                     }
                             );
-                            console.log(response);
                             this.$set('uploading', false);
                         });
             }
