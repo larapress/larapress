@@ -66,7 +66,7 @@
         <feature-image btn-text="Select Cover Image"
                 feature-name="cover_image"
                 feature-title="Cover Image"
-                feature-value="{!!$project->cover_image!!}"
+                feature-value="{!!old('cover_image', isset($project->cover_image) ? $project->cover_image : null)!!}"
                 upload-directory="/media/images/portfolio"
                 ></feature-image>
 
