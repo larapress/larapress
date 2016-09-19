@@ -224,7 +224,6 @@ var $export = require('./_export');
 $export($export.S + $export.F * !require('./_descriptors'), 'Object', {defineProperty: require('./_object-dp').f});
 },{"./_descriptors":10,"./_export":12,"./_object-dp":18}],22:[function(require,module,exports){
 // shim for using process in browser
-
 var process = module.exports = {};
 
 // cached from whatever global is present so that test runners that stub it
@@ -236,21 +235,35 @@ var cachedSetTimeout;
 var cachedClearTimeout;
 
 (function () {
-  try {
-    cachedSetTimeout = setTimeout;
-  } catch (e) {
-    cachedSetTimeout = function () {
-      throw new Error('setTimeout is not defined');
+    try {
+        cachedSetTimeout = setTimeout;
+    } catch (e) {
+        cachedSetTimeout = function () {
+            throw new Error('setTimeout is not defined');
+        }
     }
-  }
-  try {
-    cachedClearTimeout = clearTimeout;
-  } catch (e) {
-    cachedClearTimeout = function () {
-      throw new Error('clearTimeout is not defined');
+    try {
+        cachedClearTimeout = clearTimeout;
+    } catch (e) {
+        cachedClearTimeout = function () {
+            throw new Error('clearTimeout is not defined');
+        }
     }
-  }
 } ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        return setTimeout(fun, 0);
+    } else {
+        return cachedSetTimeout.call(null, fun, 0);
+    }
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        clearTimeout(marker);
+    } else {
+        cachedClearTimeout.call(null, marker);
+    }
+}
 var queue = [];
 var draining = false;
 var currentQueue;
@@ -275,7 +288,7 @@ function drainQueue() {
     if (draining) {
         return;
     }
-    var timeout = cachedSetTimeout(cleanUpNextTick);
+    var timeout = runTimeout(cleanUpNextTick);
     draining = true;
 
     var len = queue.length;
@@ -292,7 +305,7 @@ function drainQueue() {
     }
     currentQueue = null;
     draining = false;
-    cachedClearTimeout(timeout);
+    runClearTimeout(timeout);
 }
 
 process.nextTick = function (fun) {
@@ -304,7 +317,7 @@ process.nextTick = function (fun) {
     }
     queue.push(new Item(fun, args));
     if (queue.length === 1 && !draining) {
-        cachedSetTimeout(drainQueue, 0);
+        runTimeout(drainQueue);
     }
 };
 
@@ -12263,9 +12276,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-d889446a", module.exports)
+    hotAPI.createRecord("_v-361f6d29", module.exports)
   } else {
-    hotAPI.update("_v-d889446a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-361f6d29", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":23}],29:[function(require,module,exports){
@@ -12385,9 +12398,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-f023e342", module.exports)
+    hotAPI.createRecord("_v-7d9d6bc1", module.exports)
   } else {
-    hotAPI.update("_v-f023e342", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-7d9d6bc1", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":23}],30:[function(require,module,exports){
@@ -12469,9 +12482,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4d21ce03", module.exports)
+    hotAPI.createRecord("_v-20f4453e", module.exports)
   } else {
-    hotAPI.update("_v-4d21ce03", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-20f4453e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./uploadButton.vue":36,"vue":25,"vue-hot-reload-api":23,"vueify/lib/insert-css":26}],31:[function(require,module,exports){
@@ -12551,9 +12564,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-28039444", module.exports)
+    hotAPI.createRecord("_v-7cbd77bc", module.exports)
   } else {
-    hotAPI.update("_v-28039444", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-7cbd77bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/helpers/defineProperty":3,"vue":25,"vue-hot-reload-api":23}],32:[function(require,module,exports){
@@ -12664,9 +12677,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-f390a660", module.exports)
+    hotAPI.createRecord("_v-204ff8b2", module.exports)
   } else {
-    hotAPI.update("_v-f390a660", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-204ff8b2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":23,"vueify/lib/insert-css":26}],33:[function(require,module,exports){
@@ -12770,9 +12783,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-44698e53", module.exports)
+    hotAPI.createRecord("_v-254a829e", module.exports)
   } else {
-    hotAPI.update("_v-44698e53", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-254a829e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./imageAttachment.vue":32,"vue":25,"vue-hot-reload-api":23}],34:[function(require,module,exports){
@@ -12873,9 +12886,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-8fe979b2", module.exports)
+    hotAPI.createRecord("_v-5a6f5285", module.exports)
   } else {
-    hotAPI.update("_v-8fe979b2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5a6f5285", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./directory.vue":29,"./filesComponent.vue":31,"./uploadButton.vue":36,"vue":25,"vue-hot-reload-api":23}],35:[function(require,module,exports){
@@ -12915,9 +12928,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0ec073da", module.exports)
+    hotAPI.createRecord("_v-af43b890", module.exports)
   } else {
-    hotAPI.update("_v-0ec073da", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-af43b890", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":23}],36:[function(require,module,exports){
@@ -13001,9 +13014,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-d263e8de", module.exports)
+    hotAPI.createRecord("_v-39321aef", module.exports)
   } else {
-    hotAPI.update("_v-d263e8de", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-39321aef", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/core-js/json/stringify":1,"vue":25,"vue-hot-reload-api":23,"vueify/lib/insert-css":26}]},{},[27]);
