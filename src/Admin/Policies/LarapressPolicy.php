@@ -8,7 +8,7 @@ abstract class LarapressPolicy
 {
     protected $request;
 
-    protected $configFile;
+    protected $configFile; //this must be set by the instance class
 
     public function __construct(Request $request){
         $this->request = $request;
