@@ -55,6 +55,7 @@ class LarapressAdminServiceProvider extends ServiceProvider
 
         //console register
         $this->commands([\Larapress\Admin\Console\CreateAdministrator::class]);
+        $this->commands([\Larapress\Admin\Console\CreateModel::class]);
     }
 
     /**
