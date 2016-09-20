@@ -1,4 +1,7 @@
 <?php
 
 return [
-    'dashboard_view' => 'larapress::dashboard'];
+    'title' => 'Larapress',
+    'dashboard_view' => 'larapress::dashboard',
+    'dashboard_method' => '\Larapress\Admin\Http\Controllers\AdminController@dashboard'
+];

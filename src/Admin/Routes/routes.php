@@ -8,7 +8,7 @@
 \Route::group(['middleware' => ['web', 'larapress']], function(){
 
     //login and admin
-    \Route::get('/larapress/dashboard', ['as' => 'larapress.dashboard', 'uses' => '\Larapress\Admin\Http\Controllers\AdminController@dashboard']);
+    \Route::get('/larapress/dashboard', ['as' => 'larapress.dashboard', 'uses' => config('larapress.settings.dashboard_method')]);
     \Route::get('/larapress/logout', ['as' => 'larapress.logout', 'uses' => '\Larapress\Admin\Http\Controllers\AdminController@logout']);
     \Route::get('/larapress/deny', ['as' => 'larapress.deny', 'uses' => '\Larapress\Admin\Http\Controllers\AdminController@deny']);
 

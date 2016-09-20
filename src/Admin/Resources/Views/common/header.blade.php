@@ -1,6 +1,6 @@
 <header class="main-header">
     <a href="#" class="logo">
-        {!! config('larapress.admin.title') !!}
+        {!! config('larapress.settings.title') !!}
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top" role="navigation">
