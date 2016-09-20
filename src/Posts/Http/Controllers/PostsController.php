@@ -24,6 +24,11 @@ class PostsController extends Controller
         return view('larapress::posts.index')->with('posts', $posts)->with('title', $title);
     }
 
+    /**
+     * Indexes post in a category
+     * @param string $category
+     * @return mixed
+     */
     public function category($category)
     {
         $posts = Post::inCategory($category);
