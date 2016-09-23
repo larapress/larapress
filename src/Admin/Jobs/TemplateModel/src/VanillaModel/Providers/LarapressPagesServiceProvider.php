@@ -1,14 +1,14 @@
-<?php
+--php
 
-namespace Larapress\Pages\Providers;
+namespace {Vendor}\{Package}\{Models}\Providers;
 
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
-use Larapress\Pages\Policies\PagePolicy;
-use Larapress\Pages\Models\Page;
+use {Vendor}\{Package}\{Models}\Policies\{Model}Policy;
+use {Vendor}\{Package}\{Models}\Models\{Model};
 
-class LarapressPagesServiceProvider extends ServiceProvider
+class {Model}ServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
@@ -22,7 +22,7 @@ class LarapressPagesServiceProvider extends ServiceProvider
         ], 'migrations');
 
         $this->publishes([
-            __DIR__ . '/../Config' => config_path('larapress'),
+            __DIR__ . '/../Config' => config_path('{package}'),
         ], 'config');
 
         //the admin routess file
@@ -31,15 +31,15 @@ class LarapressPagesServiceProvider extends ServiceProvider
         }
 
         //register the packages views
-        $this->loadViewsFrom(__DIR__ . '/../Resources/Views', 'larapress');
+        $this->loadViewsFrom(__DIR__ . '/../Resources/Views', '{package}');
 
         parent::boot($events);
 
         //register the events
-        $events->listen(\Larapress\Pages\Events\PageWasSaved::class, \Larapress\Pages\Listeners\PageSavedListener::class);
+        $events->listen(\{vendor}\{package}\Events\{Model}WasSaved::class, \{vendor}\{package}\Listeners\{Model}SavedListener::class);
 
         //register the authorization policies
-        $gate->policy(Page::class, PagePolicy::class);
+        $gate->policy({Model}::class, {Model}Policy::class);
 
     }
 

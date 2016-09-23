@@ -21,6 +21,8 @@ class CreateModel extends Job implements ShouldQueue
 
     protected $modelDir;
 
+    protected $files = [];
+
     public function __construct($input)
     {
         $this->input = $input;
@@ -33,17 +35,19 @@ class CreateModel extends Job implements ShouldQueue
      */
     public function handle()
     {
-        $packageDir = $this->input['root'] . '/' . $this->input['vendor'] . '/' . $this->input['package'];
+        $this->packageDir = $this->input['root'] . '/' . $this->input['vendor'] . '/' . $this->input['package'];
 
-        $this->modelDir = $packageDir . '/src/' . ucfirst($this->input['models']);
+        $this->modelDir = $this->packageDir . '/src/' . ucfirst($this->input['models']);
 
         $this->model = $this->input['model'];
 
         $this->models = $this->input['models'];
 
-        \Storage::makeDirectory($this->modelDir);
+        \Storage::makeDirectory($this->packageDir);
 
-        $this->recurse_copy(__DIR__ . '/VanillaModel', $this->modelDir);
+        $this->recurse_copy(__DIR__ . '/TemplateModel', $this->packageDir);
+
+        $this->setFiles();
 
         $this->changeFilenames();
 
@@ -54,45 +58,91 @@ class CreateModel extends Job implements ShouldQueue
 
     protected function changeFilenames()
     {
-        \Storage::rename($this->modelDir . '/Config/authorization/pages.php', $this->modelDir . '/Config/authorization/' . $this->models . '.php');
+        //folder name
+        \Storage::rename($this->packageDir . '/src/VanillaModel', $this->modelDir);
 
-        \Storage::rename($this->modelDir . '/Config/validation/page.php', $this->modelDir . '/Config/validation/' . $this->models . '.php');
+        \Storage::rename($this->modelDir . '/Config/authorization/pages.php', $this->files['config.authorization']);
 
-        \Storage::rename($this->modelDir . '/Database/Factories/PageFactory.php', $this->modelDir . '/Database/Factories/' . ucfirst($this->model) . 'Factory.php');
+        \Storage::rename($this->modelDir . '/Config/validation/page.php', $this->files['config.validation']);
 
-        \Storage::rename($this->modelDir . '/Database/Seeds/PagesTableSeeder.php', $this->modelDir . '/Database/Seeds/' . ucfirst($this->models) . 'TableSeeder.php');
+        \Storage::rename($this->modelDir . '/Database/Factories/PageFactory.php', $this->files['database.factory']);
 
-        \Storage::rename($this->modelDir . '/Database/Migrations/create_pages_table.php', $this->modelDir . '/Database/Migrations/' . date('Y_m_d') . '_create_' . $this->models . '_table.php');
+        \Storage::rename($this->modelDir . '/Database/Seeds/PagesTableSeeder.php', $this->files['database.seeds']);
 
-        \Storage::rename($this->modelDir . '/Events/PageWasSaved.php', $this->modelDir . '/Events/' . ucfirst($this->model) . 'WasSaved.php');
+        \Storage::rename($this->modelDir . '/Database/Migrations/create_pages_table.php', $this->files['database.migration']);
 
-        \Storage::rename($this->modelDir . '/Http/Controllers/PagesController.php', $this->modelDir . '/Http/Controllers/' . ucfirst($this->models) . 'Controller.php');
+        \Storage::rename($this->modelDir . '/Events/PageWasSaved.php', $this->files['events.saved']);
 
-        \Storage::rename($this->modelDir . '/Jobs/SaveNewPage.php', $this->modelDir . '/Jobs/SaveNew' . ucfirst($this->model) . '.php');
+        \Storage::rename($this->modelDir . '/Http/Controllers/PagesController.php', $this->files['http.controller']);
 
-        \Storage::rename($this->modelDir . '/Jobs/UpdateExistingPage.php', $this->modelDir . '/Jobs/UpdateExisting' . ucfirst($this->model) . '.php');
+        \Storage::rename($this->modelDir . '/Jobs/SaveNewPage.php', $this->files['jobs.save']);
 
-        \Storage::rename($this->modelDir . '/Listeners/PageSavedListener.php', $this->modelDir . '/Listeners/' . ucfirst($this->model) . 'SavedListener.php');
+        \Storage::rename($this->modelDir . '/Jobs/UpdateExistingPage.php', $this->files['jobs.update']);
 
-        \Storage::rename($this->modelDir . '/Models/Page.php', $this->modelDir . '/Models/' . ucfirst($this->model) . '.php');
+        \Storage::rename($this->modelDir . '/Listeners/PageSavedListener.php', $this->files['listeners.saved']);
 
-        \Storage::rename($this->modelDir . '/Policies/PagePolicy.php', $this->modelDir . '/Policies/' . ucfirst($this->model) . 'Policy.php');
+        \Storage::rename($this->modelDir . '/Models/Page.php', $this->files['model']);
 
-        \Storage::rename($this->modelDir . '/Providers/LarapressPagesServiceProvider.php', $this->modelDir . '/Providers/' . ucfirst($this->models) . 'ServiceProvider.php');
+        \Storage::rename($this->modelDir . '/Policies/PagePolicy.php', $this->files['policy']);
+
+        \Storage::rename($this->modelDir . '/Providers/LarapressPagesServiceProvider.php', $this->files['provider']);
     }
 
-    protected function updateFiles($vendor, $package){
-        $content = \Storage::get($this->modelDir.'/Database/Factories/'.ucfirst($this->model).'Factory.php');
 
-        $content = str_replace('{models}', $this->models, $content);
-        $content = str_replace('{Models}', ucfirst($this->models), $content);
-        $content = str_replace('{model}', $this->model, $content);
-        $content = str_replace('{Model}', ucfirst($this->model), $content);
-        $content = str_replace('{vendor}', ucfirst($vendor), $content);
-        $content = str_replace('{package}', ucfirst($package), $content);
-        $content = str_replace('--php', '<?php', $content);
+    /**
+     * Goes through each file and changes the strings to make model
+     * @param $vendor
+     * @param $package
+     */
+    protected function updateFiles($vendor, $package)
+    {
+        foreach ($this->files as $file) {
+            $content = \Storage::get($file);
 
-        \Storage::put($this->modelDir.'/Database/Factories/'.ucfirst($this->model).'Factory.php', $content);
+            $content = str_replace('{models}', $this->models, $content);
+            $content = str_replace('{Models}', ucfirst($this->models), $content);
+            $content = str_replace('{model}', $this->model, $content);
+            $content = str_replace('{Model}', ucfirst($this->model), $content);
+            $content = str_replace('{Vendor}', ucfirst($vendor), $content);
+            $content = str_replace('{vendor}', $vendor, $content);
+            $content = str_replace('{package}', $package, $content);
+            $content = str_replace('{Package}', ucfirst($package), $content);
+            $content = str_replace('--php', '<?php', $content);
+
+            \Storage::put($file, $content);
+        }
+    }
+
+
+    protected function setFiles()
+    {
+        $this->files['config.authorization'] = $this->modelDir . '/Config/authorization/' . $this->models . '.php';
+
+        $this->files['config.validation'] = $this->modelDir . '/Config/validation/' . $this->models . '.php';
+
+        $this->files['database.factory'] = $this->modelDir . '/Database/Factories/' . ucfirst($this->model) . 'Factory.php';
+
+        $this->files['database.seeds'] = $this->modelDir . '/Database/Seeds/' . ucfirst($this->models) . 'TableSeeder.php';
+
+        $this->files['database.migration'] = $this->modelDir . '/Database/Migrations/' . date('Y_m_d') . '_create_' . $this->models . '_table.php';
+
+        $this->files['events.saved'] = $this->modelDir . '/Events/' . ucfirst($this->model) . 'WasSaved.php';
+
+        $this->files['http.controller'] = $this->modelDir . '/Http/Controllers/' . ucfirst($this->models) . 'Controller.php';
+
+        $this->files['jobs.save'] = $this->modelDir . '/Jobs/SaveNew' . ucfirst($this->model) . '.php';
+
+        $this->files['jobs.update'] = $this->modelDir . '/Jobs/UpdateExisting' . ucfirst($this->model) . '.php';
+
+        $this->files['listeners.saved'] = $this->modelDir . '/Listeners/' . ucfirst($this->model) . 'SavedListener.php';
+
+        $this->files['model'] = $this->modelDir . '/Models/' . ucfirst($this->model) . '.php';
+
+        $this->files['policy'] = $this->modelDir . '/Policies/' . ucfirst($this->model) . 'Policy.php';
+
+        $this->files['provider'] = $this->modelDir . '/Providers/' . ucfirst($this->models) . 'ServiceProvider.php';
+
+        $this->files['composer'] = $this->packageDir .'/composer.json';
     }
 
     protected function recurse_copy($src, $dst)

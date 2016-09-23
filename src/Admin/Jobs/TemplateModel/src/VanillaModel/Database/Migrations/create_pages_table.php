@@ -1,9 +1,9 @@
-<?php
+--php
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePagesTable extends Migration
+class Create{Models}Table extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,11 @@ class CreatePagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('LP_pages', function (Blueprint $table) {
+        Schema::create('{models}', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
             $table->string('title')->nullable();
             $table->string('slug');
-            $table->string('description')->nullable();
-            $table->text('body')->nullable();
             $table->enum('status', ['draft', 'published', 'trashed']);
         });
     }
@@ -30,6 +28,6 @@ class CreatePagesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('LP_pages');
+        Schema::drop('{models');
     }
 }

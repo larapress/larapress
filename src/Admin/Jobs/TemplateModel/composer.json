@@ -1,0 +1,24 @@
+{
+	"name": "{vendor}/{package}",
+	"description": "",
+	"keywords": [
+		""
+	],
+	"homepage": " ",
+	"authors": [
+		{
+			"name": "",
+			"email": "",
+			"homepage": ""
+		}
+	],
+	"license": "MIT License",
+	"require": {
+		"php": ">=5.4.0",
+    },
+	"autoload": {
+		"psr-4": {
+			"{Package}\\": "src/"
+		}
+	}
+}

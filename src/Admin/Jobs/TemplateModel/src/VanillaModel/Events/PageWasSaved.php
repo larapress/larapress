@@ -1,13 +1,13 @@
-<?php
+--php
 
-namespace Larapress\Pages\Events;
+namespace {Vendor}\{Package}\{Models}\Events;
 
 use \App\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Larapress\Pages\Models\Page;
+use {Vendor}\{Package}\{Models}\Models\{Model};
 
-class PageWasSaved extends Event
+class {Model}WasSaved extends Event
 {
     use SerializesModels;
 
@@ -16,9 +16,9 @@ class PageWasSaved extends Event
      *
      * @return void
      */
-    public function __construct(Page $page)
+    public function __construct({Model} ${model})
     {
-        $this->page = $page;
+        $this->{model} = ${model};
     }
 
     /**

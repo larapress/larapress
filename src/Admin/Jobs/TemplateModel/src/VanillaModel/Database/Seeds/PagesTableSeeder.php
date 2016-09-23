@@ -1,10 +1,10 @@
-<?php
-namespace Larapress\Pages\Database\Seeds;
+--php
+namespace {Vendor}\{Package}\{Models}\Database\Seeds;
 
 use Illuminate\Database\Seeder;
-use Larapress\Pages\Database\Factories\Factory;
+use {Vendor}\{Package}\{Models}\Database\Factories\Factory;
 
-class PagesTableSeeder extends Seeder
+class {models}TableSeeder extends Seeder
 {
     public function __construct(Factory $factory)
     {
@@ -18,6 +18,6 @@ class PagesTableSeeder extends Seeder
      */
     public function run()
     {
-        $this->factory->page()->save();
+        $this->factory->{model}()->save();
     }
 }

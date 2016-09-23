@@ -1,29 +1,27 @@
-<?php
+--php
 
-namespace Larapress\Pages\Jobs;
+namespace {Vendor}\{Package}\{Models}\\Jobs;
 
-use Larapress\Pages\Models\Page;
+use {Vendor}\{Package}\{Models}\Models\{Model};
 use App\Jobs\Job;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Symfony\Component\HttpFoundation\Request;
 
-class UpdateExistingPage extends Job implements ShouldQueue
+class SaveNewPage extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
-
-    protected $id;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($id)
+    public function __construct()
     {
-        $this->id = $id;
-     }
+        //
+    }
 
     /**
      * Execute the job.
@@ -32,14 +30,13 @@ class UpdateExistingPage extends Job implements ShouldQueue
      */
     public function handle(Request $request)
     {
-        $page = Page::findOrFail($this->id);
-
-        $page->update([
+        ${model} = {Model}::create([
             'title' => $request->get('title'),
-            'description' => $request->get('description'),
-            'body' => $request->get('body')
+            'slug' => str_slug($request->get('slug')),
         ]);
 
-        \Session::flash('success', 'Your page has been saved successfully');
+        \Session::flash('success', 'Your {model} has been saved.');
+
+        event(new \{vendor}\{package}\Events\{Model}WasSaved(${model}));
     }
 }
