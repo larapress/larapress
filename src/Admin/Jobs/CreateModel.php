@@ -56,10 +56,72 @@ class CreateModel extends Job implements ShouldQueue
         dd('sdsds');
     }
 
+    protected function recurse_copy($src, $dst)
+    {
+        $dir = opendir($src);
+        @mkdir($dst);
+        while (false !== ($file = readdir($dir))) {
+            if (($file != '.') && ($file != '..')) {
+                if (is_dir($src . '/' . $file)) {
+                    $this->recurse_copy($src . '/' . $file, $dst . '/' . $file);
+                } else {
+                    copy($src . '/' . $file, $dst . '/' . $file);
+                }
+            }
+        }
+        closedir($dir);
+    }
+
+    protected function setFiles()
+    {
+        $this->files['config.authorization'] = $this->modelDir . '/Config/authorization/' . $this->models . '.php';
+
+        $this->files['config.validation'] = $this->modelDir . '/Config/validation/' . $this->models . '.php';
+
+        $this->files['database.factory'] = $this->modelDir . '/Database/Factories/' . ucfirst($this->model) . 'Factory.php';
+
+        $this->files['database.seeds'] = $this->modelDir . '/Database/Seeds/' . ucfirst($this->models) . 'TableSeeder.php';
+
+        $this->files['database.migration'] = $this->modelDir . '/Database/Migrations/' . date('Y_m_d') . '_000001_create_' . $this->models . '_table.php';
+
+        $this->files['events.saved'] = $this->modelDir . '/Events/' . ucfirst($this->model) . 'WasSaved.php';
+
+        $this->files['http.controller'] = $this->modelDir . '/Http/Controllers/' . ucfirst($this->models) . 'Controller.php';
+
+        $this->files['jobs.save'] = $this->modelDir . '/Jobs/SaveNew' . ucfirst($this->model) . '.php';
+
+        $this->files['jobs.update'] = $this->modelDir . '/Jobs/UpdateExisting' . ucfirst($this->model) . '.php';
+
+        $this->files['listeners.saved'] = $this->modelDir . '/Listeners/' . ucfirst($this->model) . 'SavedListener.php';
+
+        $this->files['model'] = $this->modelDir . '/Models/' . ucfirst($this->model) . '.php';
+
+        $this->files['policy'] = $this->modelDir . '/Policies/' . ucfirst($this->model) . 'Policy.php';
+
+        $this->files['provider'] = $this->modelDir . '/Providers/' . ucfirst($this->models) . 'ServiceProvider.php';
+
+        $this->files['routes'] = $this->modelDir .'/Routes/routes.php';
+
+        $this->files['views.create'] = $this->modelDir .'/Resources/Views/'.$this->models.'/create.blade.php';
+        $this->files['views.edit'] = $this->modelDir .'/Resources/Views/'.$this->models.'/edit.blade.php';
+        $this->files['views.form'] = $this->modelDir .'/Resources/Views/'.$this->models.'/form.blade.php';
+        $this->files['views.index'] = $this->modelDir .'/Resources/Views/'.$this->models.'/index.blade.php';
+        $this->files['views.panel'] = $this->modelDir .'/Resources/Views/'.$this->models.'/panel.blade.php';
+
+        $this->files['composer'] = $this->packageDir .'/composer.json';
+    }
+
     protected function changeFilenames()
     {
-        //folder name
+        //folder names
         \Storage::rename($this->packageDir . '/src/VanillaModel', $this->modelDir);
+
+        \Storage::rename($this->modelDir . '/Resources/Views/pages', $this->modelDir. '/Resources/Views/'.$this->models);
+
+        \Storage::rename($this->modelDir . '/Config/pages', $this->modelDir. '/Config/'.$this->models);
+
+
+        //file names
 
         \Storage::rename($this->modelDir . '/Config/authorization/pages.php', $this->files['config.authorization']);
 
@@ -88,7 +150,6 @@ class CreateModel extends Job implements ShouldQueue
         \Storage::rename($this->modelDir . '/Providers/LarapressPagesServiceProvider.php', $this->files['provider']);
     }
 
-
     /**
      * Goes through each file and changes the strings to make model
      * @param $vendor
@@ -111,53 +172,5 @@ class CreateModel extends Job implements ShouldQueue
 
             \Storage::put($file, $content);
         }
-    }
-
-
-    protected function setFiles()
-    {
-        $this->files['config.authorization'] = $this->modelDir . '/Config/authorization/' . $this->models . '.php';
-
-        $this->files['config.validation'] = $this->modelDir . '/Config/validation/' . $this->models . '.php';
-
-        $this->files['database.factory'] = $this->modelDir . '/Database/Factories/' . ucfirst($this->model) . 'Factory.php';
-
-        $this->files['database.seeds'] = $this->modelDir . '/Database/Seeds/' . ucfirst($this->models) . 'TableSeeder.php';
-
-        $this->files['database.migration'] = $this->modelDir . '/Database/Migrations/' . date('Y_m_d') . '_create_' . $this->models . '_table.php';
-
-        $this->files['events.saved'] = $this->modelDir . '/Events/' . ucfirst($this->model) . 'WasSaved.php';
-
-        $this->files['http.controller'] = $this->modelDir . '/Http/Controllers/' . ucfirst($this->models) . 'Controller.php';
-
-        $this->files['jobs.save'] = $this->modelDir . '/Jobs/SaveNew' . ucfirst($this->model) . '.php';
-
-        $this->files['jobs.update'] = $this->modelDir . '/Jobs/UpdateExisting' . ucfirst($this->model) . '.php';
-
-        $this->files['listeners.saved'] = $this->modelDir . '/Listeners/' . ucfirst($this->model) . 'SavedListener.php';
-
-        $this->files['model'] = $this->modelDir . '/Models/' . ucfirst($this->model) . '.php';
-
-        $this->files['policy'] = $this->modelDir . '/Policies/' . ucfirst($this->model) . 'Policy.php';
-
-        $this->files['provider'] = $this->modelDir . '/Providers/' . ucfirst($this->models) . 'ServiceProvider.php';
-
-        $this->files['composer'] = $this->packageDir .'/composer.json';
-    }
-
-    protected function recurse_copy($src, $dst)
-    {
-        $dir = opendir($src);
-        @mkdir($dst);
-        while (false !== ($file = readdir($dir))) {
-            if (($file != '.') && ($file != '..')) {
-                if (is_dir($src . '/' . $file)) {
-                    $this->recurse_copy($src . '/' . $file, $dst . '/' . $file);
-                } else {
-                    copy($src . '/' . $file, $dst . '/' . $file);
-                }
-            }
-        }
-        closedir($dir);
     }
 }

@@ -1,6 +1,6 @@
 --php
 
-namespace {Vendor}\{Package}\{Models}\\Jobs;
+namespace {Vendor}\{Package}\{Models}\Jobs;
 
 use {Vendor}\{Package}\{Models}\Models\{Model};
 use App\Jobs\Job;
@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Symfony\Component\HttpFoundation\Request;
 
-class SaveNewPage extends Job implements ShouldQueue
+class SaveNew{Model} extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
@@ -37,6 +37,6 @@ class SaveNewPage extends Job implements ShouldQueue
 
         \Session::flash('success', 'Your {model} has been saved.');
 
-        event(new \{vendor}\{package}\Events\{Model}WasSaved(${model}));
+        event(new \{Vendor}\{Package}\{Models}\Events\{Model}WasSaved(${model}));
     }
 }

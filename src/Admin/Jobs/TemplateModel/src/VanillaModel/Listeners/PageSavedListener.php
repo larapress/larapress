@@ -6,7 +6,7 @@ use {Vendor}\{Package}\{Models}\Events\{Model}WasSaved;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class TestListener
+class {Model}SavedListener
 {
     /**
      * Create the event listener.

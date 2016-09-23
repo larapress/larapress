@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Symfony\Component\HttpFoundation\Request;
 
-class UpdateExistingPage extends Job implements ShouldQueue
+class UpdateExisting{Model} extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
@@ -34,7 +34,7 @@ class UpdateExistingPage extends Job implements ShouldQueue
     {
         ${model} = {Model}::findOrFail($this->id);
 
-        $page->update([
+        ${model}->update([
             'title' => $request->get('title'),
         ]);
 

@@ -19,9 +19,9 @@ class {Models}Controller extends Controller
     {
         $this->authorize('index', {Model}::class);
 
-        ${models} = {Model::where('status', '!=', 'trashed')->paginate(30);
+        ${models} = {Model}::where('status', '!=', 'trashed')->paginate(30);
 
-        return view('{vendor}::{models}.index')->with('{models}', ${models});
+        return view('{package}::{models}.index')->with('{models}', ${models});
     }
 
     public function search(Request $request)
@@ -32,25 +32,25 @@ class {Models}Controller extends Controller
             ->where('title', 'like', '%' . $request->term . '%')
             ->paginate(30);
 
-        return view('{vendor}::{models}.index')->with('{models}', ${models});
+        return view('{package}::{models}.index')->with('{models}', ${models});
     }
 
     public function create()
     {
         $this->authorize('create', {Model}::class);
 
-        return view('{vendor::{models}.create');
+        return view('{package}::{models}.create');
     }
 
     public function store(Request $request)
     {
         $this->authorize('store', {Model}::class);
 
-        $this->validate($request, config('{vednor}.{model}.validation.create_form'));
+        $this->validate($request, config('{package}.validation.{models}.create_form'));
 
         $this->dispatch(new SaveNew{Model}($request));
 
-        return redirect()->route('{vendor}.{models}.index');
+        return redirect()->route('larapress.{models}.index');
     }
 
     public function edit($id)
@@ -59,17 +59,17 @@ class {Models}Controller extends Controller
 
         ${model} = {Model}::findOrFail($id);
 
-        return view('{vendor}::{models}.edit')->with('{model}', ${model});
+        return view('{package}::{models}.edit')->with('{model}', ${model});
     }
 
     public function update(Request $request, $id)
     {
         $this->authorize('update', {Model}::class);
 
-        $this->validate($request, config('{vendor}.{model}.validation.update_form'));
+        $this->validate($request, config('{package}.validation.{models}.update_form'));
 
-        $this->dispatch(new UpdateExisting{Model($id));
+        $this->dispatch(new UpdateExisting{Model}($id));
 
-        return redirect()->route('{vendor}.{models}.index');
+        return redirect()->route('larapress.{models}.index');
     }
 }
