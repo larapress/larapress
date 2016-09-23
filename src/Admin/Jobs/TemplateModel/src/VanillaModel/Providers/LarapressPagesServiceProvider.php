@@ -8,7 +8,7 @@ use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use {Vendor}\{Package}\{Models}\Policies\{Model}Policy;
 use {Vendor}\{Package}\{Models}\Models\{Model};
 
-class {Model}ServiceProvider extends ServiceProvider
+class {Models}ServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
@@ -36,7 +36,7 @@ class {Model}ServiceProvider extends ServiceProvider
         parent::boot($events);
 
         //register the events
-        $events->listen(\{vendor}\{package}\Events\{Model}WasSaved::class, \{vendor}\{package}\Listeners\{Model}SavedListener::class);
+        $events->listen(\{Vendor}\{Package}\{Models}\Events\{Model}WasSaved::class, \{Vendor}\{Package}\{Models}\Listeners\{Model}SavedListener::class);
 
         //register the authorization policies
         $gate->policy({Model}::class, {Model}Policy::class);

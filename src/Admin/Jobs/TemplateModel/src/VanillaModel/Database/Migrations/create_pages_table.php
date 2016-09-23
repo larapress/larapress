@@ -28,6 +28,6 @@ class Create{Models}Table extends Migration
      */
     public function down()
     {
-        Schema::drop('{models');
+        Schema::drop('{models}');
     }
 }
