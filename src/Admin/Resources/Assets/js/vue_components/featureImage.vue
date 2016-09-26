@@ -72,7 +72,7 @@
         },
 
         props: {
-            featureName: {},                                    // name of the feature image
+            featureName: {required:true},                                    // name of the feature image
             featureTitle: {},                                   // title to show at top of box
             featureValue: {},                                   // existing url of image
 

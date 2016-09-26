@@ -55,15 +55,17 @@
 
 
 <script src="/larapress/js/larapress_libs.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.4.2/Sortable.min.js"></script>
 
 <script src="/larapress//js/larapress_vues.js"></script>
+
 <script src="/larapress//js/larapress_core.js"></script>
 
 <!-- tempoary -->
 <script src="/js/admin.js"></script>
 
-
 @yield('scripts')
+
 </body>
 </html>
