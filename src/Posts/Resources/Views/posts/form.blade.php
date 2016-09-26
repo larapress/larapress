@@ -36,6 +36,11 @@
                 {!!old('body', isset($post->body) ? $post->body : null)!!}
             </textarea>
         </div>
+
+        <div class="form-group">
+            <label for="body">Test</label>
+            <textbox-editor textbox-name="body" textbox-id="bodytext" textbox-value="fsdfsdf"></textbox-editor>
+        </div>
     </div>
 
     <div class="col-xs-4">

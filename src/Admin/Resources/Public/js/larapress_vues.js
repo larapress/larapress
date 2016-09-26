@@ -12158,6 +12158,10 @@ var _uploadButton = require('./vue_components/uploadButton.vue');
 
 var _uploadButton2 = _interopRequireDefault(_uploadButton);
 
+var _textboxEditor = require('./vue_components/textboxEditor.vue');
+
+var _textboxEditor2 = _interopRequireDefault(_textboxEditor);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Vue = require('vue');
@@ -12175,7 +12179,8 @@ new Vue({
         ImageAttachments: _imageAttachments2.default,
         ConfirmModal: _confirmModal2.default,
         PostCategories: _postCategories2.default,
-        UploadButton: _uploadButton2.default
+        UploadButton: _uploadButton2.default,
+        TextboxEditor: _textboxEditor2.default
     },
     ready: function ready() {
         console.log(Vue.http.headers.common['X-CSRF-TOKEN']);
@@ -12222,7 +12227,7 @@ new Vue({
     }
 });
 
-},{"./vue_components/confirmModal.vue":28,"./vue_components/featureImage.vue":30,"./vue_components/imageAttachments.vue":33,"./vue_components/mediaManager.vue":34,"./vue_components/postCategories.vue":35,"./vue_components/uploadButton.vue":36,"vue":25,"vue-resource":24}],28:[function(require,module,exports){
+},{"./vue_components/confirmModal.vue":28,"./vue_components/featureImage.vue":30,"./vue_components/imageAttachments.vue":33,"./vue_components/mediaManager.vue":34,"./vue_components/postCategories.vue":35,"./vue_components/textboxEditor.vue":36,"./vue_components/uploadButton.vue":37,"vue":25,"vue-resource":24}],28:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -12420,7 +12425,7 @@ module.exports = {
     },
 
     props: {
-        featureName: {}, // name of the feature image
+        featureName: { required: true }, // name of the feature image
         featureTitle: {}, // title to show at top of box
         featureValue: {}, // existing url of image
 
@@ -12487,7 +12492,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-20f4453e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./uploadButton.vue":36,"vue":25,"vue-hot-reload-api":23,"vueify/lib/insert-css":26}],31:[function(require,module,exports){
+},{"./uploadButton.vue":37,"vue":25,"vue-hot-reload-api":23,"vueify/lib/insert-css":26}],31:[function(require,module,exports){
 'use strict';
 
 var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
@@ -12891,7 +12896,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5a6f5285", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./directory.vue":29,"./filesComponent.vue":31,"./uploadButton.vue":36,"vue":25,"vue-hot-reload-api":23}],35:[function(require,module,exports){
+},{"./directory.vue":29,"./filesComponent.vue":31,"./uploadButton.vue":37,"vue":25,"vue-hot-reload-api":23}],35:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -12934,6 +12939,37 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"vue":25,"vue-hot-reload-api":23}],36:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\niframe {\n  height: 40rem !important; }\n")
+'use strict';
+
+module.exports = {
+    props: {
+        textboxClass: { default: 'form-control' }, // the additional classes to add
+        textboxValue: { default: '' }, // value of the text box
+        textboxName: { default: 'body' }, // textbox name
+        textboxId: { default: 'textbox1' } // textbox ID
+
+    },
+    methods: {}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<textarea v-bind:id=\"textboxId\" v-bind:name=\"textboxName\" class=\"HTMLeditor\" v-bind:class=\"textboxClass\">                {{ textboxValue }}\n</textarea>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["/* line 2, stdin */\niframe {\n  height: 40rem !important; }\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-8987d642", module.exports)
+  } else {
+    hotAPI.update("_v-8987d642", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":25,"vue-hot-reload-api":23,"vueify/lib/insert-css":26}],37:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.upload-container {\n  display: inline-block;\n  position: relative; }\n  /* line 6, stdin */\n  .upload-container .btn-upload {\n    overflow: hidden; }\n  /* line 10, stdin */\n  .upload-container input[type=\"file\"] {\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    opacity: 0;\n    top: 0;\n    left: 0; }\n")
 'use strict';

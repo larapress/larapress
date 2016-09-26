@@ -10,6 +10,7 @@ import ImageAttachments from './vue_components/imageAttachments.vue';
 import ConfirmModal from './vue_components/confirmModal.vue';
 import PostCategories from './vue_components/postCategories.vue';
 import UploadButton from './vue_components/uploadButton.vue';
+import TextboxEditor from './vue_components/textboxEditor.vue';
 
 new Vue({
     el: 'body',
@@ -20,7 +21,8 @@ new Vue({
         ImageAttachments: ImageAttachments,
         ConfirmModal: ConfirmModal,
         PostCategories: PostCategories,
-        UploadButton: UploadButton
+        UploadButton: UploadButton,
+        TextboxEditor: TextboxEditor
     },
     ready: function () {
         console.log(Vue.http.headers.common['X-CSRF-TOKEN']);
